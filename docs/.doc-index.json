@@ -1,7 +1,18 @@
 {
   "version": "1",
-  "generated_at": "2026-06-10T09:21:03.320797+00:00",
-  "documents": {},
+  "generated_at": "2026-06-10T09:46:14.318934+00:00",
+  "documents": {
+    "keel-legacy-progress": {
+      "file_path": "docs/research/keel-legacy-progress.md",
+      "doc_type": "research",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 102,
+      "est_tokens": 1436,
+      "content_hash": "09890fa6",
+      "sections": {}
+    }
+  },
   "xref": {},
   "aliases": {}
 }
