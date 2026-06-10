@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>从工业级确定性代码生成到 LLM 编程的机制迁移</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1d212b; --ink:#e8ecf3; --muted:#9aa6b8;
+    --line:#2a303c; --accent:#5aa9ff; --accent2:#7bd88f; --warn:#f2c14e; --danger:#ef6f6c;
+    --violet:#b794f6; --teal:#5ecbc4;
+    --det:#7bd88f; --cfg:#f2c14e; --bound:#ef6f6c;
+    --maxw:1040px;
+    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+    --serif:"Songti SC","Noto Serif CJK SC",Georgia,"Times New Roman",serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:linear-gradient(180deg,#0c0e12,#10131a 240px);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.78;font-size:16px;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px 96px}
+  header.cover{
+    max-width:var(--maxw);margin:0 auto;padding:64px 24px 40px;border-bottom:1px solid var(--line);
+  }
+  .kicker{color:var(--accent);font-size:13px;letter-spacing:.18em;text-transform:uppercase;font-weight:600}
+  h1.title{font-size:34px;line-height:1.25;margin:14px 0 10px;font-weight:760;letter-spacing:.5px}
+  .subtitle{color:var(--muted);font-size:18px;max-width:760px;margin:0 0 22px}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+  .chip{background:var(--panel);border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:5px 13px;font-size:12.5px}
+  nav.toc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin:34px 0}
+  nav.toc h4{margin:0 0 10px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  nav.toc ol{margin:0;padding-left:20px;columns:2;column-gap:36px}
+  nav.toc a{color:var(--ink);text-decoration:none;border-bottom:1px dotted transparent}
+  nav.toc a:hover{border-bottom-color:var(--accent);color:var(--accent)}
+  nav.toc li{margin:5px 0;break-inside:avoid}
+  section{margin:54px 0 0;scroll-margin-top:20px}
+  h2{font-size:25px;margin:0 0 6px;font-weight:720;letter-spacing:.4px;padding-top:8px}
+  h2 .num{color:var(--accent);font-variant-numeric:tabular-nums;margin-right:12px}
+  h3{font-size:18.5px;margin:34px 0 6px;font-weight:680;color:#dce6f5}
+  h3::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;background:var(--accent);margin-right:10px;vertical-align:middle;transform:rotate(45deg)}
+  h4{font-size:15.5px;margin:22px 0 4px;color:#cfd9ea;font-weight:660}
+  p{margin:12px 0}
+  .sec-intro{color:var(--muted);border-left:3px solid var(--accent);padding:2px 0 2px 16px;margin:10px 0 22px;font-size:15.5px}
+  em.tm{font-style:normal;color:var(--teal);font-family:var(--mono);font-size:.9em;background:rgba(94,203,196,.08);padding:0 5px;border-radius:4px;border:1px solid rgba(94,203,196,.2)}
+  code{font-family:var(--mono);font-size:.88em;background:#0c0f15;border:1px solid var(--line);border-radius:5px;padding:1px 6px;color:#d8e2f1}
+  strong{color:#fff;font-weight:680}
+  .callout{border-radius:12px;padding:14px 18px;margin:18px 0;border:1px solid var(--line);background:var(--panel);position:relative}
+  .callout .tag{display:inline-block;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:2px 9px;border-radius:6px;margin-bottom:6px}
+  .callout p{margin:6px 0 0}
+  .callout.det{border-color:rgba(123,216,143,.4);background:rgba(123,216,143,.06)}
+  .callout.det .tag{background:rgba(123,216,143,.16);color:var(--det)}
+  .callout.cfg{border-color:rgba(242,193,78,.4);background:rgba(242,193,78,.06)}
+  .callout.cfg .tag{background:rgba(242,193,78,.16);color:var(--cfg)}
+  .callout.bound{border-color:rgba(239,111,108,.42);background:rgba(239,111,108,.06)}
+  .callout.bound .tag{background:rgba(239,111,108,.16);color:var(--danger)}
+  .callout.key{border-color:rgba(90,169,255,.42);background:rgba(90,169,255,.07)}
+  .callout.key .tag{background:rgba(90,169,255,.16);color:var(--accent)}
+  figure{margin:30px 0;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 18px 10px;overflow:hidden}
+  figure svg{display:block;width:100%;height:auto}
+  figcaption{color:var(--muted);font-size:13.5px;text-align:center;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+  figcaption b{color:var(--accent);font-weight:680}
+  .ftable{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+  .ftable th,.ftable td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  .ftable thead th{background:var(--panel2);color:#dce6f5;font-weight:680;position:sticky;top:0}
+  .ftable tbody th{background:#14171f;color:var(--accent);font-weight:660;white-space:nowrap}
+  .ftable tr:nth-child(even) td{background:rgba(255,255,255,.012)}
+  .ftable td.det{background:rgba(123,216,143,.07)}
+  .ftable td.bound{background:rgba(239,111,108,.07)}
+  .scroll{overflow-x:auto;border-radius:12px}
+  /* SVG text classes */
+  svg text{font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif}
+  .svg-title{fill:#e8ecf3;font-weight:700}
+  .svg-lbl{fill:#e8ecf3}
+  .svg-sub{fill:#9aa6b8}
+  .svg-mono{font-family:var(--mono);fill:#cfd9ea}
+  .legend-txt{fill:#9aa6b8;font-size:12px}
+  footer{margin-top:70px;border-top:1px solid var(--line);padding-top:22px;color:var(--muted);font-size:13.5px}
+  .pill-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+  .pill{font-size:12.5px;padding:4px 11px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--muted)}
+  ul.tight{margin:10px 0;padding-left:22px}
+  ul.tight li{margin:7px 0}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.twocol{grid-template-columns:1fr}nav.toc ol{columns:1}h1.title{font-size:27px}}
+  .stage-card{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stage-card h5{margin:0 0 6px;font-size:14.5px;color:var(--accent2)}
+  .stage-card .kv{font-size:13.5px;color:var(--muted);margin:3px 0}
+  .stage-card .kv b{color:#dce6f5}
+  hr.soft{border:none;border-top:1px dashed var(--line);margin:30px 0}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="kicker">Determinism Transfer · MBD × AUTOSAR × Compiler → LLM</div>
+  <h1 class="title">把工业级代码生成的确定性机制<br>迁移到 LLM 编程</h1>
+  <p class="subtitle">从 Simulink 与 AUTOSAR 的确定性流水线，到编译器三段式框架，再到对抗"幻觉"与"长期腐化"的可落地工具设计。</p>
+  <div class="meta">
+    <span class="chip">基于模型的设计 <em class="tm">Model-Based Design, MBD</em></span>
+    <span class="chip">AUTOSAR 方法论</span>
+    <span class="chip">编译原理</span>
+    <span class="chip">LLM 代码生成</span>
+    <span class="chip">自包含 · 无外部依赖</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <nav class="toc">
+    <h4>目录</h4>
+    <ol>
+      <li><a href="#p1">Simulink 代码生成机制剖析</a></li>
+      <li><a href="#p2">AUTOSAR 代码生成机制剖析</a></li>
+      <li><a href="#p3">与编译器工作流程的类比</a></li>
+      <li><a href="#p4">向 LLM 编程领域的推广性论证</a></li>
+      <li><a href="#p5">工具设计方案</a></li>
+      <li><a href="#fin">结语：确定性的迁移边界</a></li>
+    </ol>
+  </nav>
+
+  <p class="sec-intro">
+    本报告的主线是一个工程命题：<strong>工业级代码生成之所以可信，不在于它"更聪明"，而在于它把熵（不确定性）逼到了一个被形式化、可审查的入口，此后每一步都是确定性变换 + 可验证输出。</strong>
+    Simulink 与 AUTOSAR 是这一范式在控制与汽车电子领域的两个成熟实现；编译器是它的理论母体。把这三者拆开看清楚，我们就能精确回答最后一个问题：LLM 生成本质是概率采样，它能从这套确定性机制里搬走什么、搬不走什么，以及如何用搬得走的部分把不可靠的采样器封装成可靠的工程组件。
+  </p>
+
+  <!-- ======================= PART 1 ======================= -->
+  <section id="p1">
+    <h2><span class="num">01</span>Simulink 代码生成机制剖析</h2>
+    <p class="sec-intro">核心结论先行：Simulink 的代码生成器对于<strong>给定的（模型 + 配置）是一个确定性纯函数</strong>——同样的输入永远产出逐字节相同的 C 代码。真正的不确定性不在生成器里，而被前移到了"人类建模 + 工程配置"这一入口。</p>
+
+    <h3>从模型到 C 代码的完整流水线</h3>
+    <p>
+      Simulink 的代码生成不是"一步翻译"，而是一条与编译器高度同构的多段流水线。它从一个图形化数据流模型（<code>.slx/.mdl</code>）出发，经过<strong>模型编译（Model Compilation / Update Diagram）</strong>、生成<strong>中间表示 <em class="tm">Intermediate Representation, IR</em></strong>（即 <code>model.rtw</code>）、由 <strong>目标语言编译器 <em class="tm">Target Language Compiler, TLC</em></strong> 驱动代码生成，最后做目标无关与目标相关的优化。
+    </p>
+
+    <figure>
+      <!-- ===== Figure ① Simulink pipeline ===== -->
+      <svg viewBox="0 0 1000 470" role="img" aria-label="Simulink 代码生成流水线框图">
+        <defs>
+          <marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L7,3 L0,6 Z" fill="#5aa9ff"/>
+          </marker>
+        </defs>
+        <text x="20" y="26" class="svg-title" font-size="15">图① Simulink 代码生成流水线（Simulink Coder / Embedded Coder）</text>
+
+        <!-- stage boxes -->
+        <!-- 1 -->
+        <g>
+          <rect x="20" y="56" width="150" height="92" rx="10" fill="#1d212b" stroke="#f2c14e" stroke-width="1.6"/>
+          <text x="95" y="84" text-anchor="middle" class="svg-lbl" font-size="14" font-weight="700">① 模型</text>
+          <text x="95" y="104" text-anchor="middle" class="svg-sub" font-size="11.5">.slx / .mdl</text>
+          <text x="95" y="122" text-anchor="middle" class="svg-sub" font-size="11">Stateflow /</text>
+          <text x="95" y="137" text-anchor="middle" class="svg-sub" font-size="11">MATLAB Function</text>
+        </g>
+        <!-- 2 -->
+        <g>
+          <rect x="195" y="56" width="160" height="92" rx="10" fill="#1d212b" stroke="#7bd88f" stroke-width="1.6"/>
+          <text x="275" y="82" text-anchor="middle" class="svg-lbl" font-size="13.5" font-weight="700">② 模型编译</text>
+          <text x="275" y="99" text-anchor="middle" class="svg-sub" font-size="11">Update Diagram</text>
+          <text x="275" y="116" text-anchor="middle" class="svg-sub" font-size="10.5">类型/采样时间/</text>
+          <text x="275" y="130" text-anchor="middle" class="svg-sub" font-size="10.5">维度传播 · 一致性检查</text>
+        </g>
+        <!-- 3 -->
+        <g>
+          <rect x="380" y="56" width="150" height="92" rx="10" fill="#13202a" stroke="#5ecbc4" stroke-width="2"/>
+          <text x="455" y="82" text-anchor="middle" class="svg-lbl" font-size="13.5" font-weight="700">③ 中间表示 IR</text>
+          <text x="455" y="100" text-anchor="middle" class="svg-mono" font-size="12">model.rtw</text>
+          <text x="455" y="117" text-anchor="middle" class="svg-sub" font-size="10.5">分层记录格式</text>
+          <text x="455" y="131" text-anchor="middle" class="svg-sub" font-size="10.5">已完全解析的声明式描述</text>
+        </g>
+        <!-- 4 -->
+        <g>
+          <rect x="555" y="56" width="160" height="92" rx="10" fill="#1d212b" stroke="#7bd88f" stroke-width="1.6"/>
+          <text x="635" y="82" text-anchor="middle" class="svg-lbl" font-size="13.5" font-weight="700">④ TLC 引擎</text>
+          <text x="635" y="99" text-anchor="middle" class="svg-sub" font-size="10.5">System Target File</text>
+          <text x="635" y="114" text-anchor="middle" class="svg-sub" font-size="10.5">+ 每块 Block TLC</text>
+          <text x="635" y="131" text-anchor="middle" class="svg-sub" font-size="10.5">模板/规则展开</text>
+        </g>
+        <!-- 5 -->
+        <g>
+          <rect x="740" y="56" width="150" height="92" rx="10" fill="#1d212b" stroke="#7bd88f" stroke-width="1.6"/>
+          <text x="815" y="82" text-anchor="middle" class="svg-lbl" font-size="13.5" font-weight="700">⑤ 代码生成</text>
+          <text x="815" y="100" text-anchor="middle" class="svg-mono" font-size="11">model.c / .h</text>
+          <text x="815" y="116" text-anchor="middle" class="svg-sub" font-size="10.5">data.c · rtwtypes.h</text>
+          <text x="815" y="131" text-anchor="middle" class="svg-sub" font-size="10.5">ert_main.c</text>
+        </g>
+        <!-- 6 optimize (under) -->
+        <g>
+          <rect x="740" y="170" width="150" height="74" rx="10" fill="#1d212b" stroke="#7bd88f" stroke-width="1.6"/>
+          <text x="815" y="194" text-anchor="middle" class="svg-lbl" font-size="13.5" font-weight="700">⑥ 优化</text>
+          <text x="815" y="211" text-anchor="middle" class="svg-sub" font-size="10.5">表达式折叠 · 死块消除</text>
+          <text x="815" y="226" text-anchor="middle" class="svg-sub" font-size="10.5">信号存储复用 · 缓冲复用</text>
+        </g>
+
+        <!-- arrows -->
+        <line x1="170" y1="102" x2="193" y2="102" stroke="#5aa9ff" stroke-width="2" marker-end="url(#ar)"/>
+        <line x1="355" y1="102" x2="378" y2="102" stroke="#5aa9ff" stroke-width="2" marker-end="url(#ar)"/>
+        <line x1="530" y1="102" x2="553" y2="102" stroke="#5aa9ff" stroke-width="2" marker-end="url(#ar)"/>
+        <line x1="715" y1="102" x2="738" y2="102" stroke="#5aa9ff" stroke-width="2" marker-end="url(#ar)"/>
+        <line x1="815" y1="148" x2="815" y2="168" stroke="#5aa9ff" stroke-width="2" marker-end="url(#ar)"/>
+
+        <!-- Coder bands -->
+        <rect x="195" y="285" width="695" height="34" rx="8" fill="rgba(90,169,255,.10)" stroke="#5aa9ff" stroke-dasharray="4 3"/>
+        <text x="206" y="307" class="svg-lbl" font-size="12.5" font-weight="700">Simulink Coder（前 RTW）· GRT 通用实时目标：基础 C/C++ 生成、快速原型</text>
+        <rect x="380" y="328" width="510" height="34" rx="8" fill="rgba(183,148,246,.12)" stroke="#b794f6" stroke-dasharray="4 3"/>
+        <text x="391" y="350" class="svg-lbl" font-size="12.5" font-weight="700">Embedded Coder · ERT 嵌入式目标：产品级优化 / MISRA / 追溯 / SIL·PIL / AUTOSAR 导出</text>
+
+        <!-- entropy annotation -->
+        <rect x="20" y="170" width="335" height="74" rx="10" fill="rgba(242,193,78,.07)" stroke="rgba(242,193,78,.45)"/>
+        <text x="34" y="192" class="svg-lbl" font-size="12.5" font-weight="700">熵之所在：人工建模 + 工程配置</text>
+        <text x="34" y="211" class="svg-sub" font-size="11">求解器/存储类/数据类型/优化级别/打包/</text>
+        <text x="34" y="227" class="svg-sub" font-size="11">代码替换库（CRL）/调度——决定生成"形态"</text>
+        <line x1="95" y1="148" x2="120" y2="168" stroke="#f2c14e" stroke-width="1.4" stroke-dasharray="3 3"/>
+
+        <!-- legend -->
+        <g transform="translate(20,392)">
+          <rect x="0" y="0" width="16" height="12" rx="3" fill="#1d212b" stroke="#7bd88f" stroke-width="1.6"/>
+          <text x="22" y="10" class="legend-txt">确定性规则映射（同输入→同输出）</text>
+          <rect x="270" y="0" width="16" height="12" rx="3" fill="#1d212b" stroke="#f2c14e" stroke-width="1.6"/>
+          <text x="292" y="10" class="legend-txt">依赖配置 / 工程师介入</text>
+          <rect x="510" y="0" width="16" height="12" rx="3" fill="#13202a" stroke="#5ecbc4" stroke-width="2"/>
+          <text x="532" y="10" class="legend-txt">中间表示（确定性锚点）</text>
+        </g>
+        <g transform="translate(20,420)">
+          <line x1="0" y1="6" x2="16" y2="6" stroke="#5aa9ff" stroke-width="2" marker-end="url(#ar)"/>
+          <text x="24" y="10" class="legend-txt">确定性数据流</text>
+        </g>
+      </svg>
+      <figcaption><b>图①</b>　模型解析 → <code>model.rtw</code> 中间表示 → TLC → 代码生成 → 优化。绿框为确定性环节，黄框为入口处的配置/人工介入，青框为充当确定性锚点的 IR。</figcaption>
+    </figure>
+
+    <h4>① 模型编译（前端）</h4>
+    <p>
+      <code>.slx</code> 本质是一个块图（block diagram）的结构化序列化。"Update Diagram"阶段做的事与编译器前端几乎一一对应：解析块与连线得到内存中的图结构，随后执行三类全局传播——<strong>数据类型传播、采样时间（sample time）传播、信号维度传播</strong>——并做代数环（algebraic loop）检测、端口兼容性与一致性检查。这一步把一个"含隐式约定"的图，求解成一个"所有属性都被显式确定"的编译后模型。它是确定性的算法，不是启发式。
+    </p>
+
+    <h4>② 中间表示：model.rtw（中端入口）</h4>
+    <p>
+      <code>model.rtw</code> 是整条流水线的<strong>枢纽</strong>。它是一个分层的、记录式（record-format）的 ASCII 文件，把编译后的模型完全展开为声明式描述：每个块的类型与参数、每条信号、每个连接、采样率、存储归属，全部已解析、无歧义。它对应编译器里的<strong>抽象语法树 <em class="tm">Abstract Syntax Tree, AST</em> / 高层 IR</strong>。关键性质是：<strong>它把"图形语义"降维成"可被规则系统逐项消费的数据"</strong>——TLC 不需要理解 Simulink，只需要遍历 <code>model.rtw</code>。
+    </p>
+
+    <h4>③ TLC 驱动的代码生成（后端）</h4>
+    <p>
+      TLC 是一个带有自身脚本语言的<strong>文本变换引擎</strong>。它由两层模板组成：<strong>系统目标文件（System Target File，如 <code>ert.tlc</code>/<code>grt.tlc</code>）</strong>定义整体代码架构与目标风格；<strong>块目标文件（Block TLC，每种块一个）</strong>定义"这种块翻译成什么 C 习语"。TLC 遍历 <code>model.rtw</code>，对每个块调用其 <code>Outputs</code>/<code>Update</code> 等函数体，把片段拼装成完整源文件。这正是编译器后端的<strong>指令选择 + 目标代码发射</strong>：块→C 习语的映射，等同于 IR 节点→目标指令的映射；而<strong>代码替换库 <em class="tm">Code Replacement Library, CRL</em></strong> 把 <code>sin/memcpy</code> 等替换为芯片优化内建函数，等同于编译器的 intrinsic/指令模式匹配。
+    </p>
+
+    <h4>④ 优化</h4>
+    <p>
+      优化分两类。<strong>目标无关</strong>：块化简（block reduction）、表达式折叠（expression folding）、死块消除、常量折叠、信号存储复用（signal storage reuse，等价于寄存器/缓冲复用）、条件输入分支执行。<strong>目标相关</strong>：数据打包、按目标字长选择类型、循环融合。绝大多数优化由<strong>配置参数</strong>开关控制——这是确定性流水线中"由配置而非由模型决定形态"的典型环节。
+    </p>
+
+    <h3>Simulink Coder 与 Embedded Coder 的角色分工</h3>
+    <div class="twocol">
+      <div class="stage-card">
+        <h5>Simulink Coder（基础层）</h5>
+        <p class="kv">提供从 Simulink / Stateflow / MATLAB Function 到 C/C++ 的<b>基础生成能力</b>与 <b>GRT（Generic Real-Time，通用实时）</b>目标。定位：仿真加速、快速原型、桌面/非嵌入式部署。它是"能不能生成"的地基。</p>
+      </div>
+      <div class="stage-card">
+        <h5>Embedded Coder（产品层）</h5>
+        <p class="kv">在前者之上扩展 <b>ERT（Embedded Real-Time，嵌入式实时）</b>目标，提供：代码/内存深度优化、<b>MISRA C</b> 合规、自定义存储类、<b>双向模型↔代码追溯</b>、<b>SIL <em class="tm">Software-in-the-Loop</em> / PIL <em class="tm">Processor-in-the-Loop</em></b> 验证、代码度量、以及 <b>AUTOSAR/ASAP2 导出</b>。定位：量产嵌入式控制器。</p>
+      </div>
+    </div>
+    <p>一句话分工：<strong>Simulink Coder 决定"能生成"，Embedded Coder 决定"能量产"</strong>。两者共享同一条 <code>model.rtw → TLC</code> 主干，区别在系统目标文件与可用的优化/合规/追溯能力。</p>
+
+    <h3>确定性 vs. 配置 / 人工介入：精确边界</h3>
+    <div class="callout det"><span class="tag">确定性规则映射</span>
+      <p>模型编译的三类传播与一致性检查；<code>model.rtw</code> 的构造；TLC 的块→C 映射；代码替换；以及在固定开关下的各优化 pass。<strong>给定（模型, 配置），整条流水线是可复现的纯函数</strong>，这正是工具按 ISO 26262 做<em class="tm">tool qualification</em>（工具鉴定）的前提——你只需证明一次映射规则正确，便对所有输入成立。</p>
+    </div>
+    <div class="callout cfg"><span class="tag">配置 / 工程师介入</span>
+      <p>求解器与定步长选择、数据类型与定点标度、存储类与接口打包、可重用函数 vs. 非重用、优化级别、CRL 选择、任务/调度映射、目标硬件配置——以及<strong>模型本身的设计</strong>。这些不是生成器的随机性，而是<strong>被显式记录、可评审、可版本化的人类决策</strong>。</p>
+    </div>
+    <div class="callout key"><span class="tag">本部分要旨</span>
+      <p>Simulink 没有消除不确定性，而是把它<strong>钉在入口</strong>（模型 + 配置），并使其形式化、可审查、可追溯；入口之后全是确定性变换。这条"前移并锚定熵"的策略，是后文迁移到 LLM 的第一性原理。</p>
+    </div>
+  </section>
+
+  <!-- ======================= PART 2 ======================= -->
+  <section id="p2">
+    <h2><span class="num">02</span>AUTOSAR 代码生成机制剖析</h2>
+    <p class="sec-intro">AUTOSAR 与 Simulink 殊途同归，但它锚定的不是"算法"而是"架构与接口契约"。它用一份形式化的 <code>ARXML</code> 把系统结构钉死，再由 <strong>RTE 生成器</strong>按标准化规则确定性地产出连接万物的胶水代码。</p>
+
+    <h3>从 ARXML 到胶水代码的流水线</h3>
+    <p>
+      AUTOSAR（AUTomotive Open System ARchitecture，汽车开放系统架构）的代码生成围绕一个核心抽象展开：<strong>虚拟功能总线 <em class="tm">Virtual Function Bus, VFB</em></strong>。软件组件 <strong><em class="tm">Software Component, SWC</em></strong> 在设计时只通过端口（port）经 VFB 通信，<strong>完全不知道对方部署在哪颗 ECU、走哪条物理总线</strong>。把这个"虚拟"落到某颗具体 ECU 上的，就是 <strong>运行时环境 <em class="tm">Runtime Environment, RTE</em></strong>。
+    </p>
+
+    <figure>
+      <!-- ===== Figure ② AUTOSAR pipeline ===== -->
+      <svg viewBox="0 0 1000 500" role="img" aria-label="AUTOSAR 代码生成流水线框图">
+        <defs>
+          <marker id="ar2" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L7,3 L0,6 Z" fill="#5aa9ff"/>
+          </marker>
+        </defs>
+        <text x="20" y="26" class="svg-title" font-size="15">图② AUTOSAR 代码生成流水线（VFB → RTE → BSW）</text>
+
+        <!-- ARXML input -->
+        <rect x="20" y="50" width="150" height="100" rx="10" fill="#13202a" stroke="#5ecbc4" stroke-width="2"/>
+        <text x="95" y="76" text-anchor="middle" class="svg-lbl" font-size="14" font-weight="700">① ARXML</text>
+        <text x="95" y="95" text-anchor="middle" class="svg-sub" font-size="10.5">形式化描述（元模型序列化）</text>
+        <text x="95" y="112" text-anchor="middle" class="svg-sub" font-size="10.5">SWC / 端口 / 接口 /</text>
+        <text x="95" y="127" text-anchor="middle" class="svg-sub" font-size="10.5">数据类型 / 系统 / 映射</text>
+        <text x="95" y="143" text-anchor="middle" class="svg-sub" font-size="10.5">= 确定性"源码"</text>
+
+        <!-- VFB -->
+        <rect x="195" y="50" width="150" height="100" rx="10" fill="#1d212b" stroke="#b794f6" stroke-width="1.8"/>
+        <text x="270" y="76" text-anchor="middle" class="svg-lbl" font-size="14" font-weight="700">② VFB</text>
+        <text x="270" y="95" text-anchor="middle" class="svg-sub" font-size="10.5">虚拟功能总线（抽象层）</text>
+        <text x="270" y="112" text-anchor="middle" class="svg-sub" font-size="10.5">SWC 间硬件无关通信</text>
+        <text x="270" y="129" text-anchor="middle" class="svg-sub" font-size="10.5">≈ 平台无关语义模型</text>
+
+        <!-- RTE generator (big) -->
+        <rect x="370" y="50" width="200" height="100" rx="10" fill="#1d212b" stroke="#7bd88f" stroke-width="1.8"/>
+        <text x="470" y="76" text-anchor="middle" class="svg-lbl" font-size="14" font-weight="700">③ RTE 生成器</text>
+        <text x="470" y="95" text-anchor="middle" class="svg-sub" font-size="10.5">标准化映射 → Rte_ API</text>
+        <text x="470" y="112" text-anchor="middle" class="svg-sub" font-size="10.5">片内=函数调用/缓冲</text>
+        <text x="470" y="129" text-anchor="middle" class="svg-sub" font-size="10.5">跨 ECU=COM/PDU 降级实现</text>
+
+        <!-- BSW config -->
+        <rect x="595" y="50" width="170" height="100" rx="10" fill="#1d212b" stroke="#f2c14e" stroke-width="1.6"/>
+        <text x="680" y="76" text-anchor="middle" class="svg-lbl" font-size="14" font-weight="700">④ BSW 配置</text>
+        <text x="680" y="95" text-anchor="middle" class="svg-sub" font-size="10.5">基础软件栈（ECU Config）</text>
+        <text x="680" y="112" text-anchor="middle" class="svg-sub" font-size="10.5">OS/COM/PduR/CanIf/</text>
+        <text x="680" y="129" text-anchor="middle" class="svg-sub" font-size="10.5">NvM/Dem/Dcm · MCAL</text>
+
+        <!-- glue code -->
+        <rect x="790" y="50" width="190" height="100" rx="10" fill="#1d212b" stroke="#7bd88f" stroke-width="1.8"/>
+        <text x="885" y="76" text-anchor="middle" class="svg-lbl" font-size="14" font-weight="700">⑤ 胶水代码</text>
+        <text x="885" y="95" text-anchor="middle" class="svg-mono" font-size="11">Rte.c / Rte_*.h</text>
+        <text x="885" y="112" text-anchor="middle" class="svg-sub" font-size="10.5">连接 SWC ↔ BSW</text>
+        <text x="885" y="129" text-anchor="middle" class="svg-sub" font-size="10.5">运行体触发 + 任务集成</text>
+
+        <line x1="170" y1="100" x2="193" y2="100" stroke="#5aa9ff" stroke-width="2" marker-end="url(#ar2)"/>
+        <line x1="345" y1="100" x2="368" y2="100" stroke="#5aa9ff" stroke-width="2" marker-end="url(#ar2)"/>
+        <line x1="570" y1="100" x2="593" y2="100" stroke="#5aa9ff" stroke-width="2" marker-end="url(#ar2)"/>
+        <line x1="765" y1="100" x2="788" y2="100" stroke="#5aa9ff" stroke-width="2" marker-end="url(#ar2)"/>
+
+        <!-- two phases -->
+        <text x="20" y="208" class="svg-title" font-size="13.5">RTE 生成的两个阶段（同一份 ARXML，不同完整度需求）</text>
+        <rect x="20" y="222" width="460" height="118" rx="12" fill="rgba(90,169,255,.08)" stroke="#5aa9ff" stroke-dasharray="5 3"/>
+        <text x="38" y="246" class="svg-lbl" font-size="13.5" font-weight="700">A. 契约阶段 Contract Phase</text>
+        <text x="38" y="267" class="svg-sub" font-size="11.5">输入：仅需 SWC 的接口描述</text>
+        <text x="38" y="285" class="svg-sub" font-size="11.5">产出：应用头文件 Rte_&lt;SWC&gt;.h / Rte_Type.h</text>
+        <text x="38" y="303" class="svg-sub" font-size="11.5">作用：冻结 SWC↔RTE 的 API 契约</text>
+        <text x="38" y="323" class="svg-sub" font-size="11.5">价值：供应商<tspan fill="#7bd88f" font-weight="700">可独立、并行开发</tspan>组件实现</text>
+
+        <rect x="500" y="222" width="480" height="118" rx="12" fill="rgba(123,216,143,.08)" stroke="#7bd88f" stroke-dasharray="5 3"/>
+        <text x="518" y="246" class="svg-lbl" font-size="13.5" font-weight="700">B. 实现阶段 Implementation Phase</text>
+        <text x="518" y="267" class="svg-sub" font-size="11.5">输入：<tspan fill="#f2c14e">完整</tspan> ECU 配置（全部 SWC 映射/连接/OS/COM）</text>
+        <text x="518" y="285" class="svg-sub" font-size="11.5">产出：RTE 的真正实现 Rte.c</text>
+        <text x="518" y="303" class="svg-sub" font-size="11.5">作用：把 VFB 通信落地为具体调用/总线收发</text>
+        <text x="518" y="323" class="svg-sub" font-size="11.5">价值：确定性地生成全部胶水与调度集成</text>
+
+        <!-- legend -->
+        <g transform="translate(20,366)">
+          <rect x="0" y="0" width="16" height="12" rx="3" fill="#13202a" stroke="#5ecbc4" stroke-width="2"/>
+          <text x="22" y="10" class="legend-txt">形式化输入（确定性锚点）</text>
+          <rect x="240" y="0" width="16" height="12" rx="3" fill="#1d212b" stroke="#7bd88f" stroke-width="1.8"/>
+          <text x="262" y="10" class="legend-txt">确定性标准化映射</text>
+          <rect x="450" y="0" width="16" height="12" rx="3" fill="#1d212b" stroke="#b794f6" stroke-width="1.8"/>
+          <text x="472" y="10" class="legend-txt">平台无关抽象（VFB）</text>
+          <rect x="660" y="0" width="16" height="12" rx="3" fill="#1d212b" stroke="#f2c14e" stroke-width="1.6"/>
+          <text x="682" y="10" class="legend-txt">配置 / 工程师介入</text>
+        </g>
+        <text x="20" y="424" class="svg-sub" font-size="11.5">RTE 标准命名规则示例（由 ARXML 完全决定，无歧义）：</text>
+        <text x="20" y="446" class="svg-mono" font-size="12">Rte_Read_&lt;port&gt;_&lt;elem&gt; · Rte_Write_… · Rte_Call_&lt;port&gt;_&lt;op&gt; · Rte_IRead_/Rte_IWrite_（隐式访问）</text>
+        <text x="20" y="472" class="svg-sub" font-size="11.5">→ 给定有效且完整的 ARXML，RTE 的每一个符号都是被规范唯一确定的，因此可复现、可鉴定。</text>
+      </svg>
+      <figcaption><b>图②</b>　<code>ARXML</code> → VFB → RTE 生成（契约/实现两阶段）→ BSW 配置 → 胶水代码。青框是确定性锚点，绿框是标准化映射，黄框是配置介入。</figcaption>
+    </figure>
+
+    <h4>ARXML：被序列化的元模型</h4>
+    <p>
+      <code>ARXML</code> 不是普通 XML，而是 <strong>AUTOSAR 元模型（meta-model）的序列化</strong>——元模型用类 UML 的模板定义了 SWC、端口、端口接口（sender-receiver / client-server / mode / NV）、数据类型、内部行为、系统拓扑与映射等概念。因此 ARXML 是一种<strong>强类型、可 schema 校验的领域专用语言 <em class="tm">Domain-Specific Language, DSL</em></strong>。它在 AUTOSAR 中扮演的，正是 <code>model.rtw</code> 在 Simulink 中的角色：<strong>确定性流水线的形式化入口</strong>。
+    </p>
+
+    <h4>SWC 内部行为：让 RTE 可被确定性生成的关键</h4>
+    <p>
+      一个 SWC 不仅声明端口，还在 <strong>内部行为（InternalBehavior）</strong>里声明它的<strong>运行体 <em class="tm">Runnable</em></strong>、触发事件，以及每个运行体使用的<strong>访问点（access point）</strong>——即它会调用哪些 RTE API（数据读写点、服务器调用点）。这一步把"组件需要什么通信服务"写成了可枚举的清单。正因为<strong>需求被显式形式化</strong>，RTE 生成器才能确定性地为每个访问点生成对应的 <code>Rte_</code> 函数，而不必"猜测"组件意图。
+    </p>
+
+    <h4>RTE 生成器：标准化映射，而非算法优化</h4>
+    <p>
+      RTE 生成器读取 ARXML，依据 AUTOSAR RTE 规范把 VFB 通信<strong>降级（lowering）</strong>为具体实现：同一 ECU 内的端口连接→直接函数调用或共享缓冲；跨 ECU→经 COM/PDU Router 走物理总线。它同时把运行体触发与 OS 任务调度集成起来。<strong>注意它做的是"接线"而非"优化算法"</strong>——这是它与编译器中端最大的不同（见第三部分边界讨论）。
+    </p>
+
+    <h4>BSW 配置：链接标准运行库</h4>
+    <p>
+      <strong>基础软件 <em class="tm">Basic Software, BSW</em></strong> 是分层栈（微控制器抽象层 MCAL、ECU 抽象层、服务层），通过 ARXML 的 ECU 配置由工具（如 EB tresos、DaVinci Configurator）参数化生成。它对应编译器的<strong>"链接目标 ABI + 标准库"</strong>：RTE 把 SWC 与 BSW 接起来，BSW 提供 OS、COM、诊断（Dem/Dcm）、非易失存储（NvM）等标准服务实现。
+    </p>
+
+    <div class="callout key"><span class="tag">契约 / 实现分离的深意</span>
+      <p>契约阶段只需接口即可冻结 API，让组件实现与系统集成<strong>解耦并行</strong>；实现阶段在完整配置下确定性地生成胶水。这正是软件工程的"接口与实现分离"被推到极致：<strong>一个稳定的、形式化的契约，使得双方都能被独立、确定性地生成与验证</strong>。第五部分的工具设计会直接复用这一模式。</p>
+    </div>
+  </section>
+
+  <!-- ======================= PART 3 ======================= -->
+  <section id="p3">
+    <h2><span class="num">03</span>与编译器工作流程的类比</h2>
+    <p class="sec-intro">用编译器的<strong>前端 / 中端 / 后端</strong>三段式作为统一坐标系，把 Simulink 与 AUTOSAR 各环节对齐，提炼三者共性，并严格指出类比"形似而神不同"的边界。</p>
+
+    <h3>三段式框架对齐</h3>
+    <p>
+      编译器的经典结构是：<strong>前端</strong>（词法分析 → 语法分析 → 语义检查，产出经校验的 AST/高层 IR）、<strong>中端</strong>（目标无关 IR + 优化 pass）、<strong>后端</strong>（指令选择 → 寄存器分配 → 指令调度 → 目标代码发射）。把它当作坐标系，三者对齐如下表。
+    </p>
+
+    <figure>
+      <div class="scroll">
+        <table class="ftable">
+          <thead>
+            <tr>
+              <th style="width:16%">编译器阶段</th>
+              <th style="width:28%">编译器（C/LLVM）</th>
+              <th style="width:28%">Simulink（MBD）</th>
+              <th style="width:28%">AUTOSAR</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>词法 / 语法分析<br><span style="font-weight:400;color:var(--muted)">Lexing / Parsing</span></th>
+              <td>源码 → token → 抽象语法树 AST</td>
+              <td class="det">读取 <code>.slx</code> 块图结构，构造内存图</td>
+              <td class="det"><code>ARXML</code> 解析 + XSD schema 校验</td>
+            </tr>
+            <tr>
+              <th>语义检查<br><span style="font-weight:400;color:var(--muted)">Semantic Analysis</span></th>
+              <td>类型检查、符号表、作用域解析</td>
+              <td class="det">类型/采样时间/维度传播、代数环检测、一致性检查</td>
+              <td class="det">端口兼容性、接口匹配、VFB 连接一致性、配置合法性</td>
+            </tr>
+            <tr>
+              <th>中间表示<br><span style="font-weight:400;color:var(--muted)">IR</span></th>
+              <td>LLVM IR / GIMPLE（目标无关）</td>
+              <td class="det"><code>model.rtw</code>（已解析的声明式记录）</td>
+              <td class="det">VFB / 编译后的 ECU 抽象模型</td>
+            </tr>
+            <tr>
+              <th>优化 Pass<br><span style="font-weight:400;color:var(--muted)">Optimization</span></th>
+              <td>常量折叠、DCE、CSE、内联、循环优化</td>
+              <td class="det">块化简、表达式折叠、信号存储复用、死块消除</td>
+              <td class="bound">几乎无算法优化（仅通信实现选择）— 见边界③</td>
+            </tr>
+            <tr>
+              <th>指令选择 / 代码生成<br><span style="font-weight:400;color:var(--muted)">ISel / CodeGen</span></th>
+              <td>IR 节点 → 目标指令；intrinsic 匹配</td>
+              <td class="det">TLC 块→C 习语映射；CRL 内建替换</td>
+              <td class="det">RTE 生成：VFB → <code>Rte_</code> API 降级</td>
+            </tr>
+            <tr>
+              <th>链接 / 运行库<br><span style="font-weight:400;color:var(--muted)">Linking / Runtime</span></th>
+              <td>链接器 + libc + 目标 ABI</td>
+              <td>主程序集成（<code>ert_main.c</code>）+ 调度</td>
+              <td class="det">BSW 配置（OS/COM/服务层）+ 任务映射</td>
+            </tr>
+            <tr>
+              <th>正确性保证<br><span style="font-weight:400;color:var(--muted)">Correctness</span></th>
+              <td class="bound">语义保持；少数形式化验证（CompCert）</td>
+              <td class="bound">SIL/PIL 等价测试 + 工具鉴定，非证明</td>
+              <td class="bound">标准一致性 + 配置评审，非证明</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <figcaption><b>图③</b>　Simulink / AUTOSAR / 编译器三者环节对照表。<span style="color:var(--det)">绿底</span>＝强类比成立的确定性环节；<span style="color:var(--danger)">红底</span>＝类比"形似而神不同"的边界。</figcaption>
+    </figure>
+
+    <h3>三者共性原理</h3>
+    <p>剥离领域细节，三者共享同一条骨架，可凝练为一个三元式：</p>
+    <div class="pill-row">
+      <span class="pill" style="border-color:rgba(94,203,196,.5);color:var(--teal)">形式化输入 Formal Input</span>
+      <span class="pill" style="border-color:rgba(123,216,143,.5);color:var(--det)">确定性变换规则 Deterministic Rules</span>
+      <span class="pill" style="border-color:rgba(90,169,255,.5);color:var(--accent)">可验证输出 Verifiable Output</span>
+    </div>
+    <ul class="tight">
+      <li><strong>形式化输入</strong>：源码文法 / Simulink 数据流语义 / AUTOSAR 元模型——都有机器可校验的结构，歧义在入口被消除。</li>
+      <li><strong>确定性变换规则</strong>：编译 pass / TLC 规则 / RTE 规范映射——都是<strong>引用透明（referentially transparent）</strong>的函数：同输入必同输出。正确性"按构造保证"——规则被验证一次，对所有合法输入成立。</li>
+      <li><strong>可验证输出</strong>：类型安全的 IR、双向追溯、标准一致性、等价测试——输出不是"相信它对"，而是"能检查它对"。</li>
+    </ul>
+    <p>这个三元式就是把"熵前移、入口锚定、此后确定"落地的通用配方。它与具体领域无关——这正是它能被讨论迁移到 LLM 的根据。</p>
+
+    <h3>类比的边界：哪里"形似而神不同"</h3>
+    <div class="callout bound"><span class="tag">边界① 输入的表达力与抽象层级不同</span>
+      <p>编译器的源码是图灵完备、由人自由书写的；Simulink 模型与 ARXML 是受约束的 DSL，表达力被刻意限制以换取可分析性。更重要的是：在 MBD/AUTOSAR 里，被当作"源码"的模型/ARXML <strong>本身已是高层产物</strong>——真正的创造性发生在"建模/写架构"这一步，而它在编译器类比里被悄悄折叠进了"源码"。把模型类比为源码会掩盖这一点。</p>
+    </div>
+    <div class="callout bound"><span class="tag">边界② 正确性理论的强度不同</span>
+      <p>编译器有成熟的语义保持理论，甚至有形式化验证的编译器（CompCert）。MBD 代码生成的正确性主要靠<strong>等价测试（SIL/PIL）+ 工具鉴定</strong>，AUTOSAR 靠<strong>标准一致性 + 配置评审</strong>——是"高置信工程实践"而非"数学证明"。三者都确定，但"确定"≠"已证明正确"。</p>
+    </div>
+    <div class="callout bound"><span class="tag">边界③ "中端优化"的对应并不对称</span>
+      <p>编译器中端是优化的核心战场；Simulink 有真实的、语义保持的模型级优化，类比成立；但 <strong>AUTOSAR 的 RTE 生成几乎不优化算法</strong>，它做的是"接线/降级"。把 RTE 生成塞进"优化 pass"格子是错位的——它更接近"指令选择 + 链接"。类比在这一格<strong>形似而神不同</strong>。</p>
+    </div>
+    <div class="callout key"><span class="tag">边界给我们的启示</span>
+      <p>三者在<strong>确定性轴</strong>上高度同构（这正是我们要迁移的属性），而在<strong>输入抽象层级、正确性强度、优化语义</strong>三处分叉。迁移到 LLM 时，必须只搬"确定性 + 形式化锚定 + 可验证"这一骨架，而不能假装 LLM 也具备"按构造正确"的规则系统——因为它恰恰没有。这把我们直接带入第四部分。</p>
+    </div>
+  </section>
+
+  <!-- ======================= PART 4 ======================= -->
+  <section id="p4">
+    <h2><span class="num">04</span>向 LLM 编程领域的推广性论证</h2>
+    <p class="sec-intro">传统代码生成是确定性纯函数；LLM 生成本质是从条件分布中采样。理清这一根本差异，才能精确定义"幻觉"与"长期腐化"两个不同问题，并判断哪些工业机制可迁移。</p>
+
+    <h3>为什么传统生成确定、而 LLM 生成是概率采样</h3>
+    <p>
+      传统代码生成是一个变换函数 <code>f: Spec → Code</code>，由确定性算法 / 规则应用实现，引用透明：同输入产出逐字节相同的输出。其正确性"按构造保证"——规则集被验证或鉴定<strong>一次</strong>，便对全体合法输入成立。
+    </p>
+    <p>
+      LLM 则是一个自回归模型，逐 token 给出条件概率分布 <code>P(token | 上下文)</code>，再从中采样（受 temperature、top-p 调制）。即便取 <code>temperature=0</code>（贪心/argmax）使采样可复现，其映射也<strong>不是扎根于输入语义的规则系统，而是分布在权重里的统计近似</strong>：规则隐式、不可枚举、不可逐条验证，且不保证语义保持。更糟的是，它的"上下文"里掺杂了<strong>歧义的自然语言</strong>。所以本质区别不在"是否可复现"，而在<strong>"输出是否由输入语义按可验证规则确定"</strong>——传统是，LLM 不是。
+    </p>
+
+    <h3>两个核心问题：必须区分</h3>
+    <div class="twocol">
+      <div class="callout bound" style="margin:8px 0"><span class="tag">幻觉 Hallucination · 单步空间误差</span>
+        <p><strong>单次生成内部</strong>的事实/逻辑/API 错误：杜撰不存在的 API、签名错误、逻辑自相矛盾、引用错误的事实。本质是<strong>一次采样落进了错误区域</strong>——概率映射未被锚定到真值，模型用"看起来合理"的 token 做了插值。它是<strong>点态、空间性的</strong>失败。</p>
+      </div>
+      <div class="callout bound" style="margin:8px 0"><span class="tag">长期腐化 Long-term Decay · 多步时间误差</span>
+        <p><strong>多轮迭代之间</strong>的上下文漂移与误差累积：每次编辑都基于一个在增长/被摘要/被截断的漂移上下文；局部修补不断引入不一致；全局不变量未在每轮被重建；熵像<strong>无回复力的随机游走</strong>一样累积。小的单轮错误率经多轮<strong>复合放大</strong>，架构逐渐侵蚀。它是<strong>累积、时间性的</strong>失败。</p>
+      </div>
+    </div>
+    <p>
+      二者必须分治，因为<strong>解法不同</strong>：幻觉靠"每一步都设验证门 + 就地接地"来拦截；长期腐化靠"把真值锚定在稳定 IR 上、用重生成代替增量修补"来消除复合效应。把两者混为一谈会导致药不对症——例如反复让 LLM"修一下"，恰恰是用治幻觉的手段喂养了腐化。
+    </p>
+
+    <h3>哪些工业机制可迁移</h3>
+    <table class="ftable" style="margin-top:8px">
+      <thead><tr><th style="width:22%">工业机制</th><th style="width:30%">在 MBD/AUTOSAR 中的角色</th><th>迁移到 LLM 编程</th></tr></thead>
+      <tbody>
+        <tr>
+          <th>IR 锚定<br>IR Anchoring</th>
+          <td><code>model.rtw</code> / ARXML / VFB 作为唯一真值源</td>
+          <td>维护一个稳定、形式化的中间表示作为真值；LLM 只提议对 IR 的修改或在槽位填充，代码由 IR <strong>确定性再生成</strong>。IR 是对抗漂移的<strong>回复力</strong>。</td>
+        </tr>
+        <tr>
+          <th>验证门<br>Verification Gate</th>
+          <td>语义检查、SIL/PIL、schema 校验、追溯</td>
+          <td>每个变换阶段设门（类型检查、schema 校验、单测、属性测试），输出必须过门方可前进。把"盲目接受"改为"拒绝-重采样"，将不可靠采样器封装成可靠组件。</td>
+        </tr>
+        <tr>
+          <th>规则映射<br>Rule Mapping</th>
+          <td>TLC / RTE 标准映射</td>
+          <td>凡确定性规则/模板能做的，绝不交给 LLM。把 LLM 限制在"真正欠定的创造性缝隙"，最小化概率误差能进入的表面积。</td>
+        </tr>
+        <tr>
+          <th>重生成优于增量编辑<br>Regenerate &gt; Patch</th>
+          <td>"改模型再生成"，从不手改生成代码</td>
+          <td>要改行为就改 IR/规约并整体确定性再生成，而非让 LLM 修补既有代码。从干净 IR 再生成可<strong>切断误差累积</strong>，直击长期腐化。</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout key"><span class="tag">本部分要旨</span>
+      <p>可迁移的不是"确定性本身"（LLM 给不了），而是<strong>"把熵前移到形式化入口、把不可靠步骤夹在验证门之间、用稳定 IR 提供回复力、用重生成代替修补"这套结构</strong>。在这套结构里，LLM 不必可靠——结构负责把它的不可靠产出过滤成可靠系统。</p>
+    </div>
+  </section>
+
+  <!-- ======================= PART 5 ======================= -->
+  <section id="p5">
+    <h2><span class="num">05</span>工具设计方案：确定性的"需求 → 架构 → 代码"管线</h2>
+    <p class="sec-intro">把前四部分的原理落地为一条可实现、可验证的管线。每个阶段都有明确的输入/输出表示、约束机制、验证门与回退策略；LLM 仅在"已验证的槽位"内填充，绝不自由生成。</p>
+
+    <figure>
+      <!-- ===== Figure ④ Tool architecture ===== -->
+      <svg viewBox="0 0 1000 640" role="img" aria-label="拟设计工具的整体架构图">
+        <defs>
+          <marker id="ar4" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L7,3 L0,6 Z" fill="#5aa9ff"/>
+          </marker>
+          <marker id="arback" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L7,3 L0,6 Z" fill="#ef6f6c"/>
+          </marker>
+        </defs>
+        <text x="20" y="26" class="svg-title" font-size="15">图④ 工具整体架构：受限 LLM + 确定性管线 + 分级验证门</text>
+
+        <!-- column guides: left=stage, mid=gate, right=role -->
+        <text x="120" y="52" text-anchor="middle" class="svg-sub" font-size="11.5">变换阶段（输入→输出）</text>
+        <text x="500" y="52" text-anchor="middle" class="svg-sub" font-size="11.5">验证门 Verification Gate</text>
+        <text x="855" y="52" text-anchor="middle" class="svg-sub" font-size="11.5">LLM 角色</text>
+
+        <!-- Stage 0 -->
+        <rect x="20" y="64" width="240" height="72" rx="10" fill="#1d212b" stroke="#5ecbc4" stroke-width="1.8"/>
+        <text x="34" y="86" class="svg-lbl" font-size="13" font-weight="700">阶段0　自然语言需求 → R-IR</text>
+        <text x="34" y="104" class="svg-sub" font-size="10.5">输出：结构化需求 IR（EARS/DSL）</text>
+        <text x="34" y="120" class="svg-sub" font-size="10.5">带 ID · 可测验收准则 · 受控词表</text>
+        <rect x="380" y="64" width="240" height="72" rx="10" fill="rgba(90,169,255,.08)" stroke="#5aa9ff"/>
+        <text x="394" y="86" class="svg-sub" font-size="10.5">schema 校验 · 完整性/一致性</text>
+        <text x="394" y="103" class="svg-sub" font-size="10.5">歧义检测 · <tspan fill="#f2c14e">人工批准（不可替代）</tspan></text>
+        <text x="394" y="120" class="svg-sub" font-size="10.5">回退：歧义→提问澄清，不带病前进</text>
+        <rect x="700" y="64" width="280" height="72" rx="10" fill="rgba(123,216,143,.06)" stroke="#7bd88f"/>
+        <text x="714" y="90" class="svg-sub" font-size="10.5">受限抽取：把 NL 归一到 schema 槽位</text>
+        <text x="714" y="110" class="svg-sub" font-size="10.5">不得发明需求</text>
+
+        <!-- Stage 1 -->
+        <rect x="20" y="148" width="240" height="74" rx="10" fill="#1d212b" stroke="#5ecbc4" stroke-width="1.8"/>
+        <text x="34" y="170" class="svg-lbl" font-size="13" font-weight="700">阶段1　R-IR → 架构 IR（A-IR）</text>
+        <text x="34" y="188" class="svg-sub" font-size="10.5">输出：组件/接口/契约/依赖图</text>
+        <text x="34" y="204" class="svg-sub" font-size="10.5">（类比 ARXML/SWC 描述）</text>
+        <rect x="380" y="148" width="240" height="74" rx="10" fill="rgba(90,169,255,.08)" stroke="#5aa9ff"/>
+        <text x="394" y="170" class="svg-sub" font-size="10.5">接口兼容 · 无悬空端口 · 无环依赖</text>
+        <text x="394" y="187" class="svg-sub" font-size="10.5">追溯：每条需求 R→A 均被分配</text>
+        <text x="394" y="204" class="svg-sub" font-size="10.5">回退：分配失败→加约束重生成 A-IR</text>
+        <rect x="700" y="148" width="280" height="74" rx="10" fill="rgba(123,216,143,.06)" stroke="#7bd88f"/>
+        <text x="714" y="172" class="svg-sub" font-size="10.5">在架构约束（模式/分层/允许依赖）内</text>
+        <text x="714" y="190" class="svg-sub" font-size="10.5">提议分解与接口分配，填架构模板槽位</text>
+        <text x="714" y="208" class="svg-sub" font-size="10.5">不得突破分层/类型规则</text>
+
+        <!-- Stage 2 -->
+        <rect x="20" y="234" width="240" height="74" rx="10" fill="#13202a" stroke="#7bd88f" stroke-width="2"/>
+        <text x="34" y="256" class="svg-lbl" font-size="13" font-weight="700">阶段2　A-IR → 骨架/契约</text>
+        <text x="34" y="274" class="svg-sub" font-size="10.5">模板引擎确定性生成：模块/签名/</text>
+        <text x="34" y="290" class="svg-sub" font-size="10.5">类型/接口桩/测试桩（= TLC/RTE）</text>
+        <rect x="380" y="234" width="240" height="74" rx="10" fill="rgba(90,169,255,.08)" stroke="#5aa9ff"/>
+        <text x="394" y="258" class="svg-sub" font-size="10.5">可编译（类型自洽）</text>
+        <text x="394" y="276" class="svg-sub" font-size="10.5">结构与 A-IR 一致性校验</text>
+        <text x="394" y="294" class="svg-sub" font-size="10.5">回退：模板失败=A-IR 缺陷→退阶段1</text>
+        <rect x="700" y="234" width="280" height="74" rx="10" fill="rgba(239,111,108,.06)" stroke="#ef6f6c" stroke-dasharray="4 3"/>
+        <text x="840" y="266" text-anchor="middle" class="svg-lbl" font-size="12.5" font-weight="700">LLM 不参与</text>
+        <text x="840" y="288" text-anchor="middle" class="svg-sub" font-size="10.5">纯规则映射 · 按构造确定</text>
+
+        <!-- Stage 3 -->
+        <rect x="20" y="320" width="240" height="86" rx="10" fill="#1d212b" stroke="#f2c14e" stroke-width="1.8"/>
+        <text x="34" y="342" class="svg-lbl" font-size="13" font-weight="700">阶段3　契约 → 函数体</text>
+        <text x="34" y="360" class="svg-sub" font-size="10.5">输入：单函数签名+契约+需求切片</text>
+        <text x="34" y="376" class="svg-sub" font-size="10.5">+ 仅本地上下文（防漂移）</text>
+        <text x="34" y="394" class="svg-sub" font-size="10.5">输出：实现该契约的函数体</text>
+        <rect x="380" y="320" width="240" height="86" rx="10" fill="rgba(90,169,255,.08)" stroke="#5aa9ff"/>
+        <text x="394" y="344" class="svg-sub" font-size="10.5">编译+类型 · 契约派生单测</text>
+        <text x="394" y="362" class="svg-sub" font-size="10.5">属性测试 · 静态分析/lint</text>
+        <text x="394" y="380" class="svg-sub" font-size="10.5">回退：失败→<tspan fill="#ef6f6c" font-weight="700">按固定契约重生成该单元</tspan></text>
+        <text x="394" y="398" class="svg-sub" font-size="10.5">（不修补）有界 N 次后升级人工</text>
+        <rect x="700" y="320" width="280" height="86" rx="10" fill="rgba(242,193,78,.08)" stroke="#f2c14e"/>
+        <text x="714" y="346" class="svg-lbl" font-size="12" font-weight="700">唯一"自由生成"槽位——但被装箱</text>
+        <text x="714" y="366" class="svg-sub" font-size="10.5">签名/类型/契约固定，仅可写函数体</text>
+        <text x="714" y="384" class="svg-sub" font-size="10.5">单元小而隔离 · 逐单元、对他单元无状态</text>
+
+        <!-- Stage 4 -->
+        <rect x="20" y="418" width="240" height="74" rx="10" fill="#1d212b" stroke="#5ecbc4" stroke-width="1.8"/>
+        <text x="34" y="440" class="svg-lbl" font-size="13" font-weight="700">阶段4　集成与系统验证</text>
+        <text x="34" y="458" class="svg-sub" font-size="10.5">输入：全部已验证单元 + A-IR</text>
+        <text x="34" y="474" class="svg-sub" font-size="10.5">输出：集成系统</text>
+        <rect x="380" y="418" width="240" height="74" rx="10" fill="rgba(90,169,255,.08)" stroke="#5aa9ff"/>
+        <text x="394" y="442" class="svg-sub" font-size="10.5">集成测试 · 端到端验收（回溯 R-IR）</text>
+        <text x="394" y="460" class="svg-sub" font-size="10.5">需求覆盖率 · 系统属性</text>
+        <text x="394" y="478" class="svg-sub" font-size="10.5">回退：失败定位到契约/单元→IR 级修复并再生成子树</text>
+        <rect x="700" y="418" width="280" height="74" rx="10" fill="rgba(239,111,108,.06)" stroke="#ef6f6c" stroke-dasharray="4 3"/>
+        <text x="840" y="450" text-anchor="middle" class="svg-lbl" font-size="12.5" font-weight="700">LLM 不参与</text>
+        <text x="840" y="472" text-anchor="middle" class="svg-sub" font-size="10.5">确定性集成 + 验证</text>
+
+        <!-- forward arrows -->
+        <line x1="140" y1="136" x2="140" y2="146" stroke="#5aa9ff" stroke-width="2" marker-end="url(#ar4)"/>
+        <line x1="140" y1="222" x2="140" y2="232" stroke="#5aa9ff" stroke-width="2" marker-end="url(#ar4)"/>
+        <line x1="140" y1="308" x2="140" y2="318" stroke="#5aa9ff" stroke-width="2" marker-end="url(#ar4)"/>
+        <line x1="140" y1="406" x2="140" y2="416" stroke="#5aa9ff" stroke-width="2" marker-end="url(#ar4)"/>
+        <!-- gate to stage link -->
+        <line x1="260" y1="100" x2="378" y2="100" stroke="#5aa9ff" stroke-width="1.4" stroke-dasharray="3 3"/>
+        <line x1="260" y1="185" x2="378" y2="185" stroke="#5aa9ff" stroke-width="1.4" stroke-dasharray="3 3"/>
+        <line x1="260" y1="271" x2="378" y2="271" stroke="#5aa9ff" stroke-width="1.4" stroke-dasharray="3 3"/>
+        <line x1="260" y1="363" x2="378" y2="363" stroke="#5aa9ff" stroke-width="1.4" stroke-dasharray="3 3"/>
+        <line x1="260" y1="455" x2="378" y2="455" stroke="#5aa9ff" stroke-width="1.4" stroke-dasharray="3 3"/>
+
+        <!-- regenerate feedback (red, on the far left) -->
+        <path d="M14,455 C0,360 0,250 14,165" fill="none" stroke="#ef6f6c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arback)"/>
+        <text x="-6" y="312" transform="rotate(-90 -6 312)" text-anchor="middle" fill="#ef6f6c" font-size="11" font-weight="700">失败→IR 级再生成（重生成优于修补）</text>
+
+        <!-- IR anchor rail on right of stages -->
+        <rect x="278" y="64" width="22" height="428" rx="8" fill="rgba(94,203,196,.10)" stroke="#5ecbc4" stroke-dasharray="4 3"/>
+        <text x="289" y="290" transform="rotate(90 289 290)" text-anchor="middle" fill="#5ecbc4" font-size="11.5" font-weight="700">IR 锚：R-IR · A-IR · 契约＝持久真值源</text>
+
+        <!-- bottom legend -->
+        <g transform="translate(20,512)">
+          <rect x="0" y="0" width="15" height="11" rx="3" fill="#13202a" stroke="#5ecbc4" stroke-width="2"/>
+          <text x="20" y="9" class="legend-txt">形式化 IR / 确定性锚点</text>
+          <rect x="210" y="0" width="15" height="11" rx="3" fill="#13202a" stroke="#7bd88f" stroke-width="2"/>
+          <text x="230" y="9" class="legend-txt">模板引擎（按构造确定，无 LLM）</text>
+          <rect x="470" y="0" width="15" height="11" rx="3" fill="#1d212b" stroke="#f2c14e" stroke-width="1.8"/>
+          <text x="490" y="9" class="legend-txt">LLM 受限槽位（被契约装箱）</text>
+          <rect x="700" y="0" width="15" height="11" rx="3" fill="rgba(90,169,255,.08)" stroke="#5aa9ff"/>
+          <text x="720" y="9" class="legend-txt">验证门</text>
+        </g>
+        <g transform="translate(20,536)">
+          <line x1="0" y1="6" x2="16" y2="6" stroke="#5aa9ff" stroke-width="2" marker-end="url(#ar4)"/>
+          <text x="22" y="10" class="legend-txt">确定性前向流</text>
+          <line x1="170" y1="6" x2="186" y2="6" stroke="#ef6f6c" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#arback)"/>
+          <text x="194" y="10" class="legend-txt">失败回退：到 IR 级重生成（非就地修补）</text>
+        </g>
+        <text x="20" y="582" class="svg-sub" font-size="11">关键不变量：熵只在阶段0/1的形式化入口进入并被人工/校验锚定；阶段2/4按构造确定；阶段3的不可靠性被"小槽位+验证门+重生成"三重封装。</text>
+        <text x="20" y="606" class="svg-sub" font-size="11">每个单元由"固定契约 + 有界本地上下文"生成，无跨单元状态 → 上下文不膨胀 → 无随机游走式漂移 → 抑制长期腐化。</text>
+      </svg>
+      <figcaption><b>图④</b>　确定性"需求→架构→代码"管线。青＝形式化 IR 锚点，绿＝纯模板（无 LLM），黄＝被契约装箱的 LLM 槽位，蓝＝验证门，红＝失败时"到 IR 级重生成"的回退。</figcaption>
+    </figure>
+
+    <h3>逐阶段规格：输入 / 输出 · 约束 · 验证门 · 回退</h3>
+    <div class="twocol">
+      <div class="stage-card">
+        <h5>阶段 0｜需求 → R-IR</h5>
+        <p class="kv"><b>输入</b>：自然语言需求。<b>输出</b>：结构化需求 IR（EARS 句式 / 需求 DSL，带 ID、类型化实体、可测验收准则）。</p>
+        <p class="kv"><b>约束</b>：schema/文法、受控词表、每条需求必须有可测验收准则。</p>
+        <p class="kv"><b>验证门</b>：schema 校验 + 完整性/一致性 + 歧义检测 + <b>人工批准</b>（需求是人类权威不可让渡之处）。</p>
+        <p class="kv"><b>回退</b>：抽取不过门或检出歧义→<b>提问澄清</b>，绝不带病前进。</p>
+        <p class="kv"><b>LLM 角色</b>：受限抽取/归一，<b>不得发明需求</b>。</p>
+      </div>
+      <div class="stage-card">
+        <h5>阶段 1｜R-IR → 架构 IR（A-IR）</h5>
+        <p class="kv"><b>输入</b>：已验证 R-IR。<b>输出</b>：类型化组件图——组件、接口、前/后置契约、依赖（类比 ARXML/SWC）。</p>
+        <p class="kv"><b>约束</b>：架构 DSL、允许的组件/连接类型、分层规则（无环、分层约束）、接口类型系统、设计规则。</p>
+        <p class="kv"><b>验证门</b>：接口兼容、无悬空端口、依赖无环、<b>每条需求 R→A 均被分配</b>（追溯）、图静态分析。</p>
+        <p class="kv"><b>回退</b>：需求无法分配/接口不匹配→把违反的约束加入上下文，<b>重生成 A-IR</b>；有界重试后升级人工。</p>
+        <p class="kv"><b>LLM 角色</b>：在架构约束内提议分解与接口分配，填模板槽位。</p>
+      </div>
+      <div class="stage-card">
+        <h5>阶段 2｜A-IR → 骨架 / 契约（确定性）</h5>
+        <p class="kv"><b>输入</b>：已验证 A-IR。<b>输出</b>：模块文件、函数签名、类型定义、接口桩、契约（断言/类型）、测试桩——由<b>模板引擎</b>确定性生成（TLC/RTE 类比）。</p>
+        <p class="kv"><b>约束</b>：模板引擎 + 类型系统；签名由 A-IR 接口<b>完全决定</b>。</p>
+        <p class="kv"><b>验证门</b>：可编译（类型自洽）+ 结构与 A-IR 一致。</p>
+        <p class="kv"><b>回退</b>：模板失败=A-IR 缺陷→退回阶段 1。</p>
+        <p class="kv"><b>LLM 角色</b>：<b>无</b>。按构造确定。</p>
+      </div>
+      <div class="stage-card">
+        <h5>阶段 3｜契约 → 函数体（唯一受限自由槽）</h5>
+        <p class="kv"><b>输入</b>：单函数签名 + 契约（前/后置、类型、不变量）+ 相关需求切片 + <b>仅本地上下文</b>。<b>输出</b>：实现契约的函数体。</p>
+        <p class="kv"><b>约束</b>：契约固定；单元小而隔离（上下文不漂移）；逐单元、对其他单元内部无状态（仅见其接口）。</p>
+        <p class="kv"><b>验证门</b>：编译+类型 → 契约派生单测 → 属性测试 → 静态分析/lint →（可选）有界形式化检查。</p>
+        <p class="kv"><b>回退</b>：失败→<b>按固定契约重生成本单元</b>（把失败用例加入上下文），有界 N 次；仍失败→升级人工/标 TODO。<b>关键：重生成而非修补</b>。</p>
+        <p class="kv"><b>LLM 角色</b>：在契约边界内填实现槽——价值所在，但被装箱。</p>
+      </div>
+      <div class="stage-card">
+        <h5>阶段 4｜集成与系统验证（确定性）</h5>
+        <p class="kv"><b>输入</b>：全部已验证单元 + A-IR。<b>输出</b>：集成系统。</p>
+        <p class="kv"><b>验证门</b>：集成测试、端到端验收（回溯 R-IR 的需求覆盖率）、系统属性。</p>
+        <p class="kv"><b>回退</b>：失败的集成测试把缺陷定位到接口契约（A-IR）或某单元→在 <b>IR 级修复并再生成受影响子树</b>，而非临场打补丁。</p>
+        <p class="kv"><b>LLM 角色</b>：<b>无</b>。确定性集成 + 验证。</p>
+      </div>
+    </div>
+
+    <h3>用 IR 锚定 +「重生成优于修改」对抗幻觉与长期腐化</h3>
+    <figure>
+      <!-- ===== Figure ⑤ Anti-hallucination & anti-decay ===== -->
+      <svg viewBox="0 0 1000 470" role="img" aria-label="幻觉与长期腐化的对抗机制示意图">
+        <defs>
+          <marker id="ar5" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L7,3 L0,6 Z" fill="#5aa9ff"/>
+          </marker>
+          <marker id="ar5r" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L7,3 L0,6 Z" fill="#f2c14e"/>
+          </marker>
+          <marker id="ar5g" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#5ecbc4"/>
+          </marker>
+        </defs>
+        <text x="20" y="26" class="svg-title" font-size="15">图⑤ 对抗机制：左—拦截单步幻觉；右—消除多步腐化</text>
+
+        <!-- divider -->
+        <line x1="500" y1="46" x2="500" y2="450" stroke="#2a303c" stroke-dasharray="5 5"/>
+
+        <!-- LEFT panel: hallucination -->
+        <text x="40" y="66" class="svg-lbl" font-size="13.5" font-weight="700">幻觉（单步 / 空间）→ 验证门 + 装箱槽位</text>
+
+        <rect x="40" y="84" width="170" height="54" rx="9" fill="#1d212b" stroke="#f2c14e" stroke-width="1.6"/>
+        <text x="125" y="106" text-anchor="middle" class="svg-lbl" font-size="12" font-weight="700">受限 LLM 生成</text>
+        <text x="125" y="124" text-anchor="middle" class="svg-sub" font-size="10.5">固定契约的小槽位</text>
+
+        <line x1="210" y1="111" x2="248" y2="111" stroke="#5aa9ff" stroke-width="2" marker-end="url(#ar5)"/>
+
+        <!-- gate diamond -->
+        <polygon points="320,84 392,124 320,164 248,124" fill="rgba(90,169,255,.10)" stroke="#5aa9ff" stroke-width="1.8"/>
+        <text x="320" y="116" text-anchor="middle" class="svg-lbl" font-size="12" font-weight="700">验证门</text>
+        <text x="320" y="133" text-anchor="middle" class="svg-sub" font-size="10">类型/编译/单测/属性</text>
+
+        <!-- pass -->
+        <line x1="392" y1="124" x2="430" y2="124" stroke="#7bd88f" stroke-width="2" marker-end="url(#ar5)"/>
+        <rect x="430" y="100" width="56" height="48" rx="9" fill="rgba(123,216,143,.10)" stroke="#7bd88f"/>
+        <text x="458" y="120" text-anchor="middle" class="svg-lbl" font-size="11" font-weight="700">通过</text>
+        <text x="458" y="137" text-anchor="middle" class="svg-sub" font-size="9.5">接受</text>
+        <text x="430" y="92" class="svg-sub" font-size="10">PASS</text>
+
+        <!-- fail loop -->
+        <path d="M320,164 C320,210 150,210 125,142" fill="none" stroke="#ef6f6c" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#arback)"/>
+        <text x="222" y="206" text-anchor="middle" fill="#ef6f6c" font-size="10.5" font-weight="700">不过→拒绝并重采样（有界 N 次）</text>
+
+        <rect x="40" y="232" width="446" height="92" rx="10" fill="rgba(94,203,196,.06)" stroke="#5ecbc4" stroke-dasharray="4 3"/>
+        <text x="56" y="254" class="svg-lbl" font-size="12" font-weight="700">为何有效</text>
+        <text x="56" y="273" class="svg-sub" font-size="11">· 杜撰的 API → 编译/类型门当场拦下</text>
+        <text x="56" y="291" class="svg-sub" font-size="11">· 错误逻辑 → 契约派生测试/属性测试拦下</text>
+        <text x="56" y="309" class="svg-sub" font-size="11">· 槽位极小 → 单次误差表面积最小、可检查</text>
+
+        <!-- RIGHT panel: decay chart -->
+        <text x="520" y="66" class="svg-lbl" font-size="13.5" font-weight="700">长期腐化（多步 / 时间）→ IR 锚定 + 重生成</text>
+
+        <!-- chart axes -->
+        <line x1="560" y1="300" x2="965" y2="300" stroke="#9aa6b8" stroke-width="1.2"/>
+        <line x1="560" y1="100" x2="560" y2="300" stroke="#9aa6b8" stroke-width="1.2"/>
+        <text x="762" y="322" text-anchor="middle" class="svg-sub" font-size="11">迭代轮次 →</text>
+        <text x="548" y="200" transform="rotate(-90 548 200)" text-anchor="middle" class="svg-sub" font-size="11">误差 / 漂移 →</text>
+
+        <!-- drift curve (red, exponential up) -->
+        <path d="M560,290 C620,285 660,260 710,215 C760,170 800,135 860,112 C900,100 935,96 960,94"
+              fill="none" stroke="#ef6f6c" stroke-width="2.6"/>
+        <text x="828" y="92" fill="#ef6f6c" font-size="11" font-weight="700">无锚定·增量修补</text>
+        <text x="838" y="108" fill="#ef6f6c" font-size="10">误差复合放大（随机游走）</text>
+
+        <!-- anchored flat sawtooth (teal) -->
+        <path d="M560,288 L600,278 L605,288 L645,278 L650,288 L690,278 L695,288 L735,278 L740,288 L780,278 L785,288 L825,278 L830,288 L870,278 L875,288 L915,278 L920,288 L960,280"
+              fill="none" stroke="#5ecbc4" stroke-width="2.4"/>
+        <text x="690" y="266" fill="#5ecbc4" font-size="11" font-weight="700">IR 锚定 + 每轮重生成</text>
+        <text x="690" y="281" fill="#5ecbc4" font-size="10">漂移被周期性归零（有回复力）</text>
+
+        <!-- small reset arrows up to baseline for teal -->
+        <line x1="605" y1="288" x2="605" y2="280" stroke="#5ecbc4" stroke-width="1" marker-end="url(#ar5g)"/>
+
+        <!-- IR anchor box -->
+        <rect x="600" y="338" width="320" height="58" rx="10" fill="rgba(94,203,196,.08)" stroke="#5ecbc4" stroke-width="1.8"/>
+        <text x="760" y="360" text-anchor="middle" class="svg-lbl" font-size="12" font-weight="700">IR 锚（R-IR · A-IR · 契约）= 持久真值源</text>
+        <text x="760" y="379" text-anchor="middle" class="svg-sub" font-size="10.5">改行为=改 IR 再确定性生成；每单元从固定契约无状态再生</text>
+        <!-- restoring force arrows -->
+        <path d="M700,338 C690,326 680,318 700,302" fill="none" stroke="#5ecbc4" stroke-width="1.6" stroke-dasharray="3 2" marker-end="url(#ar5g)"/>
+        <text x="612" y="416" fill="#5ecbc4" font-size="10.5">回复力：把每轮拉回基线</text>
+
+        <!-- bottom note left -->
+        <text x="40" y="352" class="svg-sub" font-size="11">分治：幻觉=就地接地+拒绝重采样；</text>
+        <text x="40" y="370" class="svg-sub" font-size="11">腐化=稳定 IR 提供回复力，重生成切断复合。</text>
+        <text x="40" y="396" class="svg-sub" font-size="11">反模式：反复让 LLM"修一下"——</text>
+        <text x="40" y="414" class="svg-sub" font-size="11">用治幻觉的手段，反而喂养了腐化。</text>
+
+        <!-- legend right -->
+        <g transform="translate(560,432)">
+          <line x1="0" y1="6" x2="22" y2="6" stroke="#ef6f6c" stroke-width="2.6"/>
+          <text x="28" y="10" class="legend-txt">无锚定增量编辑（误差累积）</text>
+          <line x1="230" y1="6" x2="252" y2="6" stroke="#5ecbc4" stroke-width="2.4"/>
+          <text x="258" y="10" class="legend-txt">IR 锚定 + 重生成（漂移归零）</text>
+        </g>
+      </svg>
+      <figcaption><b>图⑤</b>　左：幻觉是单步空间误差，用"装箱小槽位 + 验证门 + 拒绝重采样"拦截。右：长期腐化是多步时间误差，IR 作为回复力、每轮从固定契约重生成把漂移周期性归零，避免随机游走式复合放大。</figcaption>
+    </figure>
+
+    <p>
+      把两张机制图与管线合起来看，对抗逻辑是清晰的双线：
+    </p>
+    <div class="callout det" style="border-color:rgba(90,169,255,.4);background:rgba(90,169,255,.06)"><span class="tag" style="background:rgba(90,169,255,.16);color:var(--accent)">对抗幻觉（单步）</span>
+      <p>每个 LLM 产出在被接受前都必须过验证门；LLM 只在<strong>契约装箱的小槽位</strong>内工作，单次生成的误差表面积被压到最小且可检查。杜撰 API 编译不过，错误逻辑测试不过。验证门把一个不可靠采样器，变成"<strong>要么验证通过、要么有界重采样</strong>"的可靠组件。</p>
+    </div>
+    <div class="callout det" style="border-color:rgba(94,203,196,.4);background:rgba(94,203,196,.06)"><span class="tag" style="background:rgba(94,203,196,.16);color:var(--teal)">对抗长期腐化（多步）</span>
+      <p>真值源是 <strong>IR（R-IR / A-IR / 契约）而非聊天上下文</strong>。改行为=改 IR 再确定性生成；逐单元再生成是<strong>无状态的、每次重新锚定到固定契约</strong>，因此不积累漂移——这就是"回复力"。每个单元从<strong>有界、固定的上下文</strong>（其契约+本地依赖）生成，上下文永不无界膨胀。重生成用一个<strong>不动点</strong>替换了"带漂移的随机游走"动力学。</p>
+    </div>
+
+    <h3>现有技术如何组合落地</h3>
+    <table class="ftable" style="margin-top:8px">
+      <thead><tr><th style="width:24%">技术</th><th>在管线中的位置与作用</th></tr></thead>
+      <tbody>
+        <tr><th>DSL（领域专用语言）</th><td>R-IR 与 A-IR 即 DSL——形式化、受约束、机器可校验，在<strong>入口处压低歧义熵</strong>（对应 ARXML / model.rtw 的角色）。</td></tr>
+        <tr><th>形式化规约<br>Formal Specification</th><td>契约（前/后置、不变量）、接口规约——单元必须满足的<strong>可验证真值</strong>，同时驱动属性检查。</td></tr>
+        <tr><th>模板引擎<br>Template Engine</th><td>阶段 2 把 A-IR <strong>确定性映射</strong>为骨架/胶水（TLC/RTE 类比），承担一切"规则能做"的部分，无 LLM。</td></tr>
+        <tr><th>类型系统<br>Type System</th><td>永远在线的<strong>廉价验证门</strong>，把整类幻觉变成"编译不过"；并作为契约的载体。</td></tr>
+        <tr><th>测试 / 属性验证<br>Testing / PBT</th><td>单元与系统层的<strong>可执行验证门</strong>；R-IR 的验收准则<strong>降生为测试</strong>（追溯闭环），属性测试越过样例探测边界。</td></tr>
+      </tbody>
+    </table>
+    <p>
+      组合方式一句话概括：<strong>DSL + 类型系统在入口压熵并静态拦截幻觉；模板引擎吃掉确定性部分；LLM 被关进隔离的契约槽位；形式化契约 + 测试构成验证门；IR + 重生成提供回复力以根除腐化。</strong>每一块都是成熟、可采购的工程技术——这套方案不需要任何尚未存在的能力，它只是把工业代码生成"熵前移 + 确定性变换 + 可验证输出"的纪律，套在 LLM 这个新的、不可靠的变换器之外。
+    </p>
+
+    <div class="callout bound"><span class="tag">落地的诚实边界</span>
+      <p>这套设计能把 LLM 的不可靠<strong>封装</strong>，但不能<strong>消灭</strong>它：验证门只在"可写出可执行/可检查的规约"的地方有牙齿——UI 美感、模糊产品意图、缺乏 oracle 的领域，门会变钝，此时回退到人工批准（阶段 0 的设计正源于此）。同时，验证门只能证伪不能证明：通过测试 ≠ 正确。因此该工具的定位是<strong>"在可形式化的范围内逼近工业级确定性"</strong>，而非"让 LLM 变得确定"——这与第三部分指出的类比边界完全一致。</p>
+    </div>
+  </section>
+
+  <!-- ======================= FIN ======================= -->
+  <section id="fin">
+    <h2><span class="num">06</span>结语：确定性的迁移边界</h2>
+    <p>
+      贯穿五部分的，是同一个第一性原理：<strong>工业代码生成的可信度来自结构而非智能</strong>。Simulink 把熵钉在"模型+配置"，AUTOSAR 把熵钉在"ARXML 架构契约"，编译器把熵钉在"源码文法"——此后都是确定性变换 + 可验证输出。LLM 无法提供"按构造正确"的规则系统，但我们可以把它<strong>关进同一副结构</strong>：形式化 IR 入口、装箱的受限槽位、分级验证门、以及"改 IR 再生成"取代"反复修补"的纪律。
+    </p>
+    <p>
+      在这副结构里，LLM 不需要变得可靠——<strong>结构负责把它的不可靠产出过滤成可靠系统</strong>。幻觉被验证门当场拒绝，长期腐化被 IR 的回复力与重生成的不动点消解。这不是让概率采样器假装成确定性编译器，而是承认它的概率本质，并用三十年工业代码生成沉淀下来的确定性骨架，为它划定一个"在可形式化范围内可信"的工作边界。
+    </p>
+    <div class="pill-row">
+      <span class="pill" style="border-color:rgba(94,203,196,.5);color:var(--teal)">熵前移到形式化入口</span>
+      <span class="pill" style="border-color:rgba(123,216,143,.5);color:var(--det)">确定性部分交给模板</span>
+      <span class="pill" style="border-color:rgba(242,193,78,.5);color:var(--warn)">LLM 关进契约槽位</span>
+      <span class="pill" style="border-color:rgba(90,169,255,.5);color:var(--accent)">每步设验证门</span>
+      <span class="pill" style="border-color:rgba(239,111,108,.5);color:var(--danger)">重生成优于修补</span>
+    </div>
+  </section>
+
+  <footer>
+    <p>本报告为自包含 HTML：全部图表均以内联 SVG / 纯 CSS 绘制，不引用任何外部图片、脚本或样式资源。术语首次出现处标注英文。<br>
+    主题：把工业级代码生成的确定性机制迁移到 LLM 编程 · Simulink / AUTOSAR / 编译器 → LLM。</p>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Keel · 嵌入式垂直方向 竞品与市场分析报告</title>
+<style>
+  :root{
+    --ink:#14202e; --body:#283543; --muted:#5b6b7c; --faint:#8896a4;
+    --line:#e3e8ee; --bg:#f4f6f9; --panel:#ffffff;
+    --navy:#16324f; --teal:#0f7c74; --teal-soft:#e6f4f2; --teal-line:#bfe3df;
+    --accent:#127a8a;
+    --green:#1a9460; --green-soft:#e7f6ee;
+    --amber:#c97d12; --amber-soft:#fbf0db;
+    --red:#cf4439; --red-soft:#fbe9e7;
+    --purple:#7b51c4; --purple-soft:#efe8fb;
+    --slate:#475569;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--body);
+    font-family:"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif;
+    font-size:15px;line-height:1.72;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:980px;margin:0 auto;padding:0 22px 80px;}
+
+  /* 封面 */
+  .cover{background:linear-gradient(135deg,#10293f 0%,#0f5d56 100%);color:#fff;
+    border-radius:0 0 20px 20px;padding:54px 48px 46px;margin-bottom:34px;
+    box-shadow:0 14px 40px rgba(15,45,60,.22);position:relative;overflow:hidden;}
+  .cover::after{content:"";position:absolute;right:-80px;top:-80px;width:300px;height:300px;
+    border-radius:50%;background:rgba(255,255,255,.05);}
+  .cover .kicker{font-size:13px;letter-spacing:3px;color:#9fe3da;text-transform:uppercase;font-weight:600;}
+  .cover h1{font-size:32px;line-height:1.25;margin:14px 0 8px;font-weight:800;letter-spacing:.5px;}
+  .cover h2{font-size:17px;font-weight:500;color:#d7ecea;margin:0 0 22px;}
+  .cover .meta{display:flex;flex-wrap:wrap;gap:10px 26px;font-size:13px;color:#bfe0db;border-top:1px solid rgba(255,255,255,.16);padding-top:16px;}
+  .cover .meta b{color:#fff;font-weight:600;}
+
+  /* 通用 */
+  h2.sec{font-size:22px;color:var(--ink);margin:46px 0 14px;padding-left:14px;
+    border-left:5px solid var(--teal);font-weight:800;scroll-margin-top:16px;}
+  h3.sub{font-size:17px;color:var(--navy);margin:26px 0 8px;font-weight:700;}
+  h4{font-size:15px;color:var(--ink);margin:18px 0 6px;font-weight:700;}
+  p{margin:9px 0;}
+  a{color:var(--accent);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  strong{color:var(--ink);}
+  .lead{font-size:16px;color:var(--ink);}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:20px 24px;margin:16px 0;box-shadow:0 1px 2px rgba(20,40,60,.04);}
+
+  /* TOC */
+  .toc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 24px;margin:0 0 10px;}
+  .toc h3{margin:0 0 10px;font-size:14px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-weight:700;}
+  .toc ol{margin:0;padding-left:22px;columns:2;column-gap:34px;}
+  .toc li{margin:5px 0;font-size:14px;}
+  .toc a{color:var(--slate);}
+
+  /* 要点框 */
+  .callout{border-left:4px solid var(--teal);background:var(--teal-soft);
+    border-radius:0 12px 12px 0;padding:14px 20px;margin:18px 0;}
+  .callout.warn{border-left-color:var(--amber);background:var(--amber-soft);}
+  .callout.key{border-left-color:var(--purple);background:var(--purple-soft);}
+  .callout p{margin:6px 0;}
+  .callout .tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:1px;
+    text-transform:uppercase;color:var(--teal);margin-bottom:4px;}
+  .callout.warn .tag{color:var(--amber);}
+  .callout.key .tag{color:var(--purple);}
+
+  /* 表格 */
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;background:#fff;
+    border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  th,td{padding:9px 11px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{background:#eef2f6;color:var(--ink);font-weight:700;font-size:12.5px;}
+  tr:last-child td{border-bottom:none;}
+  tbody tr:nth-child(even){background:#fafbfc;}
+  td.center,th.center{text-align:center;}
+
+  /* heatmap 单元 */
+  .hm td{text-align:center;font-weight:700;}
+  .hm td.lab{text-align:left;font-weight:600;color:var(--ink);background:#f6f8fa;}
+  .cell-full{background:var(--green-soft);color:var(--green);}
+  .cell-part{background:var(--amber-soft);color:var(--amber);}
+  .cell-none{background:#f1f3f5;color:#c2cad2;}
+  .hm tr.keel td{background:#10293f!important;color:#fff;}
+  .hm tr.keel td.lab{background:#0f5d56!important;color:#fff;}
+  .hm tr.keel .cell-full{color:#7df0c8;}
+  .hm tr.keel .cell-part{color:#ffd98a;}
+  .hm tr.keel .cell-none{color:#7e8c97;}
+
+  /* 图卡 */
+  figure{margin:20px 0;background:#fff;border:1px solid var(--line);border-radius:14px;
+    padding:18px 20px 12px;box-shadow:0 1px 2px rgba(20,40,60,.04);}
+  figure svg{display:block;width:100%;height:auto;}
+  figcaption{font-size:12.5px;color:var(--muted);margin-top:10px;border-top:1px dashed var(--line);padding-top:9px;}
+  figcaption b{color:var(--ink);}
+
+  /* 分层格局 */
+  .tiers{display:flex;flex-direction:column;gap:8px;margin:14px 0;}
+  .tier{display:flex;align-items:stretch;border-radius:10px;overflow:hidden;border:1px solid var(--line);}
+  .tier .tname{flex:0 0 168px;padding:11px 14px;font-weight:700;font-size:13px;color:#fff;display:flex;align-items:center;}
+  .tier .tbody{flex:1;padding:10px 14px;font-size:13px;background:#fff;color:var(--body);}
+  .tier .tbody b{color:var(--ink);}
+  .t1 .tname{background:#0f5d56;} .t2 .tname{background:#127a8a;}
+  .t3 .tname{background:#2a6f97;} .t4 .tname{background:#3d7a4e;}
+  .t5 .tname{background:#6a5acd;} .t6 .tname{background:#9a6a3c;}
+  .t7 .tname{background:#5b6b7c;}
+
+  /* 玩家卡 */
+  .players{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;}
+  .pcard{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fff;}
+  .pcard h4{margin:0 0 2px;display:flex;align-items:center;gap:8px;}
+  .pcard .badge{font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:999px;letter-spacing:.5px;}
+  .b-yc{background:#fde8d7;color:#d4621a;} .b-oss{background:#e7f6ee;color:var(--green);}
+  .b-vendor{background:#e7eef6;color:#2a6f97;} .b-ent{background:#efe8fb;color:var(--purple);}
+  .pcard .role{font-size:11.5px;color:var(--faint);margin:0 0 7px;}
+  .pcard p{margin:5px 0;font-size:12.8px;line-height:1.6;}
+  .pcard .gap{color:var(--red);font-size:12.2px;}
+
+  /* timeline */
+  .tl{position:relative;margin:18px 0 8px;padding-left:6px;}
+  .tl .row{display:flex;gap:14px;margin:0 0 4px;}
+  .tl .when{flex:0 0 96px;text-align:right;font-weight:800;color:var(--teal);font-size:12.5px;padding-top:1px;}
+  .tl .what{flex:1;border-left:2px solid var(--teal-line);padding:0 0 16px 16px;position:relative;font-size:13px;}
+  .tl .what::before{content:"";position:absolute;left:-6px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--teal);}
+  .tl .what b{color:var(--ink);}
+
+  /* pincer */
+  .pincer{display:grid;grid-template-columns:1fr;gap:8px;margin:14px 0;text-align:center;}
+  .pincer .box{border-radius:10px;padding:12px 16px;font-size:13.5px;}
+  .pincer .top{background:var(--amber-soft);border:1px solid #f0dcb4;}
+  .pincer .mid{background:var(--teal-soft);border:2px solid var(--teal);font-weight:700;color:var(--ink);}
+  .pincer .bot{background:var(--amber-soft);border:1px solid #f0dcb4;}
+  .pincer .arrow{font-size:18px;color:var(--amber);line-height:1;}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  ul.tight{margin:8px 0;padding-left:20px;} ul.tight li{margin:5px 0;}
+  .disclaimer{font-size:12px;color:var(--faint);background:#f0f2f5;border-radius:10px;padding:12px 16px;margin:14px 0;}
+  .src{font-size:12.5px;}
+  .src li{margin:6px 0;word-break:break-all;}
+  .footer{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;font-size:12px;color:var(--faint);text-align:center;}
+  @media(max-width:760px){.players,.grid2{grid-template-columns:1fr;}.toc ol{columns:1;}.cover{padding:40px 26px;}.cover h1{font-size:25px;}}
+  @media print{body{background:#fff;}.cover{box-shadow:none;}figure,.card{break-inside:avoid;}}
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="kicker">竞品与市场分析报告 · 内部研究</div>
+  <h1>Keel 垂直嵌入式方向<br>竞品格局与市场机会分析</h1>
+  <h2>AI 固件 copilot、嵌入式 spec-driven 与「AI + 治理 + 仿真」闭环的现状盘点与白地评估</h2>
+  <div class="meta">
+    <span><b>主题</b>　Keel 产品战略 · 嵌入式垂直可行性</span>
+    <span><b>日期</b>　2026-06-08</span>
+    <span><b>方法</b>　联网检索 + 桌面竞品分析</span>
+    <span><b>状态</b>　草案 v1</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <nav class="toc">
+    <h3>目录</h3>
+    <ol>
+      <li><a href="#s1">执行摘要</a></li>
+      <li><a href="#s2">背景与研究方法</a></li>
+      <li><a href="#s3">市场与需求分析</a></li>
+      <li><a href="#s4">竞争格局全景（七层）</a></li>
+      <li><a href="#s5">能力覆盖矩阵</a></li>
+      <li><a href="#s6">定位与白地分析</a></li>
+      <li><a href="#s7">资本与动量信号</a></li>
+      <li><a href="#s8">关键洞察与战略建议</a></li>
+      <li><a href="#s9">风险评估</a></li>
+      <li><a href="#s10">结论与下一步</a></li>
+      <li><a href="#s11">信息来源</a></li>
+    </ol>
+  </nav>
+
+  <div class="disclaimer">
+    <b>口径与免责说明：</b>本报告中产品能力描述多来自各厂商官网与公开报道的<b>自述</b>，未经独立测评核实；市场规模为多家分析机构口径，<b>数值区间差异较大</b>，仅用于量级判断，不作投资依据。检索时点为 2026 年 6 月，AI-embedded 为高速演进领域，结论具有时效性。完整来源见第 11 节。
+  </div>
+
+  <!-- ============ 1 执行摘要 ============ -->
+  <h2 class="sec" id="s1">1 · 执行摘要</h2>
+
+  <p class="lead">一句话结论：<strong>「AI + 仿真 / HIL 闭环」已不再是空白地带</strong>——2025–26 年已有 YC 背景的专业向创业公司（BootLoop、Embedder）把「自然语言→生成→编译→烧录→真机/仿真测试→自修复」做成产品；<strong>但它们的「真相源」是数据手册与合规标准（正确性 grounding），而非架构蓝图</strong>。Keel 真正的楔子——<strong>蓝图即真相的结构治理 + 非架构师可读的能力地图 + 成长不腐化 + 代码归属可迁出</strong>——目前仍无人占据。</p>
+
+  <div class="callout key">
+    <span class="tag">对此前判断的修正</span>
+    <p>上一轮分析曾把「自建仿真验证回路」列为 Keel 的头号护城河。<b>该判断需推翻：</b>验证回路正被有资本背书的创业公司快速商品化（BootLoop 主打 ITAR/HIL、Embedder 企业级气隙部署）。Keel 不应在回路上硬碰，而应<b>骑在/集成这些执行层之上</b>，把护城河押在它们都没做的「治理 + 可读 + 非架构师人群」一层——这与 Keel-Web「骑在 Claude Code 之上」是同一动作的平移。</p>
+  </div>
+
+  <table>
+    <thead><tr><th style="width:30%">维度</th><th style="width:34%">现状</th><th>对 Keel 的含义</th></tr></thead>
+    <tbody>
+      <tr><td>AI NL→固件 + 闭环验证</td><td>BootLoop、Embedder 已做且做得好（专业向）</td><td>❌ 已被占 → 转为「集成而非自建」</td></tr>
+      <tr><td><b>架构/蓝图即真相 + 漂移防腐</b></td><td>无人做；专业工具 grounding 在数据手册，创客工具无结构</td><td>✅ <b>白地</b> → 核心护城河</td></tr>
+      <tr><td><b>非架构师可读能力地图</b></td><td>专业工具极硬核（ISO 26262/ITAR），创客工具极浅</td><td>✅ <b>白地</b> → R1 可读半边正对此</td></tr>
+      <tr><td><b>成长不腐化 + 可迁出</b></td><td>创客工具起步浅、专业工具按任务优化、平台型锁定</td><td>✅ <b>白地</b> → 差异化定位</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ============ 2 背景与方法 ============ -->
+  <h2 class="sec" id="s2">2 · 背景与研究方法</h2>
+  <p><strong>Keel 内核：</strong>以「应用蓝图」为唯一真相源、以「能力地图」为非程序员唯一界面，骑在 Claude Code / Codex 之上让应用持续成长而<strong>不腐化</strong>，代码全程归用户、可迁出。其押注的核心假设 <strong>R1</strong>：蓝图能否同时做到<strong>机器可检</strong>（强制半边，已被认为基础扎实）+ <strong>非程序员可读</strong>（可读半边，最大未知）。</p>
+  <p><strong>本报告问题：</strong>若把 Keel 垂直细分到<strong>嵌入式开发</strong>，竞品与需求层面机会如何？是否已有人在做「AI 固件 copilot / 嵌入式 spec-driven / AI+治理+仿真闭环」？</p>
+  <p><strong>方法：</strong>围绕「专业 AI 固件闭环、创客 NL→MCU、原厂配置工具、OSS 框架、仿真/健康工具、高端模型驱动先例、研究前沿」七条线做联网检索，深读关键玩家官网，并补齐市场规模与融资背景。</p>
+
+  <!-- ============ 3 市场与需求 ============ -->
+  <h2 class="sec" id="s3">3 · 市场与需求分析</h2>
+
+  <figure>
+    <svg viewBox="0 0 720 268" role="img" aria-label="2026 年相关市场规模条形图">
+      <!-- axis baseline -->
+      <text x="8" y="14" font-size="12" font-weight="700" fill="#14202e">2026 年相关市场规模（US$ 十亿）与增速</text>
+      <!-- rows -->
+      <!-- helper: bar x start 168, scale 350px = 210B => 1.667 px/B -->
+      <!-- row1 嵌入式系统 201.4 -->
+      <g>
+        <text x="160" y="52" font-size="12.5" text-anchor="end" fill="#283543">嵌入式系统</text>
+        <rect x="168" y="40" width="335.7" height="20" rx="3" fill="#334155"/>
+        <text x="511" y="55" font-size="12" font-weight="700" fill="#14202e">$201.4B · CAGR 7.6%</text>
+      </g>
+      <!-- row2 嵌入式计算 128.3 -->
+      <g>
+        <text x="160" y="92" font-size="12.5" text-anchor="end" fill="#283543">嵌入式计算</text>
+        <rect x="168" y="80" width="213.8" height="20" rx="3" fill="#475569"/>
+        <text x="389" y="95" font-size="12" font-weight="700" fill="#14202e">$128.3B · CAGR 6.9%</text>
+      </g>
+      <!-- row3 低代码/无代码 44.5 -->
+      <g>
+        <text x="160" y="132" font-size="12.5" text-anchor="end" fill="#283543">低代码 / 无代码</text>
+        <rect x="168" y="120" width="74.2" height="20" rx="3" fill="#7b51c4"/>
+        <text x="250" y="135" font-size="12" font-weight="700" fill="#14202e">$44.5B（Gartner 口径）· 高双位数增长</text>
+      </g>
+      <!-- row4 IoT MCU 8.4 -->
+      <g>
+        <text x="160" y="172" font-size="12.5" text-anchor="end" fill="#283543">IoT 微控制器</text>
+        <rect x="168" y="160" width="14" height="20" rx="3" fill="#0f7c74"/>
+        <text x="190" y="175" font-size="12" font-weight="700" fill="#0f7c74">$8.4B · CAGR 14.2% ▲</text>
+      </g>
+      <!-- row5 TinyML 1.36 -->
+      <g>
+        <text x="160" y="212" font-size="12.5" text-anchor="end" fill="#283543">TinyML / 边缘 AI</text>
+        <rect x="168" y="200" width="4" height="20" rx="2" fill="#14b8a6"/>
+        <text x="180" y="215" font-size="12" font-weight="700" fill="#0f7c74">$1.36B · CAGR 9.8–22.1% ▲▲</text>
+      </g>
+      <line x1="168" y1="34" x2="168" y2="226" stroke="#cdd5dd" stroke-width="1"/>
+      <text x="168" y="244" font-size="11" fill="#8896a4">深色＝庞大存量基底　|　</text>
+      <text x="300" y="244" font-size="11" fill="#0f7c74">青色＝AI 原生高增长楔形（体量小、增速最快）</text>
+    </svg>
+    <figcaption><b>图 1　</b>嵌入式相关市场量级与增速（2026）。存量基底巨大（嵌入式系统约 <b>$201B</b>），但真正的高增长在 <b>IoT MCU（14.2%）</b> 与 <b>TinyML/边缘 AI（最高约 22%）</b> 这两块 AI 原生楔形——也正是 Keel 嵌入式滩头最该切入的位置。数值为多机构口径，仅示量级。</figcaption>
+  </figure>
+
+  <h3 class="sub">3.1 需求侧四大驱动</h3>
+  <div class="grid2">
+    <div class="card" style="margin:6px 0">
+      <h4>① 开发者短缺 + 公民开发者崛起</h4>
+      <p>到 2026 年美国预计缺口 <strong>约 120–140 万</strong>名软件开发者；<strong>公民开发者已 4:1 超过专业开发者</strong>，70% 新企业应用将用低代码/无代码。把结构纪律「平民化」的需求是宏观级的。</p>
+    </div>
+    <div class="card" style="margin:6px 0">
+      <h4>② 创客 → 产品的鸿沟</h4>
+      <p>数百万 Arduino/ESP32 创客卡在「面包板能跑、做不成可靠出货产品」。Keel 的「不腐化 + 结构纪律」正好架这座桥——潜在需求最大且最贴 Persona A。</p>
+    </div>
+    <div class="card" style="margin:6px 0">
+      <h4>③ 边缘 AI 浪潮</h4>
+      <p>大量领域专家想把 ML 塞进设备而不愿当固件专家。<strong>Qualcomm 于 2025-03 收购 Edge Impulse</strong> 印证了「为非固件专家抽象嵌入式」这条赛道的战略价值与资本关注。</p>
+    </div>
+    <div class="card" style="margin:6px 0">
+      <h4>④ 固件腐化痛点更烈</h4>
+      <p>固件腐化（全局状态、ISR 面条、硬件耦合、缺测试）比 Web 更狠，代价更高（现场失效、难打补丁、安全后果）。Keel 防腐价值主张在这里更尖。</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="tag">需求侧小结</span>
+    <p>宏观（开发者缺口 + 公民开发者）、垂直（创客→产品鸿沟 + 边缘 AI）、痛点（腐化代价更高）三股力共振。<b>体量在存量嵌入式，增速与可切入性在 IoT MCU / 边缘 AI 楔形。</b></p>
+  </div>
+
+  <!-- ============ 4 竞争格局 ============ -->
+  <h2 class="sec" id="s4">4 · 竞争格局全景（七层）</h2>
+  <p>把嵌入式开发的「拼图」按贴近 Keel 的程度分七层。关键发现：<strong>每一块都已有成熟对应物，且大多面向开发者；没有任何一家把它们串成「AI 驱动 + 受治理不腐化 + 非架构师可读 + 厂商中立」的单一产品。</strong></p>
+
+  <div class="tiers">
+    <div class="tier t1"><div class="tname">① 专业 AI 固件闭环</div><div class="tbody"><b>BootLoop、Embedder、Flux Copilot</b>　NL→生成→编译→烧录→HIL/仿真→自修复。<b>最接近设想形态，但人群相反（专业工程师）、且 grounding 在数据手册而非架构。</b></div></div>
+    <div class="tier t2"><div class="tname">② 创客 NL→MCU</div><div class="tbody"><b>Espressif ESP-Claw、EQSP32、zclaw、Paulblink</b>　「描述一下就能在 ESP32 上跑」。起步快但<b>浅</b>（单板、Lua 脚本、绑硬件/框架），无成长与防腐故事。</div></div>
+    <div class="tier t3"><div class="tname">③ 原厂图形配置</div><div class="tbody"><b>ST CubeMX、Microchip MCC/Harmony、TI SysConfig、Infineon ModusToolbox/PSoC Creator、SiLabs Simplicity、ESP-IDF</b>　「外设地图→生成代码」形态最像，但<b>单厂锁定、一次性 codegen、不治理</b>。</div></div>
+    <div class="tier t4"><div class="tname">④ OSS 框架</div><div class="tbody"><b>Zephyr（devicetree+Kconfig，声明式蓝图先例）、Luos（结构纪律+拓扑，精神最近）、PlatformIO（厂商中立构建）、modm</b>　强但要工程师手驾，无 AI、无可读地图。</div></div>
+    <div class="tier t5"><div class="tname">⑤ 验证 / 仿真</div><div class="tbody"><b>Renode（OSS）、Wokwi（浏览器仿真）、QEMU</b>　回归守护的验证回路基座；正被第①层创业公司接入并商品化。</div></div>
+    <div class="tier t6"><div class="tname">⑥ 健康 / 观测</div><div class="tbody"><b>Memfault、ESP Insights、Golioth、Mender（OTA）</b>　设备崩溃/指标/看门狗/升级——Keel「健康/漂移 FR-6」的车队级运行期版本。</div></div>
+    <div class="tier t7"><div class="tname">⑦ 高端先例 / 通用 AI</div><div class="tbody"><b>AUTOSAR、ANSYS SCADE、MATLAB Simulink+Embedded Coder</b>（「架构即真相+机检符合性」已成熟，但重、贵、面向大团队）；<b>Copilot/Cursor/Claude Code</b>（硬件盲、腐化盲）。</div></div>
+  </div>
+
+  <h3 class="sub">4.1 焦点层：专业 AI 固件闭环（最强竞品）</h3>
+  <div class="players">
+    <div class="pcard">
+      <h4>BootLoop <span class="badge b-yc">YC</span></h4>
+      <p class="role">前 SpaceX / MIT Media Lab 团队 · 「固件以分钟计，而非月」</p>
+      <p>Agent 接自然语言→写框架原生代码、对工具链编译、烧到连着的板子、迭代到跑通。<b>BootLoop Test</b>（2026-05 发布）自动生成 unit/integration/compile/runtime 测试计划，在真机 + 仪器（示波器/逻辑分析仪/电源监视器/仿真模型）执行。支持 Zephyr/VxWorks/ESP-IDF/Yocto，C/C++/Rust，Arm M0→X925。<b>首个 ITAR-capable coding agent</b>（航空国防）。</p>
+      <p class="gap">缺口：无架构治理 / 漂移检测 / 能力地图 / 抗腐化；面向资深工程师。</p>
+    </div>
+    <div class="pcard">
+      <h4>Embedder <span class="badge b-yc">YC S25</span></h4>
+      <p class="role">种子轮 $625K（YC 领投）· 「AI Agents for Firmware」</p>
+      <p>NL→固件，<b>每行生成代码引用数据手册章节</b>（如 §30.6.3）并带<b>置信度评分</b>；读原理图（Altium/KiCad/Eagle）；<b>「Build, flash, test, fix — autonomously」</b>闭环；接 30+ 调试探针 + 逻辑分析仪 + 功耗仪；<b>支持上板前仿真预验证</b>；内置 MISRA C:2012 / CERT C 与勘误检查。500+ MCU、FreeRTOS/Zephyr/ThreadX/NuttX。部署 SaaS/VPC/本地/气隙（ITAR）。</p>
+      <p class="gap">缺口：除合规标记外无架构治理 / 漂移 / 能力地图；面向专业团队。</p>
+    </div>
+    <div class="pcard">
+      <h4>Flux Copilot <span class="badge b-vendor">PCB→固件</span></h4>
+      <p class="role">PCB 设计工具的固件助手</p>
+      <p>给固件工程师直接访问网表 / 引脚信息，缩短开发延迟。偏硬件设计侧，正向固件延伸。</p>
+      <p class="gap">缺口：以 PCB 设计为中心，非系统级成长治理。</p>
+    </div>
+    <div class="pcard">
+      <h4>创客层代表 <span class="badge b-vendor">浅 / 易</span></h4>
+      <p class="role">ESP-Claw（乐鑫官方）· EQSP32 · zclaw</p>
+      <p><b>ESP-Claw</b>：刷固件→Telegram 描述需求→动态生成 Lua「秒级可用」。<b>EQSP32</b>：自称「全球首个 ChatGPT PLC」，无代码 IoT（绑自家硬件）。<b>zclaw</b>：ESP32 上接 Claude/OpenAI 的自然语言控制。</p>
+      <p class="gap">缺口：单板浅层、绑硬件/框架，无成长/结构/防腐/迁出。</p>
+    </div>
+  </div>
+
+  <h3 class="sub">4.2 研究前沿信号</h3>
+  <ul class="tight">
+    <li><b>嵌入式 spec-driven 正进入主流：</b>arXiv「Spec-Driven Development: From Code to Contract」把 spec 当「活契约 / 可执行蓝图」，并已有 DeepLearning.AI 课程。</li>
+    <li><b>多 agent 验证/修补：</b>「Securing LLM-Generated Embedded Firmware via AI Agent-Driven Validation」「Skilled AI Agents for Embedded and IoT」等，按威胁/性能/合规分工。</li>
+    <li><b>漂移检测 + 一致性成研究热词：</b>MI9 运行时治理框架（FSM 一致性引擎 + 目标条件漂移检测）——治理对象是 AI agent 行为而非嵌入式架构，但方法论高度相邻。</li>
+  </ul>
+
+  <!-- ============ 5 能力覆盖矩阵 ============ -->
+  <h2 class="sec" id="s5">5 · 能力覆盖矩阵</h2>
+  <p>把 Keel 的七项能力维度对各竞品类别逐格打分（<span style="color:var(--green);font-weight:700">✓ 覆盖</span> / <span style="color:var(--amber);font-weight:700">◐ 部分</span> / <span style="color:#aab3bc;font-weight:700">✗ 缺失</span>）。<strong>Keel 目标行</strong>在「治理/可读/非架构师/可迁出」连成一片白地，仅在「闭环验证」选择集成而非自建。</p>
+
+  <figure>
+  <table class="hm">
+    <thead><tr>
+      <th class="lab" style="width:21%">玩家 / 类别</th>
+      <th>NL<br>驱动</th><th>闭环<br>验证</th><th>蓝图即<br>真相</th><th>漂移+<br>防腐</th><th>可读<br>地图</th><th>非架<br>构师</th><th>中立/<br>可迁出</th>
+    </tr></thead>
+    <tbody>
+      <tr><td class="lab">BootLoop / Embedder（专业闭环）</td><td class="cell-full">✓</td><td class="cell-full">✓</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-part">◐</td></tr>
+      <tr><td class="lab">Flux Copilot</td><td class="cell-full">✓</td><td class="cell-part">◐</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-none">✗</td></tr>
+      <tr><td class="lab">创客 NL（ESP-Claw/EQSP32）</td><td class="cell-full">✓</td><td class="cell-part">◐</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-full">✓</td><td class="cell-none">✗</td></tr>
+      <tr><td class="lab">原厂配置（CubeMX/MCC/SysConfig）</td><td class="cell-none">✗</td><td class="cell-part">◐</td><td class="cell-part">◐</td><td class="cell-none">✗</td><td class="cell-part">◐</td><td class="cell-none">✗</td><td class="cell-none">✗</td></tr>
+      <tr><td class="lab">Zephyr（devicetree/Kconfig）</td><td class="cell-none">✗</td><td class="cell-part">◐</td><td class="cell-full">✓</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-full">✓</td></tr>
+      <tr><td class="lab">Luos（结构纪律 OSS）</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-part">◐</td><td class="cell-part">◐</td><td class="cell-part">◐</td><td class="cell-none">✗</td><td class="cell-full">✓</td></tr>
+      <tr><td class="lab">Renode / Wokwi（仿真）</td><td class="cell-none">✗</td><td class="cell-full">✓</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-full">✓</td></tr>
+      <tr><td class="lab">Memfault / ESP Insights（健康）</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-part">◐</td><td class="cell-part">◐</td><td class="cell-none">✗</td><td class="cell-part">◐</td></tr>
+      <tr><td class="lab">AUTOSAR / SCADE（高端）</td><td class="cell-none">✗</td><td class="cell-full">✓</td><td class="cell-full">✓</td><td class="cell-full">✓</td><td class="cell-part">◐</td><td class="cell-none">✗</td><td class="cell-none">✗</td></tr>
+      <tr><td class="lab">通用 AI 编码（Copilot/Cursor）</td><td class="cell-full">✓</td><td class="cell-part">◐</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-none">✗</td><td class="cell-full">✓</td></tr>
+      <tr class="keel"><td class="lab">★ Keel（目标）</td><td class="cell-full">✓</td><td class="cell-part">◐<br><span style="font-size:9px">集成</span></td><td class="cell-full">✓</td><td class="cell-full">✓</td><td class="cell-full">✓</td><td class="cell-full">✓</td><td class="cell-full">✓</td></tr>
+    </tbody>
+  </table>
+  <figcaption><b>图 2　</b>能力覆盖热力矩阵。竖着看：<b>「闭环验证」列已有多家 ✓</b>（红海）；而<b>「蓝图即真相 / 漂移+防腐 / 可读地图 / 非架构师」四列几乎全空</b>，仅高端 AUTOSAR/SCADE 在治理列亮灯却不可读、非面向非架构师。Keel 目标行在这四列连成白地。</figcaption>
+  </figure>
+
+  <!-- ============ 6 定位与白地 ============ -->
+  <h2 class="sec" id="s6">6 · 定位与白地分析</h2>
+  <figure>
+    <svg viewBox="0 0 660 470" role="img" aria-label="竞争定位二维矩阵">
+      <!-- quadrant background -->
+      <rect x="70" y="40" width="530" height="360" fill="#fbfcfd" stroke="#e3e8ee"/>
+      <!-- top-right highlight (white space) -->
+      <rect x="335" y="40" width="265" height="180" fill="#e6f4f2"/>
+      <!-- mid lines -->
+      <line x1="335" y1="40" x2="335" y2="400" stroke="#cdd5dd" stroke-dasharray="5 5"/>
+      <line x1="70" y1="220" x2="600" y2="400" stroke="none"/>
+      <line x1="70" y1="220" x2="600" y2="220" stroke="#cdd5dd" stroke-dasharray="5 5"/>
+      <!-- axis labels -->
+      <text x="335" y="430" font-size="13" font-weight="700" text-anchor="middle" fill="#14202e">可达性 / 可读性  →</text>
+      <text x="92" y="418" font-size="11" fill="#8896a4">专业工程师 only</text>
+      <text x="520" y="418" font-size="11" fill="#8896a4">非架构师 / 创客可读</text>
+      <text x="30" y="225" font-size="13" font-weight="700" fill="#14202e" transform="rotate(-90 30 225)" text-anchor="middle">架构治理 + 防腐（成长不腐化）  →</text>
+      <text x="50" y="396" font-size="11" fill="#8896a4" transform="rotate(-90 50 396)" text-anchor="middle">低</text>
+      <text x="50" y="60" font-size="11" fill="#8896a4" transform="rotate(-90 50 60)" text-anchor="middle">高</text>
+      <!-- white space label -->
+      <text x="467" y="84" font-size="13" font-weight="800" text-anchor="middle" fill="#0f7c74">⬤ 白　地</text>
+      <text x="467" y="104" font-size="11" text-anchor="middle" fill="#0f7c74">受治理 + 可读 + 非架构师</text>
+
+      <!-- plotted points: cx,cy -->
+      <!-- AUTOSAR/SCADE top-left high gov low access -->
+      <circle cx="150" cy="94" r="7" fill="#9a6a3c"/>
+      <text x="162" y="90" font-size="11" fill="#283543">AUTOSAR / SCADE</text>
+      <text x="162" y="104" font-size="9.5" fill="#8896a4">治理强，但重/贵/非可读</text>
+      <!-- Luos -->
+      <circle cx="255" cy="166" r="6" fill="#3d7a4e"/>
+      <text x="266" y="170" font-size="11" fill="#283543">Luos</text>
+      <!-- Zephyr -->
+      <circle cx="205" cy="202" r="6" fill="#3d7a4e"/>
+      <text x="120" y="206" font-size="11" fill="#283543" text-anchor="end">Zephyr</text>
+      <!-- 原厂配置 -->
+      <circle cx="230" cy="300" r="6" fill="#2a6f97"/>
+      <text x="242" y="304" font-size="11" fill="#283543">原厂配置 (CubeMX…)</text>
+      <!-- BootLoop -->
+      <circle cx="200" cy="292" r="7" fill="#0f5d56"/>
+      <text x="120" y="288" font-size="11" font-weight="700" fill="#0f5d56" text-anchor="end">BootLoop</text>
+      <!-- Embedder -->
+      <circle cx="176" cy="274" r="7" fill="#127a8a"/>
+      <text x="120" y="270" font-size="11" font-weight="700" fill="#127a8a" text-anchor="end">Embedder</text>
+      <!-- 通用 AI 编码 -->
+      <circle cx="255" cy="360" r="6" fill="#5b6b7c"/>
+      <text x="266" y="364" font-size="11" fill="#283543">Copilot / Cursor</text>
+      <!-- 创客 NL bottom-right -->
+      <circle cx="500" cy="338" r="7" fill="#c97d12"/>
+      <text x="500" y="358" font-size="11" font-weight="700" fill="#c97d12" text-anchor="middle">创客 NL (ESP-Claw…)</text>
+      <text x="500" y="372" font-size="9.5" fill="#b08a4a" text-anchor="middle">易达，但浅/无治理</text>
+      <!-- Keel star top-right -->
+      <g transform="translate(467,150)">
+        <polygon points="0,-16 4.7,-5 16,-5 6.5,2.5 10,14 0,7 -10,14 -6.5,2.5 -16,-5 -4.7,-5"
+          fill="#0f5d56" stroke="#0f7c74" stroke-width="1.5"/>
+      </g>
+      <text x="467" y="182" font-size="12.5" font-weight="800" text-anchor="middle" fill="#0f5d56">Keel（目标）</text>
+    </svg>
+    <figcaption><b>图 3　</b>竞争定位矩阵。<b>治理</b>已被高端占据（AUTOSAR/SCADE，左上：强但不可读、非面向非架构师）；<b>可达性</b>已被创客工具占据（右下：易达但浅、无治理）；专业 AI 闭环（BootLoop/Embedder）落在<b>左下</b>（专业向、正确性而非架构治理）。<b>右上「受治理 + 可读 + 非架构师」象限空置</b>——即 Keel 楔子，也正是 R1 可读半边要验证的位置。</figcaption>
+  </figure>
+
+  <div class="callout">
+    <span class="tag">白地定义</span>
+    <p>仍空置的四格：<b>① 架构/蓝图即真相的结构治理</b>（vs 数据手册正确性 grounding）；<b>② 面向非架构师的可读能力地图</b>；<b>③ 成长不腐化（第 N 个功能边际成本平稳）</b>；<b>④ 厂商中立 + 代码归属可迁出</b>。验证回路（闭环）则建议<b>集成而非自建</b>。</p>
+  </div>
+
+  <!-- ============ 7 资本与动量 ============ -->
+  <h2 class="sec" id="s7">7 · 资本与动量信号</h2>
+  <div class="tl">
+    <div class="row"><div class="when">2025-03</div><div class="what"><b>Qualcomm 收购 Edge Impulse</b>　边缘 AI MLOps 平台被巨头收编——验证「为非固件专家抽象嵌入式」赛道的战略价值。</div></div>
+    <div class="row"><div class="when">2025 (S25)</div><div class="what"><b>Embedder 入选 YC、种子轮 $625K（YC 领投）</b>　AI 固件 agent 在真机上写/测/调。</div></div>
+    <div class="row"><div class="when">2025</div><div class="what"><b>BootLoop 入选 YC</b>（前 SpaceX/MIT）　主打「分钟级固件」+ 首个 ITAR-capable coding agent。</div></div>
+    <div class="row"><div class="when">2026-05</div><div class="what"><b>BootLoop Test 发布</b>　把 AI 驱动的 HIL 测试推向「每个团队」——验证回路加速商品化。</div></div>
+    <div class="row"><div class="when">2026</div><div class="what"><b>spec-driven 开发进入主流</b>　论文 + 公开课程涌现；漂移检测/一致性成 AI 治理研究热词。</div></div>
+  </div>
+  <div class="callout warn">
+    <span class="tag">动量解读</span>
+    <p>资本与人才在 18 个月内密集涌入「AI×嵌入式执行层」（YC 连出两家、巨头并购）。<b>这条赛道的「执行/验证」侧正快速变红</b>；窗口提示 Keel 应尽快在「治理 + 可读」侧建立差异化，而非在已拥挤的执行侧竞争。</p>
+  </div>
+
+  <!-- ============ 8 洞察与建议 ============ -->
+  <h2 class="sec" id="s8">8 · 关键洞察与战略建议</h2>
+  <table>
+    <thead><tr><th style="width:24%">建议</th><th>要点</th><th style="width:20%">与竞品关系</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 集成执行层，不自建回路</b></td><td>把 BootLoop / Embedder 式「编译-烧录-HIL-仿真」当作可替换的执行引擎（呼应 Keel FR-13 执行器抽象），自己只做蓝图、治理、地图。</td><td>互补（潜在合作/接入）</td></tr>
+      <tr><td><b>② 护城河押治理 + 可读</b></td><td>蓝图即真相、结构漂移检测、成长不腐化、非架构师可读地图——竞品全无。这是唯一难被执行层创业公司顺手吃掉的层。</td><td>差异化（无直接竞品）</td></tr>
+      <tr><td><b>③ 滩头选 ESP32/Arduino 联网 IoT</b></td><td>Wokwi 仿真成熟（回路最先能闭环）、腐化痛点真实、人群可达（创客升级）、连通性需求旺；初期避开安全关键域（认证门槛）。</td><td>错位（专业向打高端，我打创客升级）</td></tr>
+      <tr><td><b>④ 蓝图编译成既有标准</b></td><td>把蓝图编译为 Zephyr devicetree/Kconfig + PlatformIO 工程，物化为厂商中立配置——既复用 OSS 生态，又坐实「可迁出、不锁定」。</td><td>站在 OSS 肩上</td></tr>
+      <tr><td><b>⑤ 先验证 R1 可读半边</b></td><td>嵌入式版可用性测试优先测「带资源表与引脚冲突的 diff」——既机会最大、又可读性最吃重；通过才是 go 闸门。</td><td>无人占据的轴</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub">8.1 双向挤压风险</h3>
+  <div class="pincer">
+    <div class="box top">专业工具<b>下沉</b>（BootLoop/Embedder 降门槛触达创客）</div>
+    <div class="arrow">▼</div>
+    <div class="box mid">Keel 窗口：受治理 + 可读 + 不腐化 + 可迁出</div>
+    <div class="arrow">▲</div>
+    <div class="box bot">创客工具<b>加结构</b>（ESP-Claw 之类补上治理）</div>
+  </div>
+  <p style="font-size:13.5px;color:var(--muted)">两侧都可能向中间挤压，但「受治理 + 可读 + 不腐化 + 可迁出」这个<strong>特定组合目前确实空置</strong>——既是机会，也意味着窗口不会一直开着，需尽快用 R1 验证 + 滩头切入卡位。</p>
+
+  <!-- ============ 9 风险 ============ -->
+  <h2 class="sec" id="s9">9 · 风险评估</h2>
+  <table>
+    <thead><tr><th style="width:22%">风险</th><th class="center" style="width:12%">严重度</th><th>说明与缓解</th></tr></thead>
+    <tbody>
+      <tr><td>验证回路被商品化</td><td class="center" style="color:var(--red);font-weight:700">高</td><td>BootLoop/Embedder 已占执行侧 → <b>缓解：</b>集成而非自建，护城河上移到治理/可读。</td></tr>
+      <tr><td>R1 可读半边证伪</td><td class="center" style="color:var(--red);font-weight:700">高</td><td>非架构师读不懂含资源/时序/任务的系统地图 → <b>缓解：</b>用本系列可用性测试做 go/no-go 闸门，未过即重做呈现。</td></tr>
+      <tr><td>R5 表达力天花板更低</td><td class="center" style="color:var(--amber);font-weight:700">中高</td><td>仿真/时序/EMC 等大类问题不在代码、不可机检 → <b>缓解：</b>诚实标出硬件边界（NEEDS_DECISION 硬件卡），不过度承诺。</td></tr>
+      <tr><td>人群 TAM 收窄</td><td class="center" style="color:var(--amber);font-weight:700">中</td><td>纯非程序员撞硬件墙 → <b>缓解：</b>定位「领域专家/进阶创客/非架构师固件通才」，非纯小白。</td></tr>
+      <tr><td>双向挤压</td><td class="center" style="color:var(--amber);font-weight:700">中</td><td>专业下沉 + 创客加结构 → <b>缓解：</b>尽快卡位「治理+可读+不腐化+可迁出」组合。</td></tr>
+      <tr><td>厂商/工具链碎片化</td><td class="center" style="color:var(--amber);font-weight:700">中</td><td>架构原型库成本随厂商膨胀 → <b>缓解：</b>先死磕单一滩头（ESP32），勿铺开。</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ============ 10 结论 ============ -->
+  <h2 class="sec" id="s10">10 · 结论与下一步</h2>
+  <div class="callout key">
+    <span class="tag">总结论</span>
+    <p>嵌入式垂直对 Keel 是<b>更锋利的楔子</b>（痛点更烈、机器可检更有牙、AI app-builder 竞争更少、声明式配置文化先例足），但<b>必须换人群（非架构师而非纯非程序员）、并把执行/验证回路从"自建"改为"集成"</b>。<b>「AI 跑通固件」已是红海；「让非架构师读懂、并让系统长大不腐化」才是无人占据的蓝海</b>——这恰好与 Keel 的 R1 可读半边假设重合。</p>
+  </div>
+  <h4>建议下一步（按依赖顺序，不含工时）</h4>
+  <ul class="tight">
+    <li><b>定位收敛：</b>把嵌入式形态结论改写为「集成 BootLoop/Embedder 式执行层 + 自做治理与可读地图」，明确与两家是竞合（执行互补、治理差异）。</li>
+    <li><b>样例迁移：</b>把现有「内容博客」蓝图与三张原型平移为嵌入式样例（如「温湿度传感节点 + 新增 BLE 上报」），直观呈现资源表、引脚冲突、任务/ISR 等新概念的呈现形态。</li>
+    <li><b>R1 嵌入式验证：</b>优先对「带资源表与引脚冲突的 diff（原型 B 嵌入式版）」做可用性测试，作为嵌入式方向的 go/no-go 闸门。</li>
+    <li><b>技术接缝预研：</b>验证「蓝图 → Zephyr devicetree/Kconfig + PlatformIO 工程」的编译落地，坐实厂商中立与可迁出。</li>
+  </ul>
+
+  <!-- ============ 11 来源 ============ -->
+  <h2 class="sec" id="s11">11 · 信息来源</h2>
+  <p class="src">以下为本报告引用的公开来源（产品能力为厂商自述、市场数据为各分析机构口径，均未独立核实）：</p>
+  <ul class="src">
+    <li>专业 AI 固件闭环：<a href="https://bootloop.ai/">BootLoop</a> · <a href="https://www.ycombinator.com/companies/bootloop">YC: BootLoop</a> · <a href="https://www.allaboutcircuits.com/news/bootloop-unveils-tool-enabling-ai-powered-hardware-in-the-loop-testing/">AllAboutCircuits 报道</a> · <a href="https://www.businesswire.com/news/home/20260525094585/en/BootLoop-Launches-New-Test-Platform-to-Bring-AI-Powered-Hardware-in-the-Loop-Testing-to-Every-Team">BootLoop Test 发布</a></li>
+    <li><a href="https://embedder.com/">Embedder</a> · <a href="https://www.ycombinator.com/companies/embedder">YC: Embedder</a> · <a href="https://www.startuphub.ai/investment_rounds/embedder-yc-s25-seed-2025/">Embedder 种子轮 $625K</a></li>
+    <li>PCB/固件 copilot：<a href="https://www.flux.ai/p/blog/code-firmware-faster-with-ai">Flux — Code Firmware Faster with AI</a></li>
+    <li>创客向 NL→MCU：<a href="https://www.hackster.io/news/esp-claw-lets-you-build-iot-projects-via-chat-4b7eead1c3ca">Espressif ESP-Claw</a> · <a href="https://erqos.com/">EQSP32 / erqos</a></li>
+    <li>实践与趋势：<a href="https://www.bitcraze.io/2026/04/embedded-development-with-ai-agents-trying-it-on-the-crazyflie/">Bitcraze: AI agents on Crazyflie</a> · <a href="https://blog.adafruit.com/2026/04/07/tips-for-using-ai-to-write-embedded-firmware">Adafruit: AI 写固件</a> · <a href="https://www.beningo.com/why-claude-code-for-firmware-development-matters/">Beningo: Claude Code for Firmware</a></li>
+    <li>研究前沿：<a href="https://arxiv.org/html/2602.00180v1">Spec-Driven Development (arXiv 2602.00180)</a> · <a href="https://www.deeplearning.ai/courses/spec-driven-development-with-coding-agents">DeepLearning.AI 课程</a> · <a href="https://arxiv.org/html/2509.09970v1">Securing LLM-Generated Embedded Firmware (2509.09970)</a> · <a href="https://arxiv.org/html/2603.19583v1">Skilled AI Agents for Embedded & IoT (2603.19583)</a> · <a href="https://arxiv.org/html/2508.03858">MI9 Runtime Governance (2508.03858)</a></li>
+    <li>边缘 AI 并购：<a href="https://www.qualcomm.com/news/releases/2025/03/qualcomm-to-bolster-ai-and-iot-capabilities-with-edge-impulse-ac">Qualcomm 收购 Edge Impulse</a> · <a href="https://www.crunchbase.com/acquisition/qualcomm-acquires-edge-impulse--b4d5d9cf">Crunchbase 收购档案</a></li>
+    <li>市场规模：<a href="https://www.coherentmarketinsights.com/industry-reports/embedded-systems-market">嵌入式系统市场</a> · <a href="https://www.coherentmarketinsights.com/industry-reports/embedded-computing-market">嵌入式计算市场</a> · <a href="https://www.openpr.com/news/4531331/iot-microcontroller-market-to-expand-at-14-2-cagr-fueled-by-edge">IoT 微控制器市场</a> · <a href="https://www.marketgrowthreports.com/market-reports/tiny-machine-learning-tinyml-market-103553">TinyML 市场</a></li>
+    <li>低代码/公民开发者：<a href="https://kissflow.com/low-code/low-code-trends-statistics/">Kissflow 低代码统计</a> · <a href="https://blog.tooljet.com/low-code-statistics-2026/">ToolJet 低代码 2026</a></li>
+  </ul>
+
+  <div class="footer">
+    Keel 内部研究 · 嵌入式垂直竞品与市场分析 · 2026-06-08 · 草案 v1<br>
+    本文图表均为基于公开数据自绘的示意图；数值口径见各节标注与第 11 节来源。
+  </div>
+
+</div>
+</body>
+</html>

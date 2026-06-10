@@ -1,0 +1,363 @@
+# =============================================================================
+# Keel 蓝图实例 — 示例应用「我的博客」（唯一规范实例）
+# 校验：本文件应通过 docs/blueprint.schema.json（Draft 2020-12）
+# =============================================================================
+# 本文件是「我的博客」的唯一规范蓝图实例（v9），符合通用元模型。
+# 决策 ADR-0007：收敛到 typed-rule schema —— 取代 demo/blueprint.yaml 的字符串规则版。
+# 决策 ADR-0008：近期就加 R-IR 需求层 + 追溯链（requirements / satisfies）。
+# 决策 ADR-0009：行为门远期纳入 —— 现在只为 Port 预留 contract(pre/post/invariant) 占位。
+#
+# 版本：v9 = v8（迁移到元模型）+ R-IR 需求层、satisfies 追溯链、契约占位。
+# =============================================================================
+
+meta:
+  app_name: 我的博客
+  archetype: modular-monolith
+  blueprint_version: 9
+  stack: web-fullstack-js-ts
+
+# ── R-IR 需求层（报告 §05 阶段0）：整套结构的第一锚点 ─────────────────────────
+# 每条需求带 id、EARS 句式 statement、plain（给非程序员）、可测验收准则 acceptance。
+# 能力/约束经 satisfies 回链到这里，构成 需求 → 架构 → (将来)测试 的追溯链。
+# acceptance.oracle：test/property/type/schema = 远期可自动设门；human = 无 oracle 回退人工。
+requirements:
+  - id: req-account
+    statement: 当访客提交注册或登录信息时，系统应创建或校验账户并维持其登录态。
+    plain: 让人能注册账号、登录、退出。
+    priority: must
+    status: established
+    origin: generated
+    acceptance:
+      - id: req-account-a1
+        plain: 用新邮箱能注册成功，并自动进入登录态。
+        oracle: test
+      - id: req-account-a2
+        plain: 用正确的邮箱和密码能登录；密码错误则登录失败。
+        oracle: test
+      - id: req-account-a3
+        plain: 登录后能退出，退出后受保护的操作不再可用。
+        oracle: test
+
+  - id: req-read-articles
+    statement: 当访客访问站点时，系统应列出全部已发布文章，并允许点击进入单篇详情。
+    plain: 访客不登录也能看文章列表，点一篇能看到完整内容。
+    priority: must
+    status: established
+    origin: generated
+    acceptance:
+      - id: req-read-articles-a1
+        plain: 列表展示全部已发布文章。
+        oracle: test
+      - id: req-read-articles-a2
+        plain: 点击列表中某篇，进入这一篇的详情页。
+        oracle: test
+
+  - id: req-comment
+    statement: 当登录用户在某篇文章下提交评论时，系统应保存该评论并展示在该文章下；未登录用户不得发评论。
+    plain: 登录的人能在文章下面留言；没登录不能发。
+    priority: should
+    status: established
+    origin: generated
+    acceptance:
+      - id: req-comment-a1
+        plain: 登录后能在某篇文章下发出一条评论，并立刻显示在该文章下。
+        oracle: test
+      - id: req-comment-a2
+        plain: 未登录时发评论被拒绝。
+        oracle: test
+
+  - id: req-favorite
+    statement: 当登录用户在文章详情页点击收藏时，系统应记录该用户对该文章的收藏，并允许其之后找回；未登录用户不得收藏。
+    plain: 登录的人能把喜欢的文章收起来，之后能快速找回；没登录不能收藏。
+    priority: should
+    status: proposed
+    origin: generated
+    acceptance:
+      - id: req-favorite-a1
+        plain: 登录后在文章详情页点收藏，该文章出现在「我的收藏」里。
+        oracle: test
+      - id: req-favorite-a2
+        plain: 未登录时收藏按钮不可用或被拒绝。
+        oracle: test
+      - id: req-favorite-a3
+        plain: 同一篇文章重复点收藏，不会产生两条记录。
+        oracle: property
+
+  - id: req-no-corrupt
+    statement: 系统在整个生命周期内应保持结构不腐化——同一职责仅一处规范实现，能力间不破边界。
+    plain: 应用越长越大也不许变乱：同一件事只有一处来做，功能之间不互相乱伸手。
+    priority: must
+    status: established
+    origin: generated
+    acceptance:
+      - id: req-no-corrupt-a1
+        plain: 不存在两处都在做「收藏」（或任何同一职责）的代码。
+        check: ts-morph 重复/相似实现扫描为空
+        oracle: test
+      - id: req-no-corrupt-a2
+        plain: 不存在功能直接伸进另一个功能内部的依赖。
+        check: dependency-cruiser 禁止 feature→feature import 命中为空
+        oracle: test
+
+# ── 架构原型：内联『有效架构』（出厂预设 modular-monolith）─────────────────────
+archetype:
+  id: modular-monolith
+  plain: 特性切片 / 模块化单体——每个能力是一个自包含切片，通用默认。
+  unit_kinds: [feature, core, shared]
+  allowed_relation_kinds: [imports, uses, reads, writes]
+  node_kinds: [feature]
+  internal_layers: [ui, logic, data]
+  constraints:
+    - id: no-cross-feature-import
+      plain: 每个功能各管各的，不许偷偷伸手进别的功能内部拿东西；要打交道得走正门。
+      severity: hard
+      sealed: true
+      origin: builtin
+      checker: dependency-cruiser
+      satisfies: [req-no-corrupt]
+      rule:
+        type: forbid_relation
+        from: { kind: feature }
+        to:   { kind: feature }
+        kind: imports
+    - id: cross-feature-via-port
+      plain: 功能之间要打交道，只能走对方挂出来的对外接口。
+      severity: hard
+      sealed: true
+      origin: builtin
+      checker: dependency-cruiser
+      satisfies: [req-no-corrupt]
+      rule:
+        type: via_port
+        from: { kind: feature }
+        to:   { kind: feature }
+    - id: layer-direction
+      plain: 一个功能内部，界面找逻辑、逻辑找数据，方向不能掉头。
+      severity: hard
+      sealed: true
+      origin: builtin
+      checker: dependency-cruiser
+      rule:
+        type: direction
+        order: [ui, logic, data]
+        scope: intra_unit
+        strict: true
+    - id: data-via-core
+      plain: 所有功能存数据、取数据都得走同一个「数据管家」，不许私下连数据库。
+      severity: hard
+      sealed: true
+      origin: builtin
+      checker: dependency-cruiser
+      rule:
+        type: access_only_via
+        target: { kind: store }
+        via:    { id: core/db }
+    - id: one-canonical-impl
+      plain: 同一件事全应用只能一处来做（比如「判断有没有登录」只能有一份）。
+      severity: hard
+      sealed: true
+      origin: builtin
+      checker: ts-morph
+      satisfies: [req-no-corrupt]
+      rule:
+        type: single_canonical
+        responsibility: auth
+    - id: naming-convention
+      plain: 文件和模块名按统一规矩起，便于以后看清结构。
+      severity: soft
+      sealed: false
+      origin: override
+      checker: eslint
+      rule:
+        type: no_orphan
+        of: { kind: feature }
+
+# ── 横切设施（core）：唯一规范实现 ───────────────────────────────────────────
+units:
+  - id: core/auth
+    kind: core
+    plain: 登录管家——全应用唯一一处判断「有没有登录」。
+    owns: [auth]
+    ports: [core/auth.api]
+    surfaces_on_map: false
+    origin: builtin
+  - id: core/db
+    kind: core
+    plain: 数据管家——全应用唯一一处连数据库。
+    owns: [data-access]
+    ports: [core/db.api]
+    surfaces_on_map: false
+    origin: builtin
+
+  # ── 能力切片（feature）：能力 = 切片 = 地图节点 ──────────────────────────────
+  - id: auth
+    kind: feature
+    plain_name: 登录
+    plain: 让人注册、登录、退出。
+    plain_detail: 这块负责「认人」——注册账号、登录、退出登录。其他凡是要「先登录才能用」的功能，都靠它。
+    boundary: { path: src/features/auth }
+    ports: [auth.contract]
+    surfaces_on_map: true
+    status: established
+    health: green
+    origin: generated
+    satisfies: [req-account]
+  - id: article-list
+    kind: feature
+    plain_name: 文章列表
+    plain: 把所有文章排成一个列表给人看。
+    plain_detail: 这块负责把文章一篇篇列出来，是访客进站后最先看到的页面，点一篇就能进到「文章详情」。
+    boundary: { path: src/features/article-list }
+    ports: [article-list.contract]
+    surfaces_on_map: true
+    status: established
+    health: green
+    origin: generated
+    satisfies: [req-read-articles]
+  - id: article-detail
+    kind: feature
+    plain_name: 文章详情
+    plain: 展示某一篇文章的完整内容。
+    plain_detail: 这块负责把单独一篇文章的完整内容显示出来。评论和收藏都长在这个页面上。
+    boundary: { path: src/features/article-detail }
+    ports: [article-detail.contract]
+    surfaces_on_map: true
+    status: established
+    health: green
+    origin: generated
+    satisfies: [req-read-articles]
+  - id: comment
+    kind: feature
+    plain_name: 评论
+    plain: 让登录的人在文章下面留言。
+    plain_detail: 这块负责让人在某篇文章下面发评论、看别人的评论。要先登录才能发。
+    boundary: { path: src/features/comment }
+    ports: [comment.contract]
+    surfaces_on_map: true
+    status: established
+    health: green
+    origin: generated
+    satisfies: [req-comment]
+  - id: favorite
+    kind: feature
+    plain_name: 收藏文章
+    plain: 让登录的人把喜欢的文章收起来。
+    plain_detail: 这块负责让人把喜欢的文章收藏起来，之后能快速找回。收藏按钮长在文章详情页上，要先登录才能用。
+    boundary: { path: src/features/favorite }
+    ports: [favorite.contract]
+    surfaces_on_map: true
+    status: proposed
+    health: green
+    origin: generated
+    satisfies: [req-favorite]
+
+# ── 对外接口（Port）：跨构件只认契约；contract 为行为契约占位（ADR-0009）────────
+ports:
+  - id: core/auth.api
+    of: core/auth
+    direction: provided
+    protocol: in-process
+    plain: 「这个人登录了没」的统一判断入口。
+    contract:
+      post:
+        - plain: 返回明确的「已登录 / 未登录」判定，不抛模糊状态。
+      invariant:
+        - plain: 全应用的登录态判断只此一处，结论处处一致。
+  - id: core/db.api
+    of: core/db
+    direction: provided
+    protocol: db
+    plain: 统一的存数据、取数据入口。
+  - id: auth.contract
+    of: auth
+    direction: provided
+    protocol: in-process
+    plain: 登录功能对外提供的接口。
+  - id: article-list.contract
+    of: article-list
+    direction: provided
+    protocol: in-process
+    plain: 文章列表对外提供的接口。
+  - id: article-detail.contract
+    of: article-detail
+    direction: provided
+    protocol: in-process
+    plain: 文章详情对外提供的接口（评论/收藏挂按钮就认它）。
+  - id: comment.contract
+    of: comment
+    direction: provided
+    protocol: in-process
+    plain: 评论对外提供的接口。
+  - id: favorite.contract
+    of: favorite
+    direction: provided
+    protocol: in-process
+    plain: 收藏对外提供的接口。
+    contract:
+      pre:
+        - plain: 调用方必须已登录（由登录管家确认）。
+      post:
+        - plain: 收藏成功后，该用户的收藏集合包含这篇文章。
+      invariant:
+        - plain: 同一用户对同一文章最多一条收藏记录。
+          formal: "unique(Favorite.userId, Favorite.articleId)"
+
+# ── 关系（Relation）：模块间交互，全部是有类型的边 ───────────────────────────
+relations:
+  - { id: r1, from: article-detail, to: article-list, kind: uses, via: article-list.contract,
+      plain: 要从文章列表点进来才能看到某一篇，所以文章详情离不开文章列表。 }
+  - { id: r2, from: comment, to: article-detail, kind: uses, via: article-detail.contract,
+      plain: 评论写在某篇文章下面，所以评论长在文章详情上。 }
+  - { id: r3, from: comment, to: auth, kind: uses, via: auth.contract,
+      plain: 得先登录才能发评论，所以评论离不开登录。 }
+  - { id: r4, from: favorite, to: article-detail, kind: uses, via: article-detail.contract,
+      plain: 收藏按钮长在文章详情页上，没有详情就没处放按钮。 }
+  - { id: r5, from: favorite, to: auth, kind: uses, via: auth.contract,
+      plain: 得先登录才能收藏，所以收藏离不开登录。 }
+  - { id: r6, from: article-list, to: core/db, kind: reads, via: core/db.api,
+      plain: 文章列表去「数据管家」读文章。 }
+  - { id: r7, from: article-detail, to: core/db, kind: reads, via: core/db.api,
+      plain: 文章详情去「数据管家」读这篇文章。 }
+  - { id: r8, from: comment, to: core/db, kind: writes, via: core/db.api,
+      plain: 评论去「数据管家」写下留言。 }
+  - { id: r9, from: favorite, to: core/db, kind: writes, via: core/db.api,
+      plain: 收藏去「数据管家」记下「谁收藏了哪篇」。 }
+  - { id: r10, from: comment, to: core/auth, kind: uses, via: core/auth.api,
+      plain: 评论用「登录管家」确认这个人登录了没。 }
+  - { id: r11, from: favorite, to: core/auth, kind: uses, via: core/auth.api,
+      plain: 收藏用「登录管家」确认这个人登录了没。 }
+
+# ── 数据实体（Entity）─────────────────────────────────────────────────────────
+entities:
+  - id: User
+    plain_name: 用户
+    fields: [id, email, passwordHash, createdAt]
+    plain: 一个注册用户。
+    status: established
+    origin: generated
+  - id: Article
+    plain_name: 文章
+    fields: [id, title, body, authorId, publishedAt]
+    plain: 一篇博客文章。
+    relations:
+      - { to: User, kind: belongs_to }
+    status: established
+    origin: generated
+  - id: Comment
+    plain_name: 评论
+    fields: [id, articleId, userId, body, createdAt]
+    plain: 某人对某篇文章发的一条评论。
+    relations:
+      - { to: Article, kind: belongs_to }
+      - { to: User, kind: belongs_to }
+    status: established
+    origin: generated
+  - id: Favorite
+    plain_name: 收藏
+    fields: [userId, articleId]
+    plain: 「某个用户收藏了某篇文章」这件事的记录。
+    relations:
+      - { to: User, kind: belongs_to }
+      - { to: Article, kind: belongs_to }
+    status: proposed
+    origin: generated

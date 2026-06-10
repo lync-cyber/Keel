@@ -1,0 +1,63 @@
+# CataForge Dogfood — 产品文件白名单
+#
+# 列出哪些路径被视为"产品文件"，允许从 feature 分支（经 prepare-pr.sh）
+# PR 到 main。其他任何差异（orchestrator 过程产出、dogfood 提交、本地
+# CLAUDE.md 等）在 prepare-pr.sh 运行时都会被还原到 origin/main 的状态。
+#
+# 格式:
+#   - 以 `/` 结尾        → 目录前缀（递归匹配子内容）
+#   - 不以 `/` 结尾      → 单文件精确匹配
+#   - 以 `#` 开头        → 注释（整行忽略）
+#   - 空行              → 忽略
+#
+# 新增产品路径时，在 main 分支走正常 feature/fix PR 更新此文件即可
+# （不再有"长期 dev 分支"语义，无需同步）。
+
+# ---- 框架源码 ----
+.cataforge/agents/
+.cataforge/skills/
+.cataforge/platforms/
+.cataforge/hooks/
+.cataforge/rules/
+.cataforge/schemas/
+.cataforge/scripts/
+.cataforge/commands/
+.cataforge/framework.json
+.cataforge/PROJECT-STATE.md
+
+# PROJECT-STATE.md 与 framework.json 同性质：模板文件。运行时由
+# `_preserve_if_exists` 兜底，`cataforge upgrade apply` 不会刷新
+# 已存在的副本，所以不存在"dogfood 期间被写脏"风险。模板级修改
+# 走正常 PR 渠道即可。
+
+# ---- 产品代码 ----
+src/
+tests/
+pyproject.toml
+uv.lock
+
+# ---- 对外发布文档 ----
+docs/README.md
+docs/architecture/
+docs/assets/
+docs/getting-started/
+docs/guide/
+docs/reference/
+docs/contributing.md
+docs/faq.md
+
+# ---- 仓库顶层 ----
+README.md
+CHANGELOG.md
+LICENSE
+.gitignore
+.env.example
+
+# ---- CI / 仓库配置 ----
+.github/
+
+# ---- 按需扩展 ----
+# 当为 Claude Code 添加产品级 hook / command / settings 时，
+# 取消下面的注释（这些路径目前仍是部署产物，已被 gitignore）:
+# .claude/hooks/
+# .claude/settings.json

@@ -1,0 +1,409 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://keel.dev/schema/blueprint/0.2",
+  "title": "Keel Blueprint Meta-Model",
+  "version": "0.2-draft",
+  "description": "Keel 通用蓝图元模型（草案 v0.2）。在 v0.1 的 6 个正交原语（Unit/Port/Relation/Entity/Constraint/Archetype）之上，新增第 7 个原语 Requirement（R-IR 需求层）与 satisfies 追溯链，并为 Port 预留行为契约占位（pre/post/invariant），对齐技术报告『需求→架构→代码』确定性管线。本 schema 只校验蓝图的『形态』（字段、必填、枚举、双表达是否齐备）；蓝图里的 constraints 与 requirements 本身是数据，由编译器映射成确定性检查器/测试去强制——那是另一层。每个面向人的原语都必须带 plain_* 字段（R1 可读半边）。",
+  "type": "object",
+  "required": ["meta", "archetype", "units", "relations"],
+  "additionalProperties": false,
+  "properties": {
+    "meta": { "$ref": "#/$defs/meta" },
+    "archetype": {
+      "description": "本蓝图『有效架构』。可内联完整 Archetype 对象（自包含，便于校验），实现里也可只写 id 引用出厂预设。",
+      "oneOf": [
+        { "$ref": "#/$defs/archetype" },
+        { "type": "string", "description": "引用出厂预设 archetype 的 id" }
+      ]
+    },
+    "requirements": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/requirement" },
+      "description": "R-IR 需求层（报告 §05 阶段0）：整套结构的第一锚点。每条需求带 id、可测验收准则、plain_*；能力/约束经 satisfies 回链到此，构成 需求→架构→(将来)测试 的追溯链。近期最小版可只写 plain + acceptance（决策 ADR-0008）。"
+    },
+    "units": { "type": "array", "items": { "$ref": "#/$defs/unit" }, "minItems": 1 },
+    "ports": { "type": "array", "items": { "$ref": "#/$defs/port" } },
+    "relations": { "type": "array", "items": { "$ref": "#/$defs/relation" } },
+    "entities": { "type": "array", "items": { "$ref": "#/$defs/entity" } },
+    "constraints": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/constraint" },
+      "description": "项目覆盖层 + 生成层追加的约束。出厂密封不变量写在 archetype.constraints 里。"
+    }
+  },
+
+  "$defs": {
+
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._/-]*$",
+      "description": "稳定标识符，机器用。允许大小写（领域实体惯用 PascalCase，如 User/Article）。"
+    },
+    "plain": {
+      "type": "string",
+      "minLength": 1,
+      "description": "通俗表达，给非程序员看。R1 可读半边的载体——凡上界面的原语都必须有。"
+    },
+    "severity": {
+      "enum": ["hard", "soft"],
+      "description": "D4：结构性=hard（阻断）；风格类=soft（告警）。"
+    },
+    "origin": {
+      "enum": ["builtin", "override", "generated"],
+      "description": "三层组合的出处（B.10）：内置密封 / 项目覆盖 / 生成能力。"
+    },
+    "status": { "enum": ["established", "proposed", "deprecated"] },
+    "health": { "enum": ["green", "amber", "red"] },
+
+    "requirement": {
+      "type": "object",
+      "description": "一条需求（R-IR）。statement 用受控 EARS 句式，plain 给非程序员，acceptance 是一组可测验收准则。LLM 仅把自然语言归一到此槽位，不得发明需求（报告 §05 阶段0）。",
+      "required": ["id", "plain", "acceptance"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "statement": { "type": "string", "description": "受控文法（EARS）句式，如『当<触发>，系统应<响应>』。可选：近期最小版可只写 plain + acceptance。" },
+        "plain": { "$ref": "#/$defs/plain" },
+        "acceptance": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/acceptance" },
+          "description": "可测验收准则。每条降生为一个验收/集成测试（报告 §05 阶段4 需求覆盖率）。"
+        },
+        "priority": { "enum": ["must", "should", "could"], "description": "MoSCoW 优先级，可选。" },
+        "status": { "$ref": "#/$defs/status" },
+        "origin": { "$ref": "#/$defs/origin" }
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "description": "一条可测验收准则。plain 给人读；oracle 标注判据来源——有可执行判据(test/property/type/schema)的远期自动设门，human=无 oracle 回退人工批准（报告 §05 诚实边界 / 决策 ADR-0009）。",
+      "required": ["id", "plain"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "plain": { "$ref": "#/$defs/plain" },
+        "check": { "type": "string", "description": "判定方式描述。映射不到可执行 oracle 的，显式落到 human（NEEDS_DECISION / 人工批准）。" },
+        "oracle": { "enum": ["test", "property", "type", "schema", "human"], "description": "验收判据来源类型。human=无可执行 oracle，回退人工。" }
+      }
+    },
+    "clause": {
+      "type": "object",
+      "description": "一条契约子句。plain 必填（可读半边）；formal 可选——将来编译为可执行断言/属性（如 zod refinement、TS 断言）。留空=暂仅结构占位（决策 ADR-0009：行为门远期纳入）。",
+      "required": ["plain"],
+      "additionalProperties": false,
+      "properties": {
+        "plain": { "$ref": "#/$defs/plain" },
+        "formal": { "type": "string", "description": "可执行表达式/断言。留空=暂仅占位。" }
+      }
+    },
+
+    "unitKind": {
+      "type": "string",
+      "description": "构件种类，由 archetype 定义其词汇。常见：feature / core / shared / layer / service / domain / port / adapter / topic。元模型不固定取值——换 archetype 就换词汇。"
+    },
+    "relationKind": {
+      "enum": ["imports", "calls", "emits", "consumes", "reads", "writes", "implements", "routes_to", "uses"],
+      "description": "关系（模块间交互）的类型。这是把所有交互形式收敛成一条有类型边的关键：imports=编译期依赖；calls=同步调用；emits/consumes=异步事件；reads/writes=数据存取；implements=端口实现；routes_to=路由；uses=经对外接口的逻辑依赖。"
+    },
+    "protocol": {
+      "enum": ["in-process", "http", "rpc", "queue", "event-bus", "db", "none"],
+      "description": "关系/端口的传输形式。同样的 calls，可能是进程内、HTTP 或 RPC。"
+    },
+
+    "selector": {
+      "type": "object",
+      "description": "对图中元素的选择器：按种类 / 标识 / 标签命中。至少给一项。",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "$ref": "#/$defs/unitKind" },
+        "id": { "$ref": "#/$defs/id" },
+        "tag": { "type": "string" }
+      }
+    },
+
+    "meta": {
+      "type": "object",
+      "required": ["app_name", "archetype", "blueprint_version", "stack"],
+      "additionalProperties": false,
+      "properties": {
+        "app_name": { "type": "string", "description": "也是 plain：地图顶栏项目名。" },
+        "archetype": { "$ref": "#/$defs/id" },
+        "blueprint_version": { "type": "integer", "minimum": 1 },
+        "stack": { "type": "string", "description": "目标技术栈，如 web-fullstack-js-ts。" }
+      }
+    },
+
+    "unit": {
+      "type": "object",
+      "description": "构件：有边界、拥有代码的命名节点。一切结构原子（切片/层/模块/服务/组件/适配器）都是 Unit + kind。",
+      "required": ["id", "kind", "plain"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "kind": { "$ref": "#/$defs/unitKind" },
+        "plain": { "$ref": "#/$defs/plain" },
+        "plain_name": { "type": "string", "description": "地图节点的人类标题。" },
+        "plain_detail": { "type": "string", "description": "更详细的通俗说明（能力地图详情面板渲染）。plain 是一行短句作节点副标题，plain_detail 是补充段落。" },
+        "boundary": {
+          "type": "object",
+          "description": "该构件拥有的代码边界（供检查器界定『谁属于我』）。",
+          "additionalProperties": false,
+          "properties": { "path": { "type": "string" }, "glob": { "type": "string" } }
+        },
+        "owns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "该构件独占的横切职责标签（配合 single_canonical：一个职责只能一处 owns）。"
+        },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "ports": { "type": "array", "items": { "$ref": "#/$defs/id" }, "description": "该构件挂出的 Port id 列表。" },
+        "surfaces_on_map": { "type": "boolean", "description": "是否升为能力地图上的节点（投影策略：并非所有 Unit 都上图）。" },
+        "status": { "$ref": "#/$defs/status" },
+        "health": { "$ref": "#/$defs/health" },
+        "origin": { "$ref": "#/$defs/origin" },
+        "satisfies": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/id" },
+          "description": "本构件满足的需求 id 列表（追溯 R→A）。编译期校验：每条需求至少被一个能力 satisfies（报告 §05 阶段1）。"
+        }
+      }
+    },
+
+    "port": {
+      "type": "object",
+      "description": "对外接口：Unit 唯一被允许触达的表面。跨构件交互只认 Port，不许伸进内部。",
+      "required": ["id", "of", "direction", "plain"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "of": { "$ref": "#/$defs/id", "description": "拥有此 Port 的 Unit id。" },
+        "direction": { "enum": ["provided", "required", "inbound", "outbound"] },
+        "protocol": { "$ref": "#/$defs/protocol" },
+        "shape": {
+          "type": "object",
+          "description": "接口形态：类型 / schema 引用（编译为 tsc + schema 校验）。",
+          "additionalProperties": false,
+          "properties": {
+            "type_ref": { "type": "string" },
+            "schema_ref": { "type": "string" }
+          }
+        },
+        "plain": { "$ref": "#/$defs/plain" },
+        "contract": {
+          "type": "object",
+          "description": "行为契约占位（报告 §05 阶段3 / 形式化规约）。近期留空，仅作结构预留；远期在有 oracle 处编译为契约派生单测/属性测试（决策 ADR-0009：行为门远期纳入）。",
+          "additionalProperties": false,
+          "properties": {
+            "pre": { "type": "array", "items": { "$ref": "#/$defs/clause" }, "description": "前置条件。" },
+            "post": { "type": "array", "items": { "$ref": "#/$defs/clause" }, "description": "后置条件。" },
+            "invariant": { "type": "array", "items": { "$ref": "#/$defs/clause" }, "description": "不变量。" }
+          }
+        }
+      }
+    },
+
+    "relation": {
+      "type": "object",
+      "description": "关系：两元素间一条有类型、有方向的边。模块间所有交互形式的统一载体。",
+      "required": ["from", "to", "kind", "plain"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "from": { "$ref": "#/$defs/id", "description": "源（Unit id 或 Port id）。" },
+        "to": { "$ref": "#/$defs/id", "description": "目标（Unit id / Port id / Entity id）。" },
+        "kind": { "$ref": "#/$defs/relationKind" },
+        "via": { "$ref": "#/$defs/id", "description": "必经的 Port id（封装：跨构件须走正门）。" },
+        "protocol": { "$ref": "#/$defs/protocol" },
+        "plain": { "$ref": "#/$defs/plain" }
+      }
+    },
+
+    "entity": {
+      "type": "object",
+      "description": "数据实体：持久化数据形状 + 关系。db/schema 为数据模型唯一真相源。",
+      "required": ["id", "plain_name", "fields", "plain"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "plain_name": { "type": "string" },
+        "fields": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "relations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["to", "kind"],
+            "additionalProperties": false,
+            "properties": {
+              "to": { "$ref": "#/$defs/id" },
+              "kind": { "enum": ["has_many", "has_one", "belongs_to"] }
+            }
+          }
+        },
+        "plain": { "$ref": "#/$defs/plain" },
+        "status": { "$ref": "#/$defs/status" },
+        "origin": { "$ref": "#/$defs/origin" }
+      }
+    },
+
+    "constraint": {
+      "type": "object",
+      "description": "约束：对『Unit/Port/Relation 这张图』的一个谓词 + 严重度。架构纪律全部落在这里。每个 rule.type 映射到一个确定性检查器。",
+      "required": ["id", "plain", "severity", "rule"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "plain": { "$ref": "#/$defs/plain" },
+        "severity": { "$ref": "#/$defs/severity" },
+        "sealed": { "type": "boolean", "description": "true=密封不变量，覆盖层不可触及（B.10）。" },
+        "origin": { "$ref": "#/$defs/origin" },
+        "checker": {
+          "type": "string",
+          "description": "编译目标检查器（可由 rule.type 推断）。",
+          "enum": ["dependency-cruiser", "eslint", "ts-morph", "tsc", "schema", "madge", "NEEDS_DECISION"]
+        },
+        "rule": { "$ref": "#/$defs/rule" },
+        "satisfies": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/id" },
+          "description": "本约束服务的需求 id（可选；结构性密封不变量可不回链）。"
+        }
+      }
+    },
+
+    "rule": {
+      "description": "约束谓词的有类型 DSL。固定一组 type，每种对应一类图检查；映射不到静态检查的显式落到 NEEDS_DECISION。",
+      "oneOf": [
+        {
+          "type": "object",
+          "title": "forbid_relation",
+          "description": "禁止某形状的关系存在（如 feature 间 imports）。→ dependency-cruiser",
+          "required": ["type", "from", "to"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "forbid_relation" },
+            "from": { "$ref": "#/$defs/selector" },
+            "to": { "$ref": "#/$defs/selector" },
+            "kind": { "$ref": "#/$defs/relationKind" }
+          }
+        },
+        {
+          "type": "object",
+          "title": "allowed_relation_kinds",
+          "description": "两类构件之间只允许这些关系类型（如 service 间只许 emits/consumes/rpc）。→ dependency-cruiser",
+          "required": ["type", "between", "kinds"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "allowed_relation_kinds" },
+            "between": { "type": "array", "items": { "$ref": "#/$defs/selector" }, "minItems": 2, "maxItems": 2 },
+            "kinds": { "type": "array", "items": { "$ref": "#/$defs/relationKind" }, "minItems": 1 }
+          }
+        },
+        {
+          "type": "object",
+          "title": "direction",
+          "description": "关系必须沿指定次序、单向、不可跨级。scope 区分构件内部分层(intra_unit)与构件之间(inter_unit)。→ dependency-cruiser",
+          "required": ["type", "order"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "direction" },
+            "order": { "type": "array", "items": { "type": "string" }, "minItems": 2 },
+            "scope": { "enum": ["intra_unit", "inter_unit"], "default": "inter_unit" },
+            "strict": { "type": "boolean", "default": true, "description": "true=不可跨级（只能相邻一跳）。" }
+          }
+        },
+        {
+          "type": "object",
+          "title": "via_port",
+          "description": "从 X 到 Y 的跨构件关系必须经对方 Port（封装/走正门）。→ dependency-cruiser + eslint",
+          "required": ["type", "from", "to"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "via_port" },
+            "from": { "$ref": "#/$defs/selector" },
+            "to": { "$ref": "#/$defs/selector" }
+          }
+        },
+        {
+          "type": "object",
+          "title": "access_only_via",
+          "description": "对某类目标（如数据库/外部服务）的访问只能经某个统一封装（如 core/db）。→ dependency-cruiser + eslint import 白名单",
+          "required": ["type", "target", "via"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "access_only_via" },
+            "target": { "$ref": "#/$defs/selector" },
+            "via": { "$ref": "#/$defs/selector" }
+          }
+        },
+        {
+          "type": "object",
+          "title": "single_canonical",
+          "description": "某横切职责全应用只能有一处规范实现（owns 该职责）。→ ts-morph 重复/相似实现扫描",
+          "required": ["type", "responsibility"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "single_canonical" },
+            "responsibility": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "title": "no_outbound_except",
+          "description": "某类构件（如 domain）除指定出口外不得有出向关系（隔离）。→ dependency-cruiser",
+          "required": ["type", "from", "except"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "no_outbound_except" },
+            "from": { "$ref": "#/$defs/selector" },
+            "except": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": false,
+              "properties": {
+                "kinds": { "type": "array", "items": { "$ref": "#/$defs/relationKind" } },
+                "to": { "$ref": "#/$defs/selector" }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "title": "no_orphan",
+          "description": "不得存在孤立未接线的构件（不可达/无引用）。→ madge / ts-morph 可达性",
+          "required": ["type"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "const": "no_orphan" },
+            "of": { "$ref": "#/$defs/selector" }
+          }
+        }
+      ]
+    },
+
+    "archetype": {
+      "type": "object",
+      "description": "架构原型：一套『构件词汇 + 允许的关系类型 + 上图投影 + 约束集（含密封不变量）』的捆绑。换 archetype = 换这几个旋钮，即可表达不同架构。",
+      "required": ["id", "plain", "unit_kinds", "allowed_relation_kinds", "constraints"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "plain": { "$ref": "#/$defs/plain" },
+        "unit_kinds": { "type": "array", "items": { "$ref": "#/$defs/unitKind" }, "minItems": 1 },
+        "allowed_relation_kinds": { "type": "array", "items": { "$ref": "#/$defs/relationKind" }, "minItems": 1 },
+        "node_kinds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/unitKind" },
+          "description": "哪些 Unit kind 升为地图节点（其余隐去）。投影策略，保证地图可读。"
+        },
+        "internal_layers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "构件内部分层词汇（如 ui/logic/data），配合 scope=intra_unit 的 direction 约束。"
+        },
+        "constraints": { "type": "array", "items": { "$ref": "#/$defs/constraint" }, "minItems": 1 }
+      }
+    }
+  }
+}

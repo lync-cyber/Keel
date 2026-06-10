@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>原型 B · 这次改动 — 我的博客</title>
+<!--
+  Keel 原型 B · 蓝图 diff 确认（对应 PRD 状态 DIFF_REVIEW，FR-4，线框 附录 A.5）
+  场景:用户说「加一个用户能收藏文章的功能」，系统先给看会怎么改、影响谁，确认才动手。
+  =========================================================================
+  本页能力/连线投影自 docs/blueprint.example.yaml（唯一规范实例，ADR-0007）；
+  本次「改动」(CHANGE) 是一次蓝图 diff 提案(FR-4)、layout 是摆放坐标——二者均为
+  视图层瞬态数据，不在规范实例中。
+  界面只显示 plain_* 通俗字段，不出现任何代码/架构术语。
+-->
+<style>
+  :root{
+    --bg:#f5f6f8; --panel:#ffffff; --line:#e5e8ee; --ink:#1f2430; --muted:#697086;
+    --accent:#2563eb; --accent-soft:#eaf0ff;
+    --green:#15a05a; --green-soft:#e7f6ee;
+    --amber:#d68309; --red:#d6453d;
+    --new:#2563eb; --new-soft:#eef3ff;     /* 新增 = 蓝 */
+    --touch:#9333ea; --touch-soft:#f4ecfd; /* 会碰到 = 紫 */
+    --edge:#c4cbd8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;}
+  body{font-family:"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif;
+    background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+  .app{display:flex;flex-direction:column;height:100vh;}
+
+  .topbar{display:flex;align-items:center;gap:16px;padding:12px 20px;background:var(--panel);
+    border-bottom:1px solid var(--line);flex:0 0 auto;}
+  .health-pill{display:flex;align-items:center;gap:8px;font-weight:600;background:var(--accent-soft);
+    color:var(--accent);padding:6px 12px;border-radius:999px;font-size:13px;}
+  .health-pill .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);}
+  .proj{font-weight:700;font-size:16px;}
+  .topbar .spacer{flex:1;}
+  .ghost-btn{border:1px solid var(--line);background:#fff;color:var(--muted);padding:7px 14px;
+    border-radius:8px;font-size:13px;cursor:pointer;}
+
+  .body{flex:1;display:flex;min-height:0;}
+  .stage{flex:1;display:flex;flex-direction:column;min-width:0;padding:18px;gap:14px;overflow:auto;}
+  .stage-head{display:flex;align-items:baseline;gap:10px;}
+  .stage-head h1{font-size:17px;margin:0;}
+  .stage-head .hint{color:var(--muted);font-size:13px;}
+
+  .canvas-wrap{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px;position:relative;}
+  .canvas{position:relative;width:760px;height:440px;margin:0 auto;}
+  svg.edges{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+
+  .node{position:absolute;width:150px;min-height:64px;background:#fff;border:1.5px solid var(--line);
+    border-radius:12px;padding:10px 12px;box-shadow:0 1px 2px rgba(20,30,60,.05);transition:.15s;}
+  .node .name{font-weight:700;font-size:14.5px;padding-right:16px;}
+  .node .short{color:var(--muted);font-size:12px;margin-top:4px;}
+  .node .hdot{position:absolute;top:12px;right:12px;width:11px;height:11px;border-radius:50%;background:var(--green);}
+
+  /* 已存在但本次不动 -> 略微淡化 */
+  .node.dim{opacity:.55;}
+  /* 会碰到 -> 紫色环 + 角标 */
+  .node.touched{border-color:var(--touch);box-shadow:0 0 0 3px var(--touch-soft);}
+  /* 新增 -> 蓝色虚线 + 浅蓝底 + 角标 */
+  .node.added{border:2px dashed var(--new);background:var(--new-soft);box-shadow:0 4px 14px rgba(37,99,235,.14);}
+  .tag{position:absolute;top:-11px;left:10px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;color:#fff;}
+  .tag.added{background:var(--new);}
+  .tag.touched{background:var(--touch);}
+
+  .legend{display:flex;flex-wrap:wrap;gap:18px;align-items:center;color:var(--muted);font-size:12.5px;padding:2px 6px;}
+  .legend .item{display:flex;align-items:center;gap:6px;}
+  .legend .chip{width:14px;height:14px;border-radius:4px;}
+  .legend .chip.added{border:2px dashed var(--new);background:var(--new-soft);}
+  .legend .chip.touched{border:2px solid var(--touch);background:var(--touch-soft);}
+  .legend .chip.keep{background:#fff;border:1.5px solid var(--line);}
+
+  /* 右栏:这次改动 */
+  .panel{flex:0 0 360px;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;}
+  .panel-head{padding:16px;border-bottom:1px solid var(--line);}
+  .panel-head .k{font-size:12px;color:var(--muted);font-weight:600;}
+  .panel-head h2{margin:4px 0 0;font-size:18px;}
+  .panel-body{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:16px;}
+
+  .block .blabel{font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  .block .blabel .mk{width:8px;height:8px;border-radius:50%;}
+  .add-card{border:2px dashed var(--new);background:var(--new-soft);border-radius:12px;padding:12px 14px;}
+  .add-card .title{font-weight:700;font-size:15px;color:var(--new);}
+  .add-card .desc{font-size:13px;color:var(--ink);margin-top:4px;}
+  .needs{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+  .needs .row{font-size:13px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:7px 10px;}
+
+  ul.list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;}
+  ul.list li{font-size:13.5px;border-radius:9px;padding:9px 11px;}
+  li.touch{background:var(--touch-soft);border:1px solid #e7d6fb;}
+  li.touch .who{font-weight:700;color:var(--touch);}
+  li.newdata{background:var(--new-soft);border:1px solid #d7e3ff;}
+  li.newdata .who{font-weight:700;color:var(--new);}
+  li.keep{background:#fafbfc;border:1px solid var(--line);color:var(--muted);}
+  li.keep .who{font-weight:700;color:var(--ink);}
+
+  .footer{padding:14px 16px;border-top:1px solid var(--line);display:flex;gap:8px;}
+  .btn{flex:1;border:none;border-radius:10px;padding:11px;font-size:14px;font-weight:600;cursor:pointer;}
+  .btn.primary{background:var(--accent);color:#fff;}
+  .btn.primary:hover{background:#1d54d6;}
+  .btn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink);}
+  .btn.ghost:hover{border-color:#cfd5e0;}
+  .btn.danger{background:#fff;border:1px solid #f3c9c6;color:var(--red);}
+  .btn.danger:hover{background:var(--red);color:#fff;}
+
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);
+    background:#1f2430;color:#fff;padding:12px 18px;border-radius:10px;font-size:14px;
+    opacity:0;pointer-events:none;transition:.25s;max-width:80%;text-align:center;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .modify-note{font-size:13px;color:var(--muted);background:#fafbfc;border:1px dashed var(--line);
+    border-radius:9px;padding:10px;margin-top:6px;display:none;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="health-pill"><span class="dot"></span>正在确认一处改动</div>
+    <div class="proj">我的博客</div>
+    <div class="spacer"></div>
+    <button class="ghost-btn">历史</button>
+    <button class="ghost-btn">导出 / 交接</button>
+  </div>
+
+  <div class="body">
+    <!-- 地图 + 差异叠加 -->
+    <div class="stage">
+      <div class="stage-head">
+        <h1>这次会怎么改</h1>
+        <span class="hint">还没动手 · 蓝色虚线的是要新加的，紫色框的是会被碰到的</span>
+      </div>
+
+      <div class="canvas-wrap">
+        <div class="canvas" id="canvas">
+          <svg class="edges" id="edges" viewBox="0 0 760 440" preserveAspectRatio="none"></svg>
+        </div>
+      </div>
+
+      <div class="legend">
+        <span class="item"><span class="chip added"></span>这次新加</span>
+        <span class="item"><span class="chip touched"></span>会被碰到</span>
+        <span class="item"><span class="chip keep"></span>这次不动</span>
+      </div>
+    </div>
+
+    <!-- 右栏:这次改动（FR-4 通俗解释 + 受影响清单 + 确认/改/放弃） -->
+    <aside class="panel">
+      <div class="panel-head">
+        <div class="k">你刚才说</div>
+        <h2>"加一个用户能收藏文章的功能"</h2>
+      </div>
+      <div class="panel-body" id="panelBody"><!-- 脚本填充 --></div>
+      <div class="footer">
+        <button class="btn primary" id="btnConfirm">确认，动手</button>
+        <button class="btn ghost" id="btnModify">改一改</button>
+        <button class="btn danger" id="btnAbort">放弃</button>
+      </div>
+    </aside>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* === 能力/连线投影自 docs/blueprint.example.yaml；CHANGE = 蓝图 diff 提案(FR-4)，视图层瞬态数据 === */
+const CAPS = {
+  auth:{name:"登录", layout:{x:40,y:110}, status:"established"},
+  "article-list":{name:"文章列表", layout:{x:40,y:290}, status:"established"},
+  "article-detail":{name:"文章详情", layout:{x:305,y:290}, status:"established"},
+  comment:{name:"评论", layout:{x:570,y:110}, status:"established"},
+  favorite:{name:"收藏文章", short:"让登录的人把喜欢的文章收起来。", layout:{x:570,y:290}, status:"added"}
+};
+const EXISTING_EDGES = [
+  ["article-detail","article-list"], ["comment","article-detail"], ["comment","auth"]
+];
+const CHANGE = {
+  add_capability:{ name:"收藏文章", desc:"让登录后的人把喜欢的文章收起来，之后能快速找回。" },
+  needs:[ {name:"文章详情", why:"收藏按钮要长在文章详情页上"}, {name:"登录", why:"要先登录才能收藏"} ],
+  new_edges:[ ["favorite","article-detail"], ["favorite","auth"] ],
+  affected:[
+    { cap:"article-detail", who:"文章详情", plain:"页面上要加一个「收藏」按钮。" },
+    { cap:"auth", who:"登录", plain:"会用到它来确认是谁在收藏（要先登录才能收藏）。" }
+  ],
+  new_data:{ who:'新增「收藏」数据', plain:'会多记一种东西：「谁收藏了哪篇文章」。' },
+  not_touched:[ {who:"文章列表", plain:"保持原样。"}, {who:"评论", plain:"保持原样。"} ]
+};
+
+const NODE_W=150, NODE_H=64;
+const center = c => ({ x:c.layout.x+NODE_W/2, y:c.layout.y+NODE_H/2 });
+const touchedSet = new Set(CHANGE.affected.map(a=>a.cap));
+const notTouchedSet = new Set(CHANGE.not_touched.map(n=>{
+  return Object.keys(CAPS).find(k=>CAPS[k].name===n.who);
+}));
+
+/* 连线:已有(灰实线) + 新增(蓝虚线高亮) */
+const svg=document.getElementById("edges");
+function line(a,b,opts){
+  const l=document.createElementNS("http://www.w3.org/2000/svg","line");
+  l.setAttribute("x1",a.x);l.setAttribute("y1",a.y);l.setAttribute("x2",b.x);l.setAttribute("y2",b.y);
+  l.setAttribute("stroke",opts.color);l.setAttribute("stroke-width",opts.w);
+  if(opts.dash) l.setAttribute("stroke-dasharray","7 6");
+  svg.appendChild(l);
+}
+EXISTING_EDGES.forEach(([a,b])=>line(center(CAPS[a]),center(CAPS[b]),{color:"#c4cbd8",w:2}));
+CHANGE.new_edges.forEach(([a,b])=>line(center(CAPS[a]),center(CAPS[b]),{color:"#2563eb",w:2.5,dash:true}));
+
+/* 节点 */
+const canvas=document.getElementById("canvas");
+Object.entries(CAPS).forEach(([id,c])=>{
+  const el=document.createElement("div");
+  let cls="node";
+  if(c.status==="added") cls+=" added";
+  else if(touchedSet.has(id)) cls+=" touched";
+  else if(notTouchedSet.has(id)) cls+=" dim";
+  el.className=cls; el.style.left=c.layout.x+"px"; el.style.top=c.layout.y+"px";
+  let tag="";
+  if(c.status==="added") tag=`<span class="tag added">＋ 新增</span>`;
+  else if(touchedSet.has(id)) tag=`<span class="tag touched">会碰到</span>`;
+  el.innerHTML=`${tag}<span class="hdot"></span><div class="name">${c.name}</div>`+
+               (c.short?`<div class="short">${c.short}</div>`:"");
+  canvas.appendChild(el);
+});
+
+/* 右栏「这次改动」 */
+const pb=document.getElementById("panelBody");
+pb.innerHTML = `
+  <div class="block">
+    <div class="blabel"><span class="mk" style="background:var(--new)"></span>这次新加一块能力</div>
+    <div class="add-card">
+      <div class="title">＋ ${CHANGE.add_capability.name}</div>
+      <div class="desc">${CHANGE.add_capability.desc}</div>
+      <div class="needs">
+        ${CHANGE.needs.map(n=>`<div class="row">它要用到「<b>${n.name}</b>」——${n.why}。</div>`).join("")}
+      </div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="blabel"><span class="mk" style="background:var(--touch)"></span>会碰到这些（已经有的东西）</div>
+    <ul class="list">
+      ${CHANGE.affected.map(a=>`<li class="touch"><span class="who">${a.who}</span>：${a.plain}</li>`).join("")}
+      <li class="newdata"><span class="who">${CHANGE.new_data.who}</span>：${CHANGE.new_data.plain}</li>
+    </ul>
+  </div>
+  <div class="block">
+    <div class="blabel"><span class="mk" style="background:#c4cbd8"></span>这次不会动</div>
+    <ul class="list">
+      ${CHANGE.not_touched.map(n=>`<li class="keep"><span class="who">${n.who}</span>：${n.plain}</li>`).join("")}
+    </ul>
+  </div>
+  <div class="modify-note" id="modifyNote">想改的话，直接用大白话补充一句，比如「收藏要能在个人主页统一看到」，我会重新给你算一遍这次会怎么改。</div>
+`;
+
+/* 半交互:确认 / 改 / 放弃 */
+const toast=document.getElementById("toast");
+let toastTimer;
+function showToast(msg){ toast.textContent=msg; toast.classList.add("show");
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>toast.classList.remove("show"),3200); }
+
+document.getElementById("btnConfirm").addEventListener("click",()=>{
+  showToast("好的，开始动手加「收藏文章」。你会看到这块能力从「规划中」变到「已就绪」，全程不用看代码。");
+});
+document.getElementById("btnModify").addEventListener("click",()=>{
+  const n=document.getElementById("modifyNote");
+  n.style.display = n.style.display==="block" ? "none" : "block";
+});
+document.getElementById("btnAbort").addEventListener("click",()=>{
+  showToast("已放弃这次改动，什么都没改，应用还是原来的样子。");
+});
+</script>
+</body>
+</html>

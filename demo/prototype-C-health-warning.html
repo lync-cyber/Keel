@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>原型 C · 健康预警 — 我的博客</title>
+<!--
+  Keel 原型 C · 健康预警与修复（对应 PRD 流程 C，FR-6，信息架构 §8 健康详情面板）
+  场景:加完「收藏」后，系统检出「收藏功能被实现了两遍，建议合并」，并给逐项修复入口。
+  =========================================================================
+  本页能力/连线投影自 docs/blueprint.example.yaml（唯一规范实例，ADR-0007）；
+  health_report(PROBLEMS) 与各节点 health 是漂移检测的计算输出/演示场景、layout 是
+  摆放坐标——均为视图层数据，不在规范实例中（实例里各能力 health 为稳态 green）。
+  界面只显示 plain_* 通俗字段，不出现任何代码/架构术语。
+-->
+<style>
+  :root{
+    --bg:#f5f6f8; --panel:#ffffff; --line:#e5e8ee; --ink:#1f2430; --muted:#697086;
+    --accent:#2563eb;
+    --green:#15a05a; --green-soft:#e7f6ee;
+    --amber:#d68309; --amber-soft:#fdf2dd; --amber-line:#f1d79a;
+    --red:#d6453d; --red-soft:#fdeceb; --red-line:#f3c9c6;
+    --edge:#c4cbd8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;}
+  body{font-family:"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif;
+    background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+  .app{display:flex;flex-direction:column;height:100vh;}
+
+  .topbar{display:flex;align-items:center;gap:16px;padding:12px 20px;background:var(--panel);
+    border-bottom:1px solid var(--line);flex:0 0 auto;}
+  .health-pill{display:flex;align-items:center;gap:8px;font-weight:600;padding:6px 12px;border-radius:999px;font-size:13px;transition:.3s;}
+  .health-pill.red{background:var(--red-soft);color:var(--red);}
+  .health-pill.amber{background:var(--amber-soft);color:var(--amber);}
+  .health-pill.green{background:var(--green-soft);color:var(--green);}
+  .health-pill .dot{width:10px;height:10px;border-radius:50%;}
+  .health-pill.red .dot{background:var(--red);box-shadow:0 0 0 3px rgba(214,69,61,.18);}
+  .health-pill.amber .dot{background:var(--amber);box-shadow:0 0 0 3px rgba(214,131,9,.18);}
+  .health-pill.green .dot{background:var(--green);box-shadow:0 0 0 3px rgba(21,160,90,.18);}
+  .proj{font-weight:700;font-size:16px;}
+  .topbar .spacer{flex:1;}
+  .ghost-btn{border:1px solid var(--line);background:#fff;color:var(--muted);padding:7px 14px;border-radius:8px;font-size:13px;cursor:pointer;}
+
+  .body{flex:1;display:flex;min-height:0;}
+  .stage{flex:1;display:flex;flex-direction:column;min-width:0;padding:18px;gap:14px;overflow:auto;}
+  .stage-head{display:flex;align-items:baseline;gap:10px;}
+  .stage-head h1{font-size:17px;margin:0;}
+  .stage-head .hint{color:var(--muted);font-size:13px;}
+
+  .canvas-wrap{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px;position:relative;}
+  .canvas{position:relative;width:760px;height:440px;margin:0 auto;}
+  svg.edges{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+
+  .node{position:absolute;width:150px;min-height:64px;background:#fff;border:1.5px solid var(--line);
+    border-radius:12px;padding:10px 12px;box-shadow:0 1px 2px rgba(20,30,60,.05);transition:.2s;}
+  .node .name{font-weight:700;font-size:14.5px;padding-right:16px;}
+  .node .short{color:var(--muted);font-size:12px;margin-top:4px;}
+  .node .hdot{position:absolute;top:12px;right:12px;width:11px;height:11px;border-radius:50%;}
+  .hdot.green{background:var(--green);}
+  .hdot.amber{background:var(--amber);}
+  .hdot.red{background:var(--red);}
+  .node.flag-red{border-color:var(--red);box-shadow:0 0 0 3px var(--red-soft);}
+  .node.flag-amber{border-color:var(--amber);box-shadow:0 0 0 3px var(--amber-soft);}
+  .node.focus{transform:translateY(-3px) scale(1.03);box-shadow:0 8px 22px rgba(20,30,60,.18);}
+
+  .legend{display:flex;flex-wrap:wrap;gap:18px;align-items:center;color:var(--muted);font-size:12.5px;padding:2px 6px;}
+  .legend .item{display:flex;align-items:center;gap:6px;}
+  .legend .swatch{width:11px;height:11px;border-radius:50%;}
+
+  /* 右栏:健康详情 */
+  .panel{flex:0 0 372px;background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;}
+  .panel-head{padding:16px;border-bottom:1px solid var(--line);}
+  .panel-head h2{margin:0;font-size:17px;}
+  .panel-head .sub{color:var(--muted);font-size:13px;margin-top:4px;}
+  .panel-head .sub b{color:var(--red);}
+  .panel-body{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:14px;}
+
+  .prob{border:1px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;transition:.15s;}
+  .prob:hover{border-color:#cfd5e0;}
+  .prob.open{box-shadow:0 4px 14px rgba(20,30,60,.08);}
+  .prob .ph{display:flex;align-items:flex-start;gap:10px;padding:13px 14px;}
+  .prob .sev{flex:0 0 auto;margin-top:2px;width:10px;height:10px;border-radius:50%;}
+  .sev.red{background:var(--red);} .sev.amber{background:var(--amber);}
+  .prob .ph .t{font-weight:700;font-size:14.5px;flex:1;}
+  .prob .ph .sevtag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap;}
+  .sevtag.red{background:var(--red-soft);color:var(--red);}
+  .sevtag.amber{background:var(--amber-soft);color:var(--amber);}
+  .prob .pbody{display:none;padding:0 14px 14px;border-top:1px solid var(--line);}
+  .prob.open .pbody{display:block;}
+  .prob .pbody .seg{margin-top:11px;}
+  .prob .pbody .seg .lab{font-size:11.5px;font-weight:700;color:var(--muted);margin-bottom:3px;}
+  .prob .pbody .seg .val{font-size:13.5px;}
+  .prob .pbody .seg.why .val{background:#fafbfc;border:1px solid var(--line);border-radius:8px;padding:9px 11px;}
+  .suggest{font-size:13.5px;color:var(--ink);margin-top:11px;font-weight:600;}
+  .fixbtn{margin-top:12px;width:100%;border:none;border-radius:10px;padding:11px;font-size:14px;font-weight:600;color:#fff;cursor:pointer;}
+  .fixbtn.red{background:var(--red);} .fixbtn.red:hover{background:#c23a33;}
+  .fixbtn.amber{background:var(--amber);} .fixbtn.amber:hover{background:#bd7308;}
+  .fixbtn:disabled{background:var(--green);cursor:default;}
+
+  .resolved-mark{display:none;align-items:center;gap:6px;color:var(--green);font-size:13px;font-weight:600;margin-top:12px;}
+  .prob.resolved .resolved-mark{display:flex;}
+  .prob.resolved .fixbtn{display:none;}
+  .prob.resolved .sev{background:var(--green);}
+  .prob.resolved .sevtag{background:var(--green-soft);color:var(--green);}
+  .prob.resolved .sevtag::after{content:" 已处理";}
+
+  .allgood{display:none;text-align:center;color:var(--green);font-weight:600;padding:18px;
+    background:var(--green-soft);border-radius:12px;}
+  .allgood.show{display:block;}
+
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);
+    background:#1f2430;color:#fff;padding:12px 18px;border-radius:10px;font-size:14px;opacity:0;
+    pointer-events:none;transition:.25s;max-width:80%;text-align:center;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="health-pill red" id="healthPill"><span class="dot"></span>有 1 处要处理</div>
+    <div class="proj">我的博客</div>
+    <div class="spacer"></div>
+    <button class="ghost-btn">历史</button>
+    <button class="ghost-btn">导出 / 交接</button>
+  </div>
+
+  <div class="body">
+    <!-- 地图:出问题的能力被标红/标黄 -->
+    <div class="stage">
+      <div class="stage-head">
+        <h1>能力地图</h1>
+        <span class="hint">右边列出了发现的问题 · 点一条会在图上指给你看是哪一块</span>
+      </div>
+      <div class="canvas-wrap">
+        <div class="canvas" id="canvas">
+          <svg class="edges" id="edges" viewBox="0 0 760 440" preserveAspectRatio="none"></svg>
+        </div>
+      </div>
+      <div class="legend">
+        <span class="item"><span class="swatch" style="background:var(--green)"></span>正常</span>
+        <span class="item"><span class="swatch" style="background:var(--amber)"></span>有点小问题</span>
+        <span class="item"><span class="swatch" style="background:var(--red)"></span>要处理一下</span>
+      </div>
+    </div>
+
+    <!-- 右栏:健康详情（问题清单 + 逐项修复入口） -->
+    <aside class="panel">
+      <div class="panel-head">
+        <h2>需要看一下</h2>
+        <div class="sub" id="panelSub">发现 <b>1</b> 个要处理的、1 个小毛病。点开看是怎么回事。</div>
+      </div>
+      <div class="panel-body" id="panelBody"><!-- 脚本填充 --></div>
+    </aside>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* === 能力/连线投影自 docs/blueprint.example.yaml；PROBLEMS/health = 漂移检测计算输出(视图层)，非蓝图真相 === */
+const CAPS = {
+  auth:{name:"登录", health:"green", layout:{x:40,y:110}},
+  "article-list":{name:"文章列表", health:"green", layout:{x:40,y:290}},
+  "article-detail":{name:"文章详情", health:"green", layout:{x:305,y:290}},
+  comment:{name:"评论", health:"amber", layout:{x:570,y:110}},
+  favorite:{name:"收藏文章", health:"red", layout:{x:570,y:290}}
+};
+const EDGES = [
+  ["article-detail","article-list"], ["comment","article-detail"], ["comment","auth"],
+  ["favorite","article-detail"], ["favorite","auth"]
+];
+const PROBLEMS = [
+  { id:"dup-favorite", severity:"red", capability:"favorite",
+    title:"「收藏」功能被做了两遍",
+    what:"系统里现在有两处代码都在管「收藏」，它们在打架。",
+    why:"同一件事有两套做法，以后会越改越乱——改了一处、另一处没跟上，就会冒出「有时收藏成功、有时又不见了」这种怪毛病。这正是当初要避免的腐化。",
+    suggestion:"建议把这两处合并成一处。",
+    fix:"一键合并",
+    fixing:"正在合并：把两处收拢成一处，过程你不用看代码…" },
+  { id:"naming-comment", severity:"amber", capability:"comment",
+    title:"「评论」里有个名字没按统一规矩起",
+    what:"不影响现在使用，只是命名不太一致。",
+    why:"小毛病、不着急，但这类小乱子积少成多，时间久了会让结构慢慢看不清。",
+    suggestion:"建议顺手改成统一的名字。",
+    fix:"一键规范命名",
+    fixing:"正在按统一规矩改名字…" }
+];
+
+const NODE_W=150, NODE_H=64;
+const center = c => ({ x:c.layout.x+NODE_W/2, y:c.layout.y+NODE_H/2 });
+
+/* 连线 */
+const svg=document.getElementById("edges");
+EDGES.forEach(([a,b])=>{
+  const p=center(CAPS[a]), q=center(CAPS[b]);
+  const l=document.createElementNS("http://www.w3.org/2000/svg","line");
+  l.setAttribute("x1",p.x);l.setAttribute("y1",p.y);l.setAttribute("x2",q.x);l.setAttribute("y2",q.y);
+  l.setAttribute("stroke","#c4cbd8");l.setAttribute("stroke-width","2");
+  svg.appendChild(l);
+});
+
+/* 节点 */
+const canvas=document.getElementById("canvas");
+Object.entries(CAPS).forEach(([id,c])=>{
+  const el=document.createElement("div");
+  let cls="node"; if(c.health==="red")cls+=" flag-red"; else if(c.health==="amber")cls+=" flag-amber";
+  el.className=cls; el.id="node-"+id; el.style.left=c.layout.x+"px"; el.style.top=c.layout.y+"px";
+  el.innerHTML=`<span class="hdot ${c.health}"></span><div class="name">${c.name}</div>`;
+  canvas.appendChild(el);
+});
+
+/* 右栏问题清单 */
+const pb=document.getElementById("panelBody");
+PROBLEMS.forEach(p=>{
+  const card=document.createElement("div");
+  card.className="prob"; card.id="prob-"+p.id; card.dataset.cap=p.capability; card.dataset.sev=p.severity;
+  card.innerHTML=`
+    <div class="ph">
+      <span class="sev ${p.severity}"></span>
+      <span class="t">${p.title}</span>
+      <span class="sevtag ${p.severity}">${p.severity==="red"?"要处理":"小毛病"}</span>
+    </div>
+    <div class="pbody">
+      <div class="seg"><div class="lab">是怎么回事</div><div class="val">${p.what}</div></div>
+      <div class="seg why"><div class="lab">为什么要管它</div><div class="val">${p.why}</div></div>
+      <div class="suggest">👉 ${p.suggestion}</div>
+      <button class="fixbtn ${p.severity}">${p.fix}</button>
+      <div class="resolved-mark">✓ 已处理好，这块恢复正常了</div>
+    </div>`;
+  // 点开/收起 + 在地图上指出对应节点
+  card.querySelector(".ph").addEventListener("click",()=>{
+    const open=card.classList.toggle("open");
+    document.querySelectorAll(".node").forEach(n=>n.classList.remove("focus"));
+    if(open) document.getElementById("node-"+p.capability).classList.add("focus");
+  });
+  // 修复（触发调和，流程 C 第 3 步）
+  card.querySelector(".fixbtn").addEventListener("click",(e)=>{
+    e.stopPropagation();
+    const btn=card.querySelector(".fixbtn");
+    btn.disabled=true; btn.textContent="处理中…";
+    showToast(p.fixing);
+    setTimeout(()=>resolve(p, card),1600);
+  });
+  pb.appendChild(card);
+});
+// 默认展开第一条（红色）让被测者一眼看到主问题
+document.getElementById("prob-dup-favorite").classList.add("open");
+document.getElementById("node-favorite").classList.add("focus");
+
+const toast=document.getElementById("toast"); let tt;
+function showToast(m){ toast.textContent=m; toast.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>toast.classList.remove("show"),3000); }
+
+function resolve(p, card){
+  card.classList.add("resolved");
+  // 地图节点转绿
+  const node=document.getElementById("node-"+p.capability);
+  node.classList.remove("flag-red","flag-amber","focus");
+  node.querySelector(".hdot").className="hdot green";
+  CAPS[p.capability].health="green";
+  showToast("修好了，这块恢复正常，已记到历史里。");
+  refreshOverall();
+}
+function refreshOverall(){
+  const reds=Object.values(CAPS).filter(c=>c.health==="red").length;
+  const ambers=Object.values(CAPS).filter(c=>c.health==="amber").length;
+  const pill=document.getElementById("healthPill");
+  const sub=document.getElementById("panelSub");
+  if(reds===0 && ambers===0){
+    pill.className="health-pill green"; pill.innerHTML='<span class="dot"></span>一切正常';
+    sub.innerHTML="都处理好了 🎉 应用恢复健康。";
+  }else if(reds>0){
+    pill.className="health-pill red"; pill.innerHTML=`<span class="dot"></span>有 ${reds} 处要处理`;
+    sub.innerHTML=`还有 <b>${reds}</b> 个要处理的${ambers?`、${ambers} 个小毛病`:""}。`;
+  }else{
+    pill.className="health-pill amber"; pill.innerHTML=`<span class="dot"></span>有 ${ambers} 个小毛病`;
+    sub.innerHTML=`要处理的都清了，还剩 ${ambers} 个小毛病，不急。`;
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>原型 A · 能力地图 — 我的博客</title>
+<!--
+  Keel 原型 A · 能力地图（对应 PRD 状态 IDLE，信息架构 §8，线框 附录 A.5）
+  =========================================================================
+  本页所有内容均从 docs/blueprint.example.yaml（唯一规范实例，ADR-0007）投影 ——
+  下方 BLUEPRINT 常量是该实例相关片段的转写（能力 + 依赖）；layout 为视图层摆放
+  坐标，不属蓝图真相。界面只显示 plain_* 通俗字段，绝不出现 id / contract.ts 等
+  代码术语。这是 PRD R1「可读半边」的被测对象。
+-->
+<style>
+  :root{
+    --bg:#f5f6f8; --panel:#ffffff; --line:#e5e8ee; --ink:#1f2430; --muted:#697086;
+    --accent:#2563eb; --accent-soft:#eaf0ff;
+    --green:#15a05a; --green-soft:#e7f6ee;
+    --amber:#d68309; --amber-soft:#fdf2dd;
+    --red:#d6453d; --red-soft:#fdeceb;
+    --edge:#c4cbd8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif;
+    background:var(--bg); color:var(--ink); font-size:15px; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{display:flex;flex-direction:column;height:100vh;}
+
+  /* 顶栏:健康灯 + 项目名 + 操作 */
+  .topbar{
+    display:flex;align-items:center;gap:16px;
+    padding:12px 20px;background:var(--panel);border-bottom:1px solid var(--line);
+    flex:0 0 auto;
+  }
+  .health-pill{display:flex;align-items:center;gap:8px;font-weight:600;
+    background:var(--green-soft);color:var(--green);padding:6px 12px;border-radius:999px;font-size:13px;}
+  .health-pill .dot{width:10px;height:10px;border-radius:50%;background:var(--green);
+    box-shadow:0 0 0 3px rgba(21,160,90,.18);}
+  .proj{font-weight:700;font-size:16px;}
+  .topbar .spacer{flex:1;}
+  .ghost-btn{border:1px solid var(--line);background:#fff;color:var(--muted);
+    padding:7px 14px;border-radius:8px;font-size:13px;cursor:pointer;}
+  .ghost-btn:hover{border-color:#cfd5e0;color:var(--ink);}
+
+  /* 主体:左中=地图，右=对话面板 */
+  .body{flex:1;display:flex;min-height:0;}
+  .stage{flex:1;display:flex;flex-direction:column;min-width:0;padding:18px;gap:14px;overflow:auto;}
+  .stage-head{display:flex;align-items:baseline;gap:10px;}
+  .stage-head h1{font-size:17px;margin:0;}
+  .stage-head .hint{color:var(--muted);font-size:13px;}
+
+  .canvas-wrap{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:8px;position:relative;}
+  .canvas{position:relative;width:760px;height:440px;margin:0 auto;}
+  svg.edges{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+
+  .node{position:absolute;width:150px;min-height:64px;background:#fff;border:1.5px solid var(--line);
+    border-radius:12px;padding:10px 12px;cursor:pointer;box-shadow:0 1px 2px rgba(20,30,60,.05);
+    transition:transform .12s,box-shadow .12s,border-color .12s;}
+  .node:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(20,30,60,.12);border-color:#cfd5e0;}
+  .node.selected{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+  .node .name{font-weight:700;font-size:14.5px;padding-right:16px;}
+  .node .short{color:var(--muted);font-size:12px;margin-top:4px;}
+  .node .hdot{position:absolute;top:12px;right:12px;width:11px;height:11px;border-radius:50%;}
+  .hdot.green{background:var(--green);}
+  .hdot.amber{background:var(--amber);}
+  .hdot.red{background:var(--red);}
+
+  /* 图例 */
+  .legend{display:flex;flex-wrap:wrap;gap:18px;align-items:center;
+    color:var(--muted);font-size:12.5px;padding:2px 6px;}
+  .legend .item{display:flex;align-items:center;gap:6px;}
+  .legend .swatch{width:11px;height:11px;border-radius:50%;}
+  .legend .edge-swatch{width:22px;height:0;border-top:2px solid var(--edge);}
+
+  /* 能力说明卡（点节点后更新） */
+  .detail{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;min-height:120px;}
+  .detail .empty{color:var(--muted);}
+  .detail h2{margin:0 0 4px;font-size:16px;display:flex;align-items:center;gap:8px;}
+  .detail .pdot{width:12px;height:12px;border-radius:50%;}
+  .detail .lead{color:var(--ink);margin:6px 0 12px;}
+  .detail .section-label{font-size:12px;color:var(--muted);text-transform:none;
+    font-weight:600;margin:12px 0 6px;}
+  .detail ul{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .detail li{background:#fafbfc;border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:13.5px;}
+  .detail li .who{font-weight:600;}
+  .badge{display:inline-block;font-size:11px;color:var(--green);background:var(--green-soft);
+    padding:2px 8px;border-radius:999px;font-weight:600;}
+
+  /* 右侧对话面板 */
+  .chat{flex:0 0 340px;background:var(--panel);border-left:1px solid var(--line);
+    display:flex;flex-direction:column;}
+  .chat-head{padding:14px 16px;border-bottom:1px solid var(--line);font-weight:600;}
+  .chat-body{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:12px;}
+  .msg{max-width:85%;padding:9px 12px;border-radius:12px;font-size:13.5px;}
+  .msg.sys{background:#f1f3f7;align-self:flex-start;border-bottom-left-radius:3px;}
+  .msg.me{background:var(--accent);color:#fff;align-self:flex-end;border-bottom-right-radius:3px;}
+  .msg .tip{display:block;color:var(--muted);font-size:11px;margin-top:4px;}
+  .composer{padding:14px;border-top:1px solid var(--line);}
+  .composer .box{border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--muted);
+    background:#fafbfc;font-size:13.5px;}
+  .composer .send{margin-top:8px;width:100%;background:var(--accent);color:#fff;border:none;
+    padding:10px;border-radius:10px;font-size:14px;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- 顶栏:健康指示 + 项目名 + 操作（§8 健康指示在顶部） -->
+  <div class="topbar">
+    <div class="health-pill"><span class="dot"></span>一切正常</div>
+    <div class="proj" id="projName">我的博客</div>
+    <div class="spacer"></div>
+    <button class="ghost-btn">历史</button>
+    <button class="ghost-btn">导出 / 交接</button>
+  </div>
+
+  <div class="body">
+    <!-- 中心画布:能力地图 -->
+    <div class="stage">
+      <div class="stage-head">
+        <h1>能力地图</h1>
+        <span class="hint">这是你这个应用现在长什么样 · 点任意一块看说明</span>
+      </div>
+
+      <div class="canvas-wrap">
+        <div class="canvas" id="canvas">
+          <svg class="edges" id="edges" viewBox="0 0 760 440" preserveAspectRatio="none"></svg>
+          <!-- 节点由脚本渲染 -->
+        </div>
+      </div>
+
+      <div class="legend">
+        <span class="item"><span class="swatch" style="background:var(--green)"></span>正常</span>
+        <span class="item"><span class="swatch" style="background:var(--amber)"></span>有点小问题</span>
+        <span class="item"><span class="swatch" style="background:var(--red)"></span>要处理一下</span>
+        <span class="item"><span class="edge-swatch"></span>连线 = 两块有关联（一块用到另一块）</span>
+      </div>
+
+      <!-- 能力说明卡：点节点后填充 -->
+      <div class="detail" id="detail">
+        <div class="empty">👆 点上面任意一块能力，这里会用大白话说清楚：它是干嘛的、跟谁有关联。</div>
+      </div>
+    </div>
+
+    <!-- 右侧对话面板（§8 对话面板在侧栏） -->
+    <aside class="chat">
+      <div class="chat-head">对话</div>
+      <div class="chat-body">
+        <div class="msg sys">你的「我的博客」已经搭好了，现在有 4 块能力。<span class="tip">登录、文章列表、文章详情、评论</span></div>
+        <div class="msg me">先这样，我看看</div>
+        <div class="msg sys">随时可以告诉我你想加什么功能，我会先给你看它会怎么改、影响到谁，你点头我才动手。</div>
+      </div>
+      <div class="composer">
+        <div class="box">描述你想加的功能…</div>
+        <button class="send">发送</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+/* === 投影自 docs/blueprint.example.yaml（唯一规范实例 v9，ADR-0007）===
+   能力身份 / plain_short(=plain) / plain_detail / depends_on(=relations) 均取自规范实例。
+   layout(摆放坐标) 为视图层数据，不属蓝图真相（附录 A.5「连线=依赖」）。
+   原型只渲染 plain_* 字段；id 仅用于内部关联，不显示。 */
+const BLUEPRINT = {
+  app_name: "我的博客",
+  capabilities: [
+    { id:"auth", plain_name:"登录", status:"established", health:"green",
+      plain_short:"让人注册、登录、退出。",
+      plain_detail:"这块负责「认人」——注册账号、登录、退出登录。其他凡是要「先登录才能用」的功能，都靠它。",
+      depends_on:[], layout:{x:40,y:110} },
+    { id:"article-list", plain_name:"文章列表", status:"established", health:"green",
+      plain_short:"把所有文章排成一个列表给人看。",
+      plain_detail:"这块负责把文章一篇篇列出来，是访客进站后最先看到的页面，点一篇就能进到「文章详情」。",
+      depends_on:[], layout:{x:40,y:290} },
+    { id:"article-detail", plain_name:"文章详情", status:"established", health:"green",
+      plain_short:"展示某一篇文章的完整内容。",
+      plain_detail:"这块负责把单独一篇文章的完整内容显示出来。评论和收藏都长在这个页面上。",
+      depends_on:[{ target:"article-list", plain_reason:"要从文章列表点进来才能看到某一篇，所以文章详情离不开文章列表。" }],
+      layout:{x:305,y:290} },
+    { id:"comment", plain_name:"评论", status:"established", health:"green",
+      plain_short:"让登录的人在文章下面留言。",
+      plain_detail:"这块负责让人在某篇文章下面发评论、看别人的评论。要先登录才能发。",
+      depends_on:[
+        { target:"article-detail", plain_reason:"评论写在某篇文章下面，所以评论长在文章详情上。" },
+        { target:"auth", plain_reason:"得先登录才能发评论，所以评论离不开登录。" }
+      ], layout:{x:570,y:110} },
+    /* favorite 的 status 是 proposed —— 加收藏前的基线地图里不显示它（它在原型 B 的 diff 才出现） */
+    { id:"favorite", plain_name:"收藏文章", status:"proposed", health:"green",
+      plain_short:"让登录的人把喜欢的文章收起来。",
+      plain_detail:"这块负责让人把喜欢的文章收藏起来，之后能快速找回。收藏按钮长在文章详情页上，要先登录才能用。",
+      depends_on:[
+        { target:"article-detail", plain_reason:"收藏按钮长在文章详情页上，没有详情就没处放按钮。" },
+        { target:"auth", plain_reason:"得先登录才能收藏，所以收藏离不开登录。" }
+      ], layout:{x:570,y:290} }
+  ]
+};
+
+const NODE_W = 150, NODE_H = 64;
+const established = BLUEPRINT.capabilities.filter(c => c.status === "established");
+const byId = Object.fromEntries(BLUEPRINT.capabilities.map(c => [c.id, c]));
+const center = c => ({ x: c.layout.x + NODE_W/2, y: c.layout.y + NODE_H/2 });
+
+/* 画连线（依赖渲染为无方向连线，匹配附录 A.5「连线=依赖」） */
+const svg = document.getElementById("edges");
+const drawn = new Set();
+established.forEach(c => {
+  c.depends_on.forEach(d => {
+    const other = byId[d.target];
+    if (!other || other.status !== "established") return;
+    const key = [c.id, d.target].sort().join("~");
+    if (drawn.has(key)) return; drawn.add(key);
+    const a = center(c), b = center(other);
+    const ln = document.createElementNS("http://www.w3.org/2000/svg","line");
+    ln.setAttribute("x1",a.x); ln.setAttribute("y1",a.y);
+    ln.setAttribute("x2",b.x); ln.setAttribute("y2",b.y);
+    ln.setAttribute("stroke","#c4cbd8"); ln.setAttribute("stroke-width","2");
+    svg.appendChild(ln);
+  });
+});
+
+/* 画节点 */
+const canvas = document.getElementById("canvas");
+established.forEach(c => {
+  const el = document.createElement("div");
+  el.className = "node"; el.style.left = c.layout.x + "px"; el.style.top = c.layout.y + "px";
+  el.dataset.id = c.id;
+  el.innerHTML = `<span class="hdot ${c.health}"></span>
+                  <div class="name">${c.plain_name}</div>
+                  <div class="short">${c.plain_short}</div>`;
+  el.addEventListener("click", () => select(c.id));
+  canvas.appendChild(el);
+});
+
+/* 点节点 -> 填充「能力说明」卡（全程大白话） */
+const healthWord = { green:"正常", amber:"有点小问题", red:"要处理一下" };
+function plainName(id){ return byId[id] ? byId[id].plain_name : id; }
+function select(id){
+  document.querySelectorAll(".node").forEach(n => n.classList.toggle("selected", n.dataset.id === id));
+  const c = byId[id];
+
+  // 「它用到了谁」= 本能力的依赖
+  const uses = c.depends_on.map(d => `<li><span class="who">用到「${plainName(d.target)}」</span>：${d.plain_reason}</li>`);
+  // 「谁用到了它」= 反向依赖
+  const usedBy = established
+    .filter(o => o.depends_on.some(d => d.target === id))
+    .map(o => `<li><span class="who">「${o.plain_name}」用到它</span></li>`);
+
+  let html = `<h2><span class="pdot" style="background:var(--${c.health})"></span>${c.plain_name}
+                <span class="badge">${healthWord[c.health]}</span></h2>
+              <div class="lead">${c.plain_detail}</div>`;
+  html += `<div class="section-label">它跟谁有关联</div><ul>`;
+  if (uses.length) html += uses.join("");
+  if (usedBy.length) html += usedBy.join("");
+  if (!uses.length && !usedBy.length) html += `<li>这块目前自己独立，没跟别的能力连在一起。</li>`;
+  html += `</ul>`;
+  document.getElementById("detail").innerHTML = html;
+}
+</script>
+</body>
+</html>
