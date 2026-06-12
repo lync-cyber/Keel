@@ -2,3 +2,55 @@
 {"ts": "2026-06-10T09:36:43+00:00", "event": "session_start", "phase": "session", "detail": "IDE session started"}
 {"ts": "2026-06-10T09:46:57+00:00", "event": "state_change", "phase": "requirements", "detail": "CLAUDE.md initialized from CataForge standard template (standard mode); legacy progress archived to docs/research/keel-legacy-progress.md"}
 {"ts": "2026-06-10T09:46:58+00:00", "event": "phase_start", "phase": "requirements", "detail": "进入requirements阶段：从原有文档导入PRD"}
+{"ts": "2026-06-11T05:56:56+00:00", "event": "session_start", "phase": "session", "detail": "IDE session started"}
+{"ts": "2026-06-11T05:57:50+00:00", "event": "session_start", "phase": "session", "detail": "IDE session started"}
+{"ts": "2026-06-11T06:16:18+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 reported issues", "agent": "reviewer", "status": "needs_revision", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-11T06:16:28+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 passed", "agent": "reviewer", "status": "completed", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-11T06:16:33+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 passed", "agent": "reviewer", "status": "completed", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-11T06:16:45+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 reported issues", "agent": "reviewer", "status": "needs_revision", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-11T06:16:50+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 reported issues", "agent": "reviewer", "status": "needs_revision", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-11T06:23:30+00:00", "event": "review_verdict", "phase": "requirements", "detail": "REVIEW-prd-keel-r1: HIGH x2 (Layer1 多卷结构不兼容 + ADR-0009 正向承诺未落地), MEDIUM x4, LOW x2", "agent": "reviewer", "status": "needs_revision"}
+{"ts": "2026-06-11T06:23:31+00:00", "event": "revision_start", "phase": "requirements", "detail": "进入修订流程 needs_revision(1)", "agent": "product-manager"}
+{"ts": "2026-06-11T06:28:16+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 bad arguments (exit 2)", "agent": "reviewer", "status": "needs_revision", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-11T06:31:23+00:00", "event": "review_verdict", "phase": "requirements", "detail": "REVIEW-prd-keel-r2: HIGH x2 闭环, 残留 MEDIUM x1 (R2-001 escape hatch 与 hard Constraint 优先级语义) + LOW x3", "agent": "reviewer", "status": "approved_with_notes"}
+{"ts": "2026-06-11T06:32:11+00:00", "event": "correction", "phase": "unknown", "detail": "option-override: PRD 复审通过（approved_with_notes），无 CRITICAL/HIGH，残留 4 项建议级问题：\n【MEDIUM】R2-001: F-017", "agent": "orchestrator"}
+{"ts": "2026-06-11T06:32:29+00:00", "event": "user_decision", "phase": "requirements", "detail": "用户选择: 要求修复全部 4 项 (MEDIUM x1 + LOW x3)"}
+{"ts": "2026-06-11T06:32:30+00:00", "event": "revision_start", "phase": "requirements", "detail": "进入修订流程 needs_revision(2)·用户主动要求修复 notes 全部 4 项", "agent": "product-manager"}
+{"ts": "2026-06-11T06:36:47+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 bad arguments (exit 2)", "agent": "reviewer", "status": "needs_revision", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-11T06:36:57+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 passed", "agent": "reviewer", "status": "completed", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-11T06:37:15+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 passed", "agent": "reviewer", "status": "completed", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-11T06:37:19+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 passed", "agent": "reviewer", "status": "completed", "ref": "skill:doc-review/doc_check"}
+{"event": "phase_end", "phase": "requirements", "status": "approved", "detail": "reviewer 通过 (REVIEW-prd-keel-r3 approved)", "ts": "2026-06-11T06:41:23+00:00"}
+{"event": "review_verdict", "phase": "requirements", "agent": "reviewer", "status": "approved", "detail": "r3 增量复审通过，r2 全部 4 项 notes 闭环", "ts": "2026-06-11T06:41:23+00:00"}
+{"event": "state_change", "phase": "architecture", "detail": "CLAUDE.md 阶段更新: requirements → architecture", "ts": "2026-06-11T06:41:23+00:00"}
+{"event": "phase_start", "phase": "architecture", "detail": "进入架构设计阶段", "ts": "2026-06-11T06:41:23+00:00"}
+{"ts": "2026-06-11T06:48:46+00:00", "event": "state_change", "phase": "architecture", "detail": "docs hygiene: 14 个遗留文档补 front matter；EVENT-LOG GBK 行转码 UTF-8；8 个 ADR 实体补入 KG (ArchitectureDecision)；doctor 全绿 exit 0"}
+{"ts": "2026-06-11T06:56:16+00:00", "event": "state_change", "phase": "architecture", "detail": "legacy docs archived: 4 个遗留源素材移至 archive/（decisions/ 保留为活动决策依据）；ADR 实体撤出 KG、PRD 引用 inline-code 化以解除 kg add/import verify 死锁；doctor 全绿"}
+{"ts": "2026-06-11T07:02:13+00:00", "event": "state_change", "phase": "architecture", "detail": "framework-feedback: 5 个 issue 上报上游 CataForge (#237 doc-review 多卷, #238 GBK 编码, #239 kg add/import verify 死锁, #240 kg repair 建议无效, #241 五项改进建议含 feedback --gh 缺 --repo)"}
+{"ts": "2026-06-12T08:16:18+00:00", "event": "session_start", "phase": "session", "detail": "IDE session started"}
+{"ts": "2026-06-12T08:17:26+00:00", "event": "session_start", "phase": "session", "detail": "IDE session started"}
+{"event": "state_change", "phase": "requirements", "detail": "用户变更请求获批: PRD 全量重跑(消除一核两壳, 聚焦非程序员单一产品); 阶段回跳 architecture → requirements; prd approved → draft", "ts": "2026-06-12T08:24:18+00:00"}
+{"event": "phase_start", "phase": "requirements", "detail": "requirements 阶段重开, inline 承载 product-manager 执行 req-analysis 重写 PRD v2.0", "ts": "2026-06-12T08:24:18+00:00"}
+{"ts": "2026-06-12T08:38:34+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 passed", "agent": "reviewer", "status": "completed", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-12T08:38:45+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 passed", "agent": "reviewer", "status": "completed", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-12T08:38:54+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 passed", "agent": "reviewer", "status": "completed", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-12T08:48:29+00:00", "event": "review_verdict", "phase": "requirements", "detail": "PRD v2.0 doc-review r4: 4 MEDIUM + 3 LOW, 无 CRITICAL/HIGH", "agent": "reviewer", "status": "approved_with_notes"}
+{"event": "user_decision", "phase": "requirements", "detail": "用户选择: 修复全部 7 条(4 MEDIUM + 3 LOW)后继续", "ts": "2026-06-12T08:50:05+00:00"}
+{"event": "revision_start", "phase": "requirements", "agent": "product-manager", "detail": "进入修订流程, 修复 REVIEW-prd-keel-r4 全部 7 条问题", "ts": "2026-06-12T08:50:05+00:00"}
+{"ts": "2026-06-12T08:53:06+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 passed", "agent": "reviewer", "status": "completed", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-12T08:53:18+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 bad arguments (exit 2)", "agent": "reviewer", "status": "needs_revision", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-12T08:53:25+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 bad arguments (exit 2)", "agent": "reviewer", "status": "needs_revision", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-12T08:53:33+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 bad arguments (exit 2)", "agent": "reviewer", "status": "needs_revision", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-12T08:53:45+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 passed", "agent": "reviewer", "status": "completed", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-12T08:53:57+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 passed", "agent": "reviewer", "status": "completed", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-12T08:54:05+00:00", "event": "state_change", "phase": "requirements", "detail": "skill-run: doc-review Layer 1 passed", "agent": "reviewer", "status": "completed", "ref": "skill:doc-review/doc_check"}
+{"event": "review_verdict", "phase": "requirements", "agent": "reviewer", "status": "approved", "detail": "PRD v2.1 doc-review r5 增量复审: 7 条修复全部 RESOLVED, 无新增问题, approved", "ts": "2026-06-12T09:06:24+00:00"}
+{"event": "phase_end", "phase": "requirements", "status": "approved", "detail": "PRD v2.1 重跑完成(消除一核两壳, F-001~F-018 统一清单), reviewer 通过", "ts": "2026-06-12T09:06:24+00:00"}
+{"event": "state_change", "phase": "architecture", "detail": "CLAUDE.md 阶段更新: requirements → architecture; KG ghost 清理 38→0, reconcile OK", "ts": "2026-06-12T09:06:24+00:00"}
+{"event": "phase_start", "phase": "architecture", "detail": "进入架构设计阶段, 待 inline 承载 architect", "ts": "2026-06-12T09:06:24+00:00"}
+{"ts": "2026-06-12T09:12:53+00:00", "event": "state_change", "phase": "architecture", "detail": "amendment: F-018 新增 AC-006 LLM 可消费工具面(MCP/hooks/CLI 候选), 主卷 §3.3 对齐, ADR-0011 补边界澄清; PRD v2.2", "agent": "product-manager"}
+{"ts": "2026-06-12T09:14:41+00:00", "event": "state_change", "phase": "architecture", "detail": "skill-run: doc-review Layer 1 reported issues", "agent": "reviewer", "status": "needs_revision", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-12T09:14:55+00:00", "event": "state_change", "phase": "architecture", "detail": "skill-run: doc-review Layer 1 passed", "agent": "reviewer", "status": "completed", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-12T09:15:10+00:00", "event": "state_change", "phase": "architecture", "detail": "skill-run: doc-review Layer 1 reported issues", "agent": "reviewer", "status": "needs_revision", "ref": "skill:doc-review/doc_check"}
+{"event": "review_verdict", "phase": "architecture", "agent": "reviewer", "status": "approved_with_notes", "detail": "PRD v2.2 amendment 审查 r6: 1 MEDIUM + 2 LOW", "ts": "2026-06-12T09:18:48+00:00"}
+{"event": "state_change", "phase": "architecture", "detail": "r6 处置: R-001(MEDIUM) 经 orchestrator 核实为误报驳回(reviewer-calibration: F-003 AC-006 确为门禁 JSON 接口定义, F-018 引用正确); 2 LOW 措辞统一已修复; PRD v2.3", "ts": "2026-06-12T09:18:48+00:00"}

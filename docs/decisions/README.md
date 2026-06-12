@@ -1,3 +1,11 @@
+---
+id: "adr-readme"
+doc_type: decision
+author: Alex
+status: approved
+deps: []
+---
+
 # 决策记录（ADR）
 
 每个决策一个文件，便于独立审查与演进（决策 ADR-0010）。取代 `CLAUDE.md` 旧的决策表 —— `CLAUDE.md` 只留指针，细节在此。
@@ -16,3 +24,4 @@
 | [0008](0008-add-rir-and-traceability.md) | 近期加 R-IR 需求层 + 追溯链 | accepted |
 | [0009](0009-behavioral-gates-deferred.md) | 行为门远期纳入，现在预留契约占位 | accepted |
 | [0010](0010-authoring-file-formats.md) | 概念阶段文件形态 | accepted |
+| [0011](0011-focus-non-programmer-product.md) | 聚焦非程序员单一产品，开发者产品线移出 | accepted |

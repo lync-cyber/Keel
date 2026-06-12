@@ -1,0 +1,93 @@
+{
+  "active_doc_types": [
+    "arch",
+    "deploy-spec",
+    "dev-plan",
+    "prd",
+    "test-report",
+    "ui-spec"
+  ],
+  "ok": false,
+  "overall_divergence_count": 17,
+  "per_doc_type": {
+    "arch": {
+      "divergence_count": 0,
+      "doc_type": "arch",
+      "ghost_entities": [],
+      "ghost_relations": [],
+      "ghost_sections": [],
+      "missing_entities": [],
+      "missing_relations": [],
+      "missing_sections": []
+    },
+    "deploy-spec": {
+      "divergence_count": 0,
+      "doc_type": "deploy-spec",
+      "ghost_entities": [],
+      "ghost_relations": [],
+      "ghost_sections": [],
+      "missing_entities": [],
+      "missing_relations": [],
+      "missing_sections": []
+    },
+    "dev-plan": {
+      "divergence_count": 0,
+      "doc_type": "dev-plan",
+      "ghost_entities": [],
+      "ghost_relations": [],
+      "ghost_sections": [],
+      "missing_entities": [],
+      "missing_relations": [],
+      "missing_sections": []
+    },
+    "prd": {
+      "divergence_count": 17,
+      "doc_type": "prd",
+      "ghost_entities": [],
+      "ghost_relations": [],
+      "ghost_sections": [
+        "F-002: 蓝图双向同步引擎",
+        "F-004: 能力地图（Capability Map）",
+        "F-005: 项目初始化与上手",
+        "F-006: 意图捕获与蓝图 diff",
+        "F-007: 受门禁约束的实现执行",
+        "F-008: 调和引擎（Reconcile）",
+        "F-009: 改动影响预览（Blast Radius）",
+        "F-010: 回归守护",
+        "F-011: 意图日志与可回滚时间线",
+        "F-012: 开放代码与一键导出",
+        "F-013: 开发者交接包",
+        "F-014: 执行引擎抽象层",
+        "F-015: 开发者版专属能力（壳 A）",
+        "F-016: 小白版专属能力（壳 B）",
+        "流程 A · 主循环：加一个能力（非程序员路径）",
+        "流程 D · 导出与交接",
+        "流程 E · 开发者版只读档（arch map，获客钩子）"
+      ],
+      "missing_entities": [],
+      "missing_relations": [],
+      "missing_sections": []
+    },
+    "test-report": {
+      "divergence_count": 0,
+      "doc_type": "test-report",
+      "ghost_entities": [],
+      "ghost_relations": [],
+      "ghost_sections": [],
+      "missing_entities": [],
+      "missing_relations": [],
+      "missing_sections": []
+    },
+    "ui-spec": {
+      "divergence_count": 0,
+      "doc_type": "ui-spec",
+      "ghost_entities": [],
+      "ghost_relations": [],
+      "ghost_sections": [],
+      "missing_entities": [],
+      "missing_relations": [],
+      "missing_sections": []
+    }
+  },
+  "timestamp": "2026-06-12T08:59:34Z"
+}

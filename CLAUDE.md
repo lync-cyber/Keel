@@ -2,11 +2,10 @@
 
 ## 项目信息
 
-- 项目定位: Keel（龙骨）— 让非程序员零代码构建「可持续成长且不腐化」的应用：应用蓝图作唯一真相源 + 确定性门禁防结构漂移，代码全程归用户、可随时导出迁走
-- 项目负责人: Alex（对 go/no-go 拍板并负责路线）
 - 技术栈: 原型阶段 — 静态 HTML 原型 + YAML 蓝图实例 + JSON Schema 门禁；执行引擎技术栈待 architecture 阶段选型
 - 运行时: claude-code
-- 框架版本: 0.8.0
+- 框架版本: 0.9.1
+  <!-- 由 cataforge deploy 自动盖入已安装包版本。SemVer: MAJOR=不兼容变更, MINOR=新功能, PATCH=修复 -->
 - 语言定位: 中文框架（提示词/文档/交互用中文；代码/变量/CLI参数用英文）
 - 执行模式: standard
   <!-- 可选值: standard | agile-lite | agile-prototype。矩阵见 COMMON-RULES §执行模式矩阵。模式切换由 orchestrator §Mode Routing Protocol 路由 -->
@@ -16,22 +15,26 @@
   - deployment: 保留
 - model 继承: AGENT.md 中 `model: inherit` 继承父会话模型；可用 `model: <model-id>` 覆盖
 
+- 项目定位: Keel（龙骨）— 让非程序员零代码构建「可持续成长且不腐化」的应用：应用蓝图作唯一真相源 + 确定性门禁防结构漂移，代码全程归用户、可随时导出迁走
+- 项目负责人: Alex（对 go/no-go 拍板并负责路线）
+
 ## 执行环境 (Bootstrap 时由 `cataforge setup --emit-env-block` 填入)
 
 <!-- 本节在 Bootstrap 步骤中生成。每次会话都会作为项目指令加载，
      权重高于 hook 注入的 additionalContext。项目生命周期内保持稳定。 -->
 - 无自动检测到的标准包管理器（请根据实际技术栈手动填写）
+- Shell: 默认使用 Git Bash（POSIX 语法，Claude Code 中走 Bash 工具），不使用 PowerShell；脚本与命令示例一律按 bash 语法书写
 - 原型预览: 仓库根目录运行 `python -m http.server 4178`，浏览器开 `http://localhost:4178/demo/prototype-A-capability-map.html`（B、C 同理）
 
 ## 项目状态 (orchestrator专属写入区，其他Agent禁止修改)
 
-- 当前阶段: requirements
-- 上次完成: orchestrator — CLAUDE.md 按 CataForge 标准模板初始化；原进度叙事归档至 docs/research/keel-legacy-progress.md
-- 下一步行动: 派发 product-manager，从原有文档（docs/Keel-PRD.md、docs/meta-model.md、docs/decisions/、docs/research/keel-legacy-progress.md）导入生成规范 PRD 至 docs/prd/
-- 已完成阶段: []
+- 当前阶段: architecture
+- 上次完成: product-manager — PRD v2.1 全量重写（消除「一核两壳」，聚焦非程序员单一产品，F-001~F-018 按能力域统一编号，ADR-0011）；r4 审查 approved_with_notes 后 7 条问题全部修复，r5 增量复审 approved
+- 下一步行动: 主线程 inline 承载 architect，基于 prd-keel v2.1（docs/prd/）产出架构设计文档至 docs/arch/
+- 已完成阶段: [requirements]
 - 当前Sprint: —
 - 文档状态:
-  - prd: 未开始
+  - prd: approved
   - arch: 未开始
   - ui-spec: 未开始
   - dev-plan: 未开始

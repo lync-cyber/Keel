@@ -1,18 +1,681 @@
 {
   "version": "1",
-  "generated_at": "2026-06-10T09:46:14.318934+00:00",
+  "generated_at": "2026-06-12T09:19:54.517988+00:00",
   "documents": {
-    "keel-legacy-progress": {
-      "file_path": "docs/research/keel-legacy-progress.md",
-      "doc_type": "research",
+    "adr-0001-project-lead-alex": {
+      "file_path": "docs/decisions/0001-project-lead-alex.md",
+      "doc_type": "decision",
       "volume": "main",
       "status": "approved",
-      "total_lines": 102,
-      "est_tokens": 1436,
-      "content_hash": "09890fa6",
+      "total_lines": 24,
+      "est_tokens": 110,
+      "content_hash": "eaeef97b",
       "sections": {}
+    },
+    "adr-0002-test-web-prototype-first": {
+      "file_path": "docs/decisions/0002-test-web-prototype-first.md",
+      "doc_type": "decision",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 24,
+      "est_tokens": 138,
+      "content_hash": "26f3cf4c",
+      "sections": {}
+    },
+    "adr-0003-single-default-archetype": {
+      "file_path": "docs/decisions/0003-single-default-archetype.md",
+      "doc_type": "decision",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 24,
+      "est_tokens": 147,
+      "content_hash": "869cd981",
+      "sections": {}
+    },
+    "adr-0004-gate-severity-tiers": {
+      "file_path": "docs/decisions/0004-gate-severity-tiers.md",
+      "doc_type": "decision",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 25,
+      "est_tokens": 137,
+      "content_hash": "aeef425a",
+      "sections": {}
+    },
+    "adr-0005-pricing-deferred": {
+      "file_path": "docs/decisions/0005-pricing-deferred.md",
+      "doc_type": "decision",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 24,
+      "est_tokens": 101,
+      "content_hash": "67743a0d",
+      "sections": {}
+    },
+    "adr-0006-product-name-keel": {
+      "file_path": "docs/decisions/0006-product-name-keel.md",
+      "doc_type": "decision",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 23,
+      "est_tokens": 86,
+      "content_hash": "ef747d53",
+      "sections": {}
+    },
+    "adr-0007-converge-to-typed-rule-schema": {
+      "file_path": "docs/decisions/0007-converge-to-typed-rule-schema.md",
+      "doc_type": "decision",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 30,
+      "est_tokens": 265,
+      "content_hash": "8acb25f7",
+      "sections": {}
+    },
+    "adr-0008-add-rir-and-traceability": {
+      "file_path": "docs/decisions/0008-add-rir-and-traceability.md",
+      "doc_type": "decision",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 31,
+      "est_tokens": 250,
+      "content_hash": "bf304c3f",
+      "sections": {}
+    },
+    "adr-0009-behavioral-gates-deferred": {
+      "file_path": "docs/decisions/0009-behavioral-gates-deferred.md",
+      "doc_type": "decision",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 32,
+      "est_tokens": 294,
+      "content_hash": "fc5fd9a0",
+      "sections": {}
+    },
+    "adr-0010-authoring-file-formats": {
+      "file_path": "docs/decisions/0010-authoring-file-formats.md",
+      "doc_type": "decision",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 31,
+      "est_tokens": 237,
+      "content_hash": "8fb73b0f",
+      "sections": {}
+    },
+    "adr-0011-focus-non-programmer-product": {
+      "file_path": "docs/decisions/0011-focus-non-programmer-product.md",
+      "doc_type": "decision",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 26,
+      "est_tokens": 293,
+      "content_hash": "ea5d03f2",
+      "sections": {}
+    },
+    "adr-readme": {
+      "file_path": "docs/decisions/README.md",
+      "doc_type": "decision",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 27,
+      "est_tokens": 365,
+      "content_hash": "eb613afe",
+      "sections": {}
+    },
+    "prd-keel-f001-f009": {
+      "file_path": "docs/prd/prd-keel-f001-f009.md",
+      "doc_type": "prd",
+      "volume": "features",
+      "status": "approved",
+      "total_lines": 136,
+      "est_tokens": 2294,
+      "content_hash": "6f07e098",
+      "sections": {
+        "2": {
+          "heading": "## 2. 功能需求",
+          "line_start": 21,
+          "line_end": 136,
+          "est_tokens": 2138,
+          "deps": [],
+          "level": 2,
+          "items": {
+            "F-001": {
+              "heading": "### F-001: 蓝图核心原语与元模型",
+              "line_start": 23,
+              "line_end": 36,
+              "est_tokens": 397,
+              "deps": []
+            },
+            "F-002": {
+              "heading": "### F-002: 蓝图双向同步与漂移检测",
+              "line_start": 37,
+              "line_end": 48,
+              "est_tokens": 196,
+              "deps": []
+            },
+            "F-003": {
+              "heading": "### F-003: 验证门（Gate）",
+              "line_start": 49,
+              "line_end": 61,
+              "est_tokens": 246,
+              "deps": []
+            },
+            "F-004": {
+              "heading": "### F-004: 回归守护",
+              "line_start": 62,
+              "line_end": 72,
+              "est_tokens": 195,
+              "deps": []
+            },
+            "F-005": {
+              "heading": "### F-005: 自动修复（静默自愈）",
+              "line_start": 73,
+              "line_end": 83,
+              "est_tokens": 235,
+              "deps": []
+            },
+            "F-006": {
+              "heading": "### F-006: 能力地图（Capability Map）",
+              "line_start": 84,
+              "line_end": 98,
+              "est_tokens": 276,
+              "deps": []
+            },
+            "F-007": {
+              "heading": "### F-007: 改动影响预览（Blast Radius）",
+              "line_start": 99,
+              "line_end": 109,
+              "est_tokens": 138,
+              "deps": []
+            },
+            "F-008": {
+              "heading": "### F-008: 应用实时预览",
+              "line_start": 110,
+              "line_end": 121,
+              "est_tokens": 166,
+              "deps": []
+            },
+            "F-009": {
+              "heading": "### F-009: 意图捕获与蓝图 diff",
+              "line_start": 122,
+              "line_end": 136,
+              "est_tokens": 281,
+              "deps": []
+            }
+          }
+        }
+      },
+      "split_from": "prd-keel",
+      "deps": [
+        "prd-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "26c3b2a2"
+      }
+    },
+    "prd-keel-f010-f018": {
+      "file_path": "docs/prd/prd-keel-f010-f018.md",
+      "doc_type": "prd",
+      "volume": "features",
+      "status": "approved",
+      "total_lines": 133,
+      "est_tokens": 2287,
+      "content_hash": "7e3c1ce7",
+      "sections": {
+        "2": {
+          "heading": "## 2. 功能需求",
+          "line_start": 21,
+          "line_end": 133,
+          "est_tokens": 2129,
+          "deps": [],
+          "level": 2,
+          "items": {
+            "F-010": {
+              "heading": "### F-010: 受门禁约束的实现执行",
+              "line_start": 23,
+              "line_end": 36,
+              "est_tokens": 305,
+              "deps": []
+            },
+            "F-011": {
+              "heading": "### F-011: 调和引擎（Reconcile）",
+              "line_start": 37,
+              "line_end": 49,
+              "est_tokens": 253,
+              "deps": []
+            },
+            "F-012": {
+              "heading": "### F-012: 项目初始化与上手",
+              "line_start": 50,
+              "line_end": 63,
+              "est_tokens": 271,
+              "deps": []
+            },
+            "F-013": {
+              "heading": "### F-013: 意图日志与时光机",
+              "line_start": 64,
+              "line_end": 75,
+              "est_tokens": 178,
+              "deps": []
+            },
+            "F-014": {
+              "heading": "### F-014: 一键上线与安全体检",
+              "line_start": 76,
+              "line_end": 86,
+              "est_tokens": 152,
+              "deps": []
+            },
+            "F-015": {
+              "heading": "### F-015: 开放代码与一键导出",
+              "line_start": 87,
+              "line_end": 98,
+              "est_tokens": 188,
+              "deps": []
+            },
+            "F-016": {
+              "heading": "### F-016: 开发者交接包",
+              "line_start": 99,
+              "line_end": 109,
+              "est_tokens": 165,
+              "deps": []
+            },
+            "F-017": {
+              "heading": "### F-017: Escape Hatch（自由实现区）",
+              "line_start": 110,
+              "line_end": 121,
+              "est_tokens": 316,
+              "deps": []
+            },
+            "F-018": {
+              "heading": "### F-018: 执行引擎抽象层",
+              "line_start": 122,
+              "line_end": 133,
+              "est_tokens": 293,
+              "deps": []
+            }
+          }
+        }
+      },
+      "split_from": "prd-keel",
+      "deps": [
+        "prd-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "26c3b2a2"
+      }
+    },
+    "prd-keel": {
+      "file_path": "docs/prd/prd-keel.md",
+      "doc_type": "prd",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 221,
+      "est_tokens": 2557,
+      "content_hash": "26c3b2a2",
+      "sections": {
+        "1": {
+          "heading": "## 1. 概述",
+          "line_start": 26,
+          "line_end": 67,
+          "est_tokens": 486,
+          "deps": [],
+          "level": 2,
+          "items": {
+            "1.1": {
+              "heading": "### 1.1 背景与动机",
+              "line_start": 28,
+              "line_end": 43,
+              "est_tokens": 263,
+              "deps": []
+            },
+            "1.2": {
+              "heading": "### 1.2 目标用户",
+              "line_start": 44,
+              "line_end": 58,
+              "est_tokens": 109,
+              "deps": []
+            },
+            "1.3": {
+              "heading": "### 1.3 成功指标",
+              "line_start": 59,
+              "line_end": 67,
+              "est_tokens": 109,
+              "deps": []
+            }
+          }
+        },
+        "2": {
+          "heading": "## 2. 功能需求",
+          "line_start": 68,
+          "line_end": 100,
+          "est_tokens": 361,
+          "deps": [],
+          "level": 2,
+          "items": {}
+        },
+        "3": {
+          "heading": "## 3. 非功能需求",
+          "line_start": 101,
+          "line_end": 127,
+          "est_tokens": 272,
+          "deps": [],
+          "level": 2,
+          "items": {
+            "3.1": {
+              "heading": "### 3.1 性能",
+              "line_start": 103,
+              "line_end": 113,
+              "est_tokens": 87,
+              "deps": []
+            },
+            "3.2": {
+              "heading": "### 3.2 安全",
+              "line_start": 114,
+              "line_end": 120,
+              "est_tokens": 56,
+              "deps": []
+            },
+            "3.3": {
+              "heading": "### 3.3 兼容性",
+              "line_start": 121,
+              "line_end": 127,
+              "est_tokens": 124,
+              "deps": []
+            }
+          }
+        },
+        "4": {
+          "heading": "## 4. 约束与假设",
+          "line_start": 128,
+          "line_end": 159,
+          "est_tokens": 522,
+          "deps": [],
+          "level": 2,
+          "items": {
+            "4.1": {
+              "heading": "### 4.1 产品约束",
+              "line_start": 130,
+              "line_end": 137,
+              "est_tokens": 161,
+              "deps": []
+            },
+            "4.2": {
+              "heading": "### 4.2 技术约束",
+              "line_start": 138,
+              "line_end": 147,
+              "est_tokens": 226,
+              "deps": []
+            },
+            "4.3": {
+              "heading": "### 4.3 关键假设",
+              "line_start": 148,
+              "line_end": 153,
+              "est_tokens": 69,
+              "deps": []
+            },
+            "4.4": {
+              "heading": "### 4.4 调研记录",
+              "line_start": 154,
+              "line_end": 159,
+              "est_tokens": 60,
+              "deps": []
+            }
+          }
+        },
+        "5": {
+          "heading": "## 5. 关键流程",
+          "line_start": 160,
+          "line_end": 199,
+          "est_tokens": 353,
+          "deps": [],
+          "level": 2,
+          "items": {}
+        },
+        "6": {
+          "heading": "## 6. 术语表",
+          "line_start": 200,
+          "line_end": 221,
+          "est_tokens": 409,
+          "deps": [],
+          "level": 2,
+          "items": {}
+        }
+      }
+    },
+    "corrections-log": {
+      "file_path": "docs/reviews/CORRECTIONS-LOG.md",
+      "doc_type": "correction-log",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 24,
+      "est_tokens": 222,
+      "content_hash": "c9de0bc4",
+      "sections": {}
+    },
+    "review-prd-keel-r1": {
+      "file_path": "docs/reviews/doc/REVIEW-prd-keel-r1.md",
+      "doc_type": "review",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 138,
+      "est_tokens": 2141,
+      "content_hash": "4f9391ce",
+      "sections": {},
+      "deps": [
+        "prd-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "26c3b2a2"
+      }
+    },
+    "review-prd-keel-r2": {
+      "file_path": "docs/reviews/doc/REVIEW-prd-keel-r2.md",
+      "doc_type": "review",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 183,
+      "est_tokens": 2131,
+      "content_hash": "df3b938a",
+      "sections": {},
+      "deps": [
+        "prd-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "26c3b2a2"
+      }
+    },
+    "review-prd-keel-r3": {
+      "file_path": "docs/reviews/doc/REVIEW-prd-keel-r3.md",
+      "doc_type": "review",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 123,
+      "est_tokens": 1292,
+      "content_hash": "5d7c9910",
+      "sections": {},
+      "deps": [
+        "prd-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "26c3b2a2"
+      }
+    },
+    "review-prd-keel-r4": {
+      "file_path": "docs/reviews/doc/REVIEW-prd-keel-r4.md",
+      "doc_type": "review",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 116,
+      "est_tokens": 1612,
+      "content_hash": "b7ccb830",
+      "sections": {},
+      "deps": [
+        "prd-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "26c3b2a2"
+      }
+    },
+    "review-prd-keel-r5": {
+      "file_path": "docs/reviews/doc/REVIEW-prd-keel-r5.md",
+      "doc_type": "review",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 193,
+      "est_tokens": 1688,
+      "content_hash": "110ed1ba",
+      "sections": {},
+      "deps": [
+        "prd-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "26c3b2a2"
+      }
+    },
+    "review-prd-keel-r6": {
+      "file_path": "docs/reviews/doc/REVIEW-prd-keel-r6.md",
+      "doc_type": "review",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 183,
+      "est_tokens": 2215,
+      "content_hash": "d4726fe4",
+      "sections": {},
+      "deps": [
+        "prd-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "26c3b2a2"
+      }
     }
   },
-  "xref": {},
+  "xref": {
+    "F-001": [
+      {
+        "doc_id": "prd-keel-f001-f009",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f001-f009.md"
+      }
+    ],
+    "F-002": [
+      {
+        "doc_id": "prd-keel-f001-f009",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f001-f009.md"
+      }
+    ],
+    "F-003": [
+      {
+        "doc_id": "prd-keel-f001-f009",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f001-f009.md"
+      }
+    ],
+    "F-004": [
+      {
+        "doc_id": "prd-keel-f001-f009",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f001-f009.md"
+      }
+    ],
+    "F-005": [
+      {
+        "doc_id": "prd-keel-f001-f009",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f001-f009.md"
+      }
+    ],
+    "F-006": [
+      {
+        "doc_id": "prd-keel-f001-f009",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f001-f009.md"
+      }
+    ],
+    "F-007": [
+      {
+        "doc_id": "prd-keel-f001-f009",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f001-f009.md"
+      }
+    ],
+    "F-008": [
+      {
+        "doc_id": "prd-keel-f001-f009",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f001-f009.md"
+      }
+    ],
+    "F-009": [
+      {
+        "doc_id": "prd-keel-f001-f009",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f001-f009.md"
+      }
+    ],
+    "F-010": [
+      {
+        "doc_id": "prd-keel-f010-f018",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f010-f018.md"
+      }
+    ],
+    "F-011": [
+      {
+        "doc_id": "prd-keel-f010-f018",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f010-f018.md"
+      }
+    ],
+    "F-012": [
+      {
+        "doc_id": "prd-keel-f010-f018",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f010-f018.md"
+      }
+    ],
+    "F-013": [
+      {
+        "doc_id": "prd-keel-f010-f018",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f010-f018.md"
+      }
+    ],
+    "F-014": [
+      {
+        "doc_id": "prd-keel-f010-f018",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f010-f018.md"
+      }
+    ],
+    "F-015": [
+      {
+        "doc_id": "prd-keel-f010-f018",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f010-f018.md"
+      }
+    ],
+    "F-016": [
+      {
+        "doc_id": "prd-keel-f010-f018",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f010-f018.md"
+      }
+    ],
+    "F-017": [
+      {
+        "doc_id": "prd-keel-f010-f018",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f010-f018.md"
+      }
+    ],
+    "F-018": [
+      {
+        "doc_id": "prd-keel-f010-f018",
+        "section": "2",
+        "file_path": "docs/prd/prd-keel-f010-f018.md"
+      }
+    ]
+  },
   "aliases": {}
 }
