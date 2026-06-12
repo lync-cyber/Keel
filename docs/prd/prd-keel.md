@@ -1,6 +1,6 @@
 ---
 id: "prd-keel"
-version: "2.3"
+version: "2.5"
 doc_type: prd
 author: product-manager
 status: approved

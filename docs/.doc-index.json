@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generated_at": "2026-06-12T09:19:54.517988+00:00",
+  "generated_at": "2026-06-12T09:38:09.817202+00:00",
   "documents": {
     "adr-0001-project-lead-alex": {
       "file_path": "docs/decisions/0001-project-lead-alex.md",
@@ -127,15 +127,15 @@
       "doc_type": "prd",
       "volume": "features",
       "status": "approved",
-      "total_lines": 136,
-      "est_tokens": 2294,
-      "content_hash": "6f07e098",
+      "total_lines": 137,
+      "est_tokens": 2441,
+      "content_hash": "ac74bca4",
       "sections": {
         "2": {
           "heading": "## 2. 功能需求",
           "line_start": 21,
-          "line_end": 136,
-          "est_tokens": 2138,
+          "line_end": 137,
+          "est_tokens": 2285,
           "deps": [],
           "level": 2,
           "items": {
@@ -149,56 +149,56 @@
             "F-002": {
               "heading": "### F-002: 蓝图双向同步与漂移检测",
               "line_start": 37,
-              "line_end": 48,
-              "est_tokens": 196,
+              "line_end": 49,
+              "est_tokens": 343,
               "deps": []
             },
             "F-003": {
               "heading": "### F-003: 验证门（Gate）",
-              "line_start": 49,
-              "line_end": 61,
+              "line_start": 50,
+              "line_end": 62,
               "est_tokens": 246,
               "deps": []
             },
             "F-004": {
               "heading": "### F-004: 回归守护",
-              "line_start": 62,
-              "line_end": 72,
+              "line_start": 63,
+              "line_end": 73,
               "est_tokens": 195,
               "deps": []
             },
             "F-005": {
               "heading": "### F-005: 自动修复（静默自愈）",
-              "line_start": 73,
-              "line_end": 83,
+              "line_start": 74,
+              "line_end": 84,
               "est_tokens": 235,
               "deps": []
             },
             "F-006": {
               "heading": "### F-006: 能力地图（Capability Map）",
-              "line_start": 84,
-              "line_end": 98,
+              "line_start": 85,
+              "line_end": 99,
               "est_tokens": 276,
               "deps": []
             },
             "F-007": {
               "heading": "### F-007: 改动影响预览（Blast Radius）",
-              "line_start": 99,
-              "line_end": 109,
+              "line_start": 100,
+              "line_end": 110,
               "est_tokens": 138,
               "deps": []
             },
             "F-008": {
               "heading": "### F-008: 应用实时预览",
-              "line_start": 110,
-              "line_end": 121,
+              "line_start": 111,
+              "line_end": 122,
               "est_tokens": 166,
               "deps": []
             },
             "F-009": {
               "heading": "### F-009: 意图捕获与蓝图 diff",
-              "line_start": 122,
-              "line_end": 136,
+              "line_start": 123,
+              "line_end": 137,
               "est_tokens": 281,
               "deps": []
             }
@@ -540,6 +540,22 @@
       "total_lines": 183,
       "est_tokens": 2215,
       "content_hash": "d4726fe4",
+      "sections": {},
+      "deps": [
+        "prd-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "26c3b2a2"
+      }
+    },
+    "review-prd-keel-r7": {
+      "file_path": "docs/reviews/doc/REVIEW-prd-keel-r7.md",
+      "doc_type": "review",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 157,
+      "est_tokens": 1912,
+      "content_hash": "b2308eef",
       "sections": {},
       "deps": [
         "prd-keel"

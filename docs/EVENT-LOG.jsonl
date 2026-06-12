@@ -54,3 +54,8 @@
 {"ts": "2026-06-12T09:15:10+00:00", "event": "state_change", "phase": "architecture", "detail": "skill-run: doc-review Layer 1 reported issues", "agent": "reviewer", "status": "needs_revision", "ref": "skill:doc-review/doc_check"}
 {"event": "review_verdict", "phase": "architecture", "agent": "reviewer", "status": "approved_with_notes", "detail": "PRD v2.2 amendment 审查 r6: 1 MEDIUM + 2 LOW", "ts": "2026-06-12T09:18:48+00:00"}
 {"event": "state_change", "phase": "architecture", "detail": "r6 处置: R-001(MEDIUM) 经 orchestrator 核实为误报驳回(reviewer-calibration: F-003 AC-006 确为门禁 JSON 接口定义, F-018 引用正确); 2 LOW 措辞统一已修复; PRD v2.3", "ts": "2026-06-12T09:18:48+00:00"}
+{"ts": "2026-06-12T09:33:14+00:00", "event": "state_change", "phase": "architecture", "detail": "amendment: F-002 新增 AC-006 漂移检测来源无关性(覆盖 Keel 通道外直接文件改动), 备注补双层防御定位; PRD v2.4", "agent": "product-manager"}
+{"ts": "2026-06-12T09:34:22+00:00", "event": "state_change", "phase": "architecture", "detail": "skill-run: doc-review Layer 1 bad arguments (exit 2)", "agent": "reviewer", "status": "needs_revision", "ref": "skill:doc-review/doc_check"}
+{"ts": "2026-06-12T09:34:37+00:00", "event": "state_change", "phase": "architecture", "detail": "skill-run: doc-review Layer 1 passed", "agent": "reviewer", "status": "completed", "ref": "skill:doc-review/doc_check"}
+{"event": "review_verdict", "phase": "architecture", "agent": "reviewer", "status": "approved_with_notes", "detail": "PRD v2.4 amendment 审查 r7: 1 MEDIUM + 1 LOW", "ts": "2026-06-12T09:38:17+00:00"}
+{"event": "state_change", "phase": "architecture", "detail": "r7 处置: R-001(AC-005 计时起点歧义)与 R-002(阻断/检测机制区分)按 reviewer 建议修复; PRD v2.5", "ts": "2026-06-12T09:38:17+00:00"}
