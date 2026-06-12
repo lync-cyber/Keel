@@ -1,3 +1,11 @@
+---
+id: "keel-prd-legacy"
+doc_type: research
+author: Alex
+status: approved
+deps: []
+---
+
 # Keel · 产品需求文档
 
 **Keel（龙骨）**：龙骨是让船在风浪中不倾覆的承重结构，呼应产品内核——让持续成长的应用不腐化。

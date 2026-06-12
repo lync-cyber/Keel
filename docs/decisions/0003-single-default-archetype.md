@@ -1,3 +1,11 @@
+---
+id: "adr-0003-single-default-archetype"
+doc_type: decision
+author: Alex
+status: approved
+deps: []
+---
+
 # 0003. v1 只上 1 个默认架构原型
 
 状态：accepted（2026-06-09，原 D3）

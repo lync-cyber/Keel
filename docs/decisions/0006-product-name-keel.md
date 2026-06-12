@@ -1,3 +1,11 @@
+---
+id: "adr-0006-product-name-keel"
+doc_type: decision
+author: Alex
+status: approved
+deps: []
+---
+
 # 0006. 正式命名 = Keel
 
 状态：accepted（2026-06-09，原 D6）

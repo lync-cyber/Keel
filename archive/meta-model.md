@@ -1,3 +1,11 @@
+---
+id: "keel-meta-model"
+doc_type: research
+author: Alex
+status: approved
+deps: []
+---
+
 # Keel 蓝图元模型 · 原语规格（人工审查主入口）
 
 > 本文件是「蓝图由哪些原语构成、每个原语是什么」的**人读规格**，供团队评审与演进。

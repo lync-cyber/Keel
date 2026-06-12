@@ -1,3 +1,11 @@
+---
+id: "adr-0002-test-web-prototype-first"
+doc_type: decision
+author: Alex
+status: approved
+deps: []
+---
+
 # 0002. 先测现有 web 原型（vs 嵌入式）
 
 状态：accepted（2026-06-09，原 D2）

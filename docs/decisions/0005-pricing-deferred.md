@@ -1,3 +1,11 @@
+---
+id: "adr-0005-pricing-deferred"
+doc_type: decision
+author: Alex
+status: approved
+deps: []
+---
+
 # 0005. 无头 token 池定价暂缓到 R1 后
 
 状态：accepted（2026-06-09，原 D5）

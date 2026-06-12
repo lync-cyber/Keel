@@ -1,3 +1,11 @@
+---
+id: "adr-0009-behavioral-gates-deferred"
+doc_type: decision
+author: Alex
+status: approved
+deps: []
+---
+
 # 0009. 行为门远期纳入，现在预留契约占位
 
 状态：accepted（2026-06-10）

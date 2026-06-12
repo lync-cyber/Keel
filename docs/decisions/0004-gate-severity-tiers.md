@@ -1,3 +1,11 @@
+---
+id: "adr-0004-gate-severity-tiers"
+doc_type: decision
+author: Alex
+status: approved
+deps: []
+---
+
 # 0004. 门禁严重度：结构=硬，风格=软
 
 状态：accepted（2026-06-09，原 D4；沿用 PRD 附录 B.7）

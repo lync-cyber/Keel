@@ -1,3 +1,11 @@
+---
+id: "adr-0008-add-rir-and-traceability"
+doc_type: decision
+author: Alex
+status: approved
+deps: []
+---
+
 # 0008. 近期加 R-IR 需求层 + 追溯链
 
 状态：accepted（2026-06-10）

@@ -1,3 +1,11 @@
+---
+id: "adr-0007-converge-to-typed-rule-schema"
+doc_type: decision
+author: Alex
+status: approved
+deps: []
+---
+
 # 0007. 蓝图收敛到 typed-rule 元模型
 
 状态：accepted（2026-06-10）

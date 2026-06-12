@@ -1,3 +1,11 @@
+---
+id: "adr-0001-project-lead-alex"
+doc_type: decision
+author: Alex
+status: approved
+deps: []
+---
+
 # 0001. 项目负责人 = Alex
 
 状态：accepted（2026-06-09，原 CLAUDE.md 决策日志 D1）
