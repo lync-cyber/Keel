@@ -57,8 +57,8 @@
 
 - 命名: 文件/文档小写 kebab-case；代码命名规范待 architecture 阶段技术栈定型后补充
 - Commit: Conventional Commits（feat:/fix:/docs: 等前缀）
-- 分支: 主干（master）直推，无 PR 流程
-- 设计工具: none
+- 分支: 主干（main）直推，无 PR 流程
+- 设计工具: penpot
   <!-- 可选值: none | penpot。设为 penpot 时启用 Penpot MCP 集成 -->
 - 人工审查检查点: [pre_dev, pre_deploy]
   <!-- 详见 COMMON-RULES §MANUAL_REVIEW_CHECKPOINTS -->
