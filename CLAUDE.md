@@ -4,7 +4,7 @@
 
 - 技术栈: 原型阶段 — 静态 HTML 原型 + YAML 蓝图实例 + JSON Schema 门禁；执行引擎技术栈待 architecture 阶段选型
 - 运行时: claude-code
-- 框架版本: 0.11.0
+- 框架版本: 0.11.1
   <!-- 由 cataforge deploy 自动盖入已安装包版本。SemVer: MAJOR=不兼容变更, MINOR=新功能, PATCH=修复 -->
 - 语言定位: 中文框架（提示词/文档/交互用中文；代码/变量/CLI参数用英文）
 - 执行模式: standard
@@ -18,7 +18,7 @@
 - 项目定位: Keel（龙骨）— 让非程序员零代码构建「可持续成长且不腐化」的应用：应用蓝图作唯一真相源 + 确定性门禁防结构漂移，代码全程归用户、可随时导出迁走
 - 项目负责人: Alex（对 go/no-go 拍板并负责路线）
 
-## 执行环境 (Bootstrap 时由 `python .cataforge/scripts/framework/setup.py --emit-env-block` 填入)
+## 执行环境 (Bootstrap 时由 `cataforge setup env-block` 填入)
 
 <!-- 本节在 Bootstrap 步骤中生成。每次会话都会作为项目指令加载，
      权重高于 hook 注入的 additionalContext。项目生命周期内保持稳定。 -->
@@ -87,4 +87,3 @@
   - `upgrade.state` — 本地升级状态。升级时始终保留
   - `features` — 功能注册表。升级时全量覆盖
   - `migration_checks` — 迁移检查声明。升级时全量覆盖
-
