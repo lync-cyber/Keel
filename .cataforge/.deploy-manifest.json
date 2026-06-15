@@ -45,6 +45,6 @@
     ".claude/skills/workflow-framework-generator",
     "CLAUDE.md"
   ],
-  "source_digest": "f1596c430e03e115d8a1f9376ff464d8fe32883b9addc233b64a6473914555bd",
-  "package_version": "0.9.1"
+  "source_digest": "3298b8792c25df9c2f72fc15e3c9c8caadb299764de49dfe6d97aecabf27c597",
+  "package_version": "0.11.0"
 }

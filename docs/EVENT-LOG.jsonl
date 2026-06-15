@@ -59,3 +59,5 @@
 {"ts": "2026-06-12T09:34:37+00:00", "event": "state_change", "phase": "architecture", "detail": "skill-run: doc-review Layer 1 passed", "agent": "reviewer", "status": "completed", "ref": "skill:doc-review/doc_check"}
 {"event": "review_verdict", "phase": "architecture", "agent": "reviewer", "status": "approved_with_notes", "detail": "PRD v2.4 amendment 审查 r7: 1 MEDIUM + 1 LOW", "ts": "2026-06-12T09:38:17+00:00"}
 {"event": "state_change", "phase": "architecture", "detail": "r7 处置: R-001(AC-005 计时起点歧义)与 R-002(阻断/检测机制区分)按 reviewer 建议修复; PRD v2.5", "ts": "2026-06-12T09:38:17+00:00"}
+{"ts": "2026-06-15T02:25:46+00:00", "event": "session_start", "phase": "session", "detail": "IDE session started"}
+{"ts": "2026-06-15T02:26:18+00:00", "event": "session_start", "phase": "session", "detail": "IDE session started"}
