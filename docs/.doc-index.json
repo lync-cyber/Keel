@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generated_at": "2026-06-15T09:20:36.946985+00:00",
+  "generated_at": "2026-06-15T12:50:43.625511+00:00",
   "documents": {
     "adr-0001-project-lead-alex": {
       "file_path": "docs/decisions/0001-project-lead-alex.md",
@@ -120,6 +120,16 @@
       "total_lines": 27,
       "est_tokens": 365,
       "content_hash": "eb613afe",
+      "sections": {}
+    },
+    "feedback-bug-kg-first-rocksdb-store-git-manifest-wal": {
+      "file_path": "docs/feedback/kg-store-git-churn-20260615.md",
+      "doc_type": "framework-feedback",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 199,
+      "est_tokens": 3134,
+      "content_hash": "80ed29d2",
       "sections": {}
     },
     "feedback-bug-0-9-10-11-0-3-1-claude-md-section-merge": {
