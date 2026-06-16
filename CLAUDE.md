@@ -4,7 +4,7 @@
 
 - 技术栈: 原型阶段 — 静态 HTML 原型 + YAML 蓝图实例 + JSON Schema 门禁；执行引擎技术栈待 architecture 阶段选型
 - 运行时: claude-code
-- 框架版本: 0.11.1
+- 框架版本: 0.11.2
   <!-- 由 cataforge deploy 自动盖入已安装包版本。SemVer: MAJOR=不兼容变更, MINOR=新功能, PATCH=修复 -->
 - 语言定位: 中文框架（提示词/文档/交互用中文；代码/变量/CLI参数用英文）
 - 执行模式: standard

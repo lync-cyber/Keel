@@ -5,3 +5,6 @@
 .cataforge/kg/store/LOG
 .cataforge/kg/store/LOG.old.*
 .cataforge/kg/store/LOCK
+
+# Python 字节码缓存
+__pycache__/
