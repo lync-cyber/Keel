@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generated_at": "2026-06-16T08:05:33.317394+00:00",
+  "generated_at": "2026-06-17T10:21:18.872019+00:00",
   "documents": {
     "adr-0001-project-lead-alex": {
       "file_path": "docs/decisions/0001-project-lead-alex.md",
@@ -147,15 +147,15 @@
       "doc_type": "prd",
       "volume": "features",
       "status": "approved",
-      "total_lines": 137,
-      "est_tokens": 2441,
-      "content_hash": "ac74bca4",
+      "total_lines": 138,
+      "est_tokens": 2784,
+      "content_hash": "1162ddc0",
       "sections": {
         "2": {
           "heading": "## 2. 功能需求",
           "line_start": 21,
-          "line_end": 137,
-          "est_tokens": 2285,
+          "line_end": 138,
+          "est_tokens": 2628,
           "deps": [],
           "level": 2,
           "items": {
@@ -163,14 +163,14 @@
               "heading": "### F-001: 蓝图核心原语与元模型",
               "line_start": 23,
               "line_end": 36,
-              "est_tokens": 397,
+              "est_tokens": 534,
               "deps": []
             },
             "F-002": {
               "heading": "### F-002: 蓝图双向同步与漂移检测",
               "line_start": 37,
               "line_end": 49,
-              "est_tokens": 343,
+              "est_tokens": 470,
               "deps": []
             },
             "F-003": {
@@ -190,35 +190,35 @@
             "F-005": {
               "heading": "### F-005: 自动修复（静默自愈）",
               "line_start": 74,
-              "line_end": 84,
-              "est_tokens": 235,
+              "line_end": 85,
+              "est_tokens": 291,
               "deps": []
             },
             "F-006": {
               "heading": "### F-006: 能力地图（Capability Map）",
-              "line_start": 85,
-              "line_end": 99,
+              "line_start": 86,
+              "line_end": 100,
               "est_tokens": 276,
               "deps": []
             },
             "F-007": {
               "heading": "### F-007: 改动影响预览（Blast Radius）",
-              "line_start": 100,
-              "line_end": 110,
-              "est_tokens": 138,
+              "line_start": 101,
+              "line_end": 111,
+              "est_tokens": 160,
               "deps": []
             },
             "F-008": {
               "heading": "### F-008: 应用实时预览",
-              "line_start": 111,
-              "line_end": 122,
+              "line_start": 112,
+              "line_end": 123,
               "est_tokens": 166,
               "deps": []
             },
             "F-009": {
               "heading": "### F-009: 意图捕获与蓝图 diff",
-              "line_start": 123,
-              "line_end": 137,
+              "line_start": 124,
+              "line_end": 138,
               "est_tokens": 281,
               "deps": []
             }
@@ -230,7 +230,7 @@
         "prd-keel"
       ],
       "dep_hashes": {
-        "prd-keel": "26c3b2a2"
+        "prd-keel": "7c5be6fe"
       }
     },
     "prd-keel-f010-f018": {
@@ -238,15 +238,15 @@
       "doc_type": "prd",
       "volume": "features",
       "status": "approved",
-      "total_lines": 133,
-      "est_tokens": 2287,
-      "content_hash": "7e3c1ce7",
+      "total_lines": 136,
+      "est_tokens": 2501,
+      "content_hash": "c63c6b5e",
       "sections": {
         "2": {
           "heading": "## 2. 功能需求",
           "line_start": 21,
-          "line_end": 133,
-          "est_tokens": 2129,
+          "line_end": 136,
+          "est_tokens": 2343,
           "deps": [],
           "level": 2,
           "items": {
@@ -260,57 +260,57 @@
             "F-011": {
               "heading": "### F-011: 调和引擎（Reconcile）",
               "line_start": 37,
-              "line_end": 49,
-              "est_tokens": 253,
+              "line_end": 51,
+              "est_tokens": 362,
               "deps": []
             },
             "F-012": {
               "heading": "### F-012: 项目初始化与上手",
-              "line_start": 50,
-              "line_end": 63,
+              "line_start": 52,
+              "line_end": 65,
               "est_tokens": 271,
               "deps": []
             },
             "F-013": {
               "heading": "### F-013: 意图日志与时光机",
-              "line_start": 64,
-              "line_end": 75,
-              "est_tokens": 178,
+              "line_start": 66,
+              "line_end": 78,
+              "est_tokens": 225,
               "deps": []
             },
             "F-014": {
               "heading": "### F-014: 一键上线与安全体检",
-              "line_start": 76,
-              "line_end": 86,
-              "est_tokens": 152,
+              "line_start": 79,
+              "line_end": 89,
+              "est_tokens": 178,
               "deps": []
             },
             "F-015": {
               "heading": "### F-015: 开放代码与一键导出",
-              "line_start": 87,
-              "line_end": 98,
+              "line_start": 90,
+              "line_end": 101,
               "est_tokens": 188,
               "deps": []
             },
             "F-016": {
               "heading": "### F-016: 开发者交接包",
-              "line_start": 99,
-              "line_end": 109,
+              "line_start": 102,
+              "line_end": 112,
               "est_tokens": 165,
               "deps": []
             },
             "F-017": {
               "heading": "### F-017: Escape Hatch（自由实现区）",
-              "line_start": 110,
-              "line_end": 121,
+              "line_start": 113,
+              "line_end": 124,
               "est_tokens": 316,
               "deps": []
             },
             "F-018": {
               "heading": "### F-018: 执行引擎抽象层",
-              "line_start": 122,
-              "line_end": 133,
-              "est_tokens": 293,
+              "line_start": 125,
+              "line_end": 136,
+              "est_tokens": 323,
               "deps": []
             }
           }
@@ -321,7 +321,7 @@
         "prd-keel"
       ],
       "dep_hashes": {
-        "prd-keel": "26c3b2a2"
+        "prd-keel": "7c5be6fe"
       }
     },
     "prd-keel": {
@@ -329,15 +329,15 @@
       "doc_type": "prd",
       "volume": "main",
       "status": "approved",
-      "total_lines": 221,
-      "est_tokens": 2557,
-      "content_hash": "26c3b2a2",
+      "total_lines": 232,
+      "est_tokens": 3068,
+      "content_hash": "7c5be6fe",
       "sections": {
         "1": {
           "heading": "## 1. 概述",
           "line_start": 26,
-          "line_end": 67,
-          "est_tokens": 486,
+          "line_end": 69,
+          "est_tokens": 584,
           "deps": [],
           "level": 2,
           "items": {
@@ -358,16 +358,16 @@
             "1.3": {
               "heading": "### 1.3 成功指标",
               "line_start": 59,
-              "line_end": 67,
-              "est_tokens": 109,
+              "line_end": 69,
+              "est_tokens": 208,
               "deps": []
             }
           }
         },
         "2": {
           "heading": "## 2. 功能需求",
-          "line_start": 68,
-          "line_end": 100,
+          "line_start": 70,
+          "line_end": 102,
           "est_tokens": 361,
           "deps": [],
           "level": 2,
@@ -375,30 +375,30 @@
         },
         "3": {
           "heading": "## 3. 非功能需求",
-          "line_start": 101,
-          "line_end": 127,
-          "est_tokens": 272,
+          "line_start": 103,
+          "line_end": 137,
+          "est_tokens": 465,
           "deps": [],
           "level": 2,
           "items": {
             "3.1": {
               "heading": "### 3.1 性能",
-              "line_start": 103,
-              "line_end": 113,
-              "est_tokens": 87,
+              "line_start": 105,
+              "line_end": 116,
+              "est_tokens": 158,
               "deps": []
             },
             "3.2": {
               "heading": "### 3.2 安全",
-              "line_start": 114,
-              "line_end": 120,
-              "est_tokens": 56,
+              "line_start": 117,
+              "line_end": 130,
+              "est_tokens": 177,
               "deps": []
             },
             "3.3": {
               "heading": "### 3.3 兼容性",
-              "line_start": 121,
-              "line_end": 127,
+              "line_start": 131,
+              "line_end": 137,
               "est_tokens": 124,
               "deps": []
             }
@@ -406,37 +406,37 @@
         },
         "4": {
           "heading": "## 4. 约束与假设",
-          "line_start": 128,
-          "line_end": 159,
-          "est_tokens": 522,
+          "line_start": 138,
+          "line_end": 169,
+          "est_tokens": 605,
           "deps": [],
           "level": 2,
           "items": {
             "4.1": {
               "heading": "### 4.1 产品约束",
-              "line_start": 130,
-              "line_end": 137,
+              "line_start": 140,
+              "line_end": 147,
               "est_tokens": 161,
               "deps": []
             },
             "4.2": {
               "heading": "### 4.2 技术约束",
-              "line_start": 138,
-              "line_end": 147,
+              "line_start": 148,
+              "line_end": 157,
               "est_tokens": 226,
               "deps": []
             },
             "4.3": {
               "heading": "### 4.3 关键假设",
-              "line_start": 148,
-              "line_end": 153,
-              "est_tokens": 69,
+              "line_start": 158,
+              "line_end": 163,
+              "est_tokens": 153,
               "deps": []
             },
             "4.4": {
               "heading": "### 4.4 调研记录",
-              "line_start": 154,
-              "line_end": 159,
+              "line_start": 164,
+              "line_end": 169,
               "est_tokens": 60,
               "deps": []
             }
@@ -444,8 +444,8 @@
         },
         "5": {
           "heading": "## 5. 关键流程",
-          "line_start": 160,
-          "line_end": 199,
+          "line_start": 170,
+          "line_end": 209,
           "est_tokens": 353,
           "deps": [],
           "level": 2,
@@ -453,9 +453,9 @@
         },
         "6": {
           "heading": "## 6. 术语表",
-          "line_start": 200,
-          "line_end": 221,
-          "est_tokens": 409,
+          "line_start": 210,
+          "line_end": 232,
+          "est_tokens": 545,
           "deps": [],
           "level": 2,
           "items": {}
@@ -485,7 +485,7 @@
         "prd-keel"
       ],
       "dep_hashes": {
-        "prd-keel": "26c3b2a2"
+        "prd-keel": "7c5be6fe"
       }
     },
     "review-prd-keel-r2": {
@@ -501,7 +501,7 @@
         "prd-keel"
       ],
       "dep_hashes": {
-        "prd-keel": "26c3b2a2"
+        "prd-keel": "7c5be6fe"
       }
     },
     "review-prd-keel-r3": {
@@ -517,7 +517,7 @@
         "prd-keel"
       ],
       "dep_hashes": {
-        "prd-keel": "26c3b2a2"
+        "prd-keel": "7c5be6fe"
       }
     },
     "review-prd-keel-r4": {
@@ -533,7 +533,7 @@
         "prd-keel"
       ],
       "dep_hashes": {
-        "prd-keel": "26c3b2a2"
+        "prd-keel": "7c5be6fe"
       }
     },
     "review-prd-keel-r5": {
@@ -549,7 +549,7 @@
         "prd-keel"
       ],
       "dep_hashes": {
-        "prd-keel": "26c3b2a2"
+        "prd-keel": "7c5be6fe"
       }
     },
     "review-prd-keel-r6": {
@@ -565,7 +565,7 @@
         "prd-keel"
       ],
       "dep_hashes": {
-        "prd-keel": "26c3b2a2"
+        "prd-keel": "7c5be6fe"
       }
     },
     "review-prd-keel-r7": {
@@ -581,7 +581,27 @@
         "prd-keel"
       ],
       "dep_hashes": {
-        "prd-keel": "26c3b2a2"
+        "prd-keel": "7c5be6fe"
+      }
+    },
+    "review-prd-keel-r8": {
+      "file_path": "docs/reviews/doc/REVIEW-prd-keel-r8.md",
+      "doc_type": "review",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 74,
+      "est_tokens": 1451,
+      "content_hash": "7818a150",
+      "sections": {},
+      "deps": [
+        "prd-keel",
+        "prd-keel-f001-f009",
+        "prd-keel-f010-f018"
+      ],
+      "dep_hashes": {
+        "prd-keel": "7c5be6fe",
+        "prd-keel-f001-f009": "1162ddc0",
+        "prd-keel-f010-f018": "c63c6b5e"
       }
     }
   },
