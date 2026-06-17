@@ -2,12 +2,12 @@
 # Keel 蓝图实例 — 示例应用「我的博客」（唯一规范实例）
 # 校验：本文件应通过 docs/blueprint.schema.json（Draft 2020-12）
 # =============================================================================
-# 本文件是「我的博客」的唯一规范蓝图实例（v9），符合通用元模型。
+# 本文件是「我的博客」的唯一规范蓝图实例（v10），符合通用元模型（schema 0.3-draft）。
 # 决策 ADR-0007：收敛到 typed-rule schema —— 取代 demo/blueprint.yaml 的字符串规则版。
 # 决策 ADR-0008：近期就加 R-IR 需求层 + 追溯链（requirements / satisfies）。
 # 决策 ADR-0009：行为门远期纳入 —— 现在只为 Port 预留 contract(pre/post/invariant) 占位。
 #
-# 版本：v9 = v8（迁移到元模型）+ R-IR 需求层、satisfies 追溯链、契约占位。
+# 版本：v10 = v9 + Workflow/StateMachine 最小占位原语、store 单元（使 data-via-core 约束实际命中）。
 # =============================================================================
 
 meta:
@@ -103,7 +103,7 @@ requirements:
 archetype:
   id: modular-monolith
   plain: 特性切片 / 模块化单体——每个能力是一个自包含切片，通用默认。
-  unit_kinds: [feature, core, shared]
+  unit_kinds: [feature, core, shared, store]
   allowed_relation_kinds: [imports, uses, reads, writes]
   node_kinds: [feature]
   internal_layers: [ui, logic, data]
@@ -162,12 +162,12 @@ archetype:
       rule:
         type: single_canonical
         responsibility: auth
-    - id: naming-convention
-      plain: 文件和模块名按统一规矩起，便于以后看清结构。
+    - id: no-orphan-feature
+      plain: 不许有没人用、谁也接不上的功能块（孤岛），免得地图上挂着死区块。
       severity: soft
       sealed: false
       origin: override
-      checker: eslint
+      checker: madge
       rule:
         type: no_orphan
         of: { kind: feature }
@@ -186,6 +186,11 @@ units:
     plain: 数据管家——全应用唯一一处连数据库。
     owns: [data-access]
     ports: [core/db.api]
+    surfaces_on_map: false
+    origin: builtin
+  - id: db
+    kind: store
+    plain: 数据库本体——真正存数据的地方，只有「数据管家」能直接碰它。
     surfaces_on_map: false
     origin: builtin
 
@@ -326,6 +331,10 @@ relations:
       plain: 评论用「登录管家」确认这个人登录了没。 }
   - { id: r11, from: favorite, to: core/auth, kind: uses, via: core/auth.api,
       plain: 收藏用「登录管家」确认这个人登录了没。 }
+  - { id: r12, from: core/db, to: db, kind: writes,
+      plain: 「数据管家」是全应用唯一直接往数据库本体写数据的地方。 }
+  - { id: r13, from: core/db, to: db, kind: reads,
+      plain: 「数据管家」是全应用唯一直接从数据库本体读数据的地方。 }
 
 # ── 数据实体（Entity）─────────────────────────────────────────────────────────
 entities:
@@ -360,4 +369,29 @@ entities:
       - { to: User, kind: belongs_to }
       - { to: Article, kind: belongs_to }
     status: proposed
+    origin: generated
+
+# ── 交互流程（Workflow）：v1 最小占位原语，地图以『当…就…』投影（ADR-0009 行为门远期）──
+workflows:
+  - id: wf-read-flow
+    plain_name: 看文章
+    plain: 当访客在列表里点一篇文章，就把他带到这一篇的详情页。
+    steps:
+      - 访客打开站点，看到全部已发布文章的列表。
+      - 点击列表里的某一篇。
+      - 进入这一篇的文章详情页，看到完整内容。
+    satisfies: [req-read-articles]
+    status: established
+    origin: generated
+
+# ── 状态机（StateMachine）：v1 最小占位原语，地图以『某物的一生』投影 ──────────────
+statemachines:
+  - id: sm-article-life
+    plain_name: 文章的一生
+    plain: 一篇文章从草稿到对外发布的状态变化。
+    states: [draft, published]
+    transitions:
+      - { from: draft, to: published, "on": 作者点了发布 }
+    satisfies: [req-read-articles]
+    status: established
     origin: generated

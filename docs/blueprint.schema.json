@@ -1,9 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://keel.dev/schema/blueprint/0.2",
+  "$id": "https://keel.dev/schema/blueprint/0.3",
   "title": "Keel Blueprint Meta-Model",
-  "version": "0.2-draft",
-  "description": "Keel 通用蓝图元模型（草案 v0.2）。在 v0.1 的 6 个正交原语（Unit/Port/Relation/Entity/Constraint/Archetype）之上，新增第 7 个原语 Requirement（R-IR 需求层）与 satisfies 追溯链，并为 Port 预留行为契约占位（pre/post/invariant），对齐技术报告『需求→架构→代码』确定性管线。本 schema 只校验蓝图的『形态』（字段、必填、枚举、双表达是否齐备）；蓝图里的 constraints 与 requirements 本身是数据，由编译器映射成确定性检查器/测试去强制——那是另一层。每个面向人的原语都必须带 plain_* 字段（R1 可读半边）。",
+  "version": "0.3-draft",
+  "description": "Keel 通用蓝图元模型（草案 v0.3）。原语口径：7 个结构原语（Unit/Port/Relation/Entity/Constraint/Workflow/StateMachine）+ 需求层原语 Requirement（R-IR，带 satisfies 追溯链）+ 架构原型容器 Archetype（承载结构原语而非面向用户计数的原语之一）。Port 预留行为契约占位（pre/post/invariant），对齐技术报告『需求→架构→代码』确定性管线。Workflow 与 StateMachine 为 v1 最小化占位（仅校验形态，完整语义与可执行投影待架构阶段设计）。本 schema 只校验蓝图的『形态』（字段、必填、枚举、双表达是否齐备）；蓝图里的 constraints 与 requirements 本身是数据，由编译器映射成确定性检查器/测试去强制——那是另一层。每个面向人的原语都必须带 plain_* 字段（R1 可读半边）。",
   "type": "object",
   "required": ["meta", "archetype", "units", "relations"],
   "additionalProperties": false,
@@ -29,6 +29,16 @@
       "type": "array",
       "items": { "$ref": "#/$defs/constraint" },
       "description": "项目覆盖层 + 生成层追加的约束。出厂密封不变量写在 archetype.constraints 里。"
+    },
+    "workflows": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/workflow" },
+      "description": "交互流程原语（第 7 结构原语之一）。v1 最小化占位：仅校验形态，完整语义（步骤编排、可执行投影）待架构阶段设计。能力地图以『当…就…』业务语言投影（PRD F-006 AC-003）。"
+    },
+    "statemachines": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/statemachine" },
+      "description": "状态机原语（第 7 结构原语之一）。v1 最小化占位：仅校验形态，完整语义（守卫、动作、可执行投影）待架构阶段设计。能力地图以『某物的一生』业务语言投影（PRD F-006 AC-003）。"
     }
   },
 
@@ -242,6 +252,68 @@
           }
         },
         "plain": { "$ref": "#/$defs/plain" },
+        "status": { "$ref": "#/$defs/status" },
+        "origin": { "$ref": "#/$defs/origin" }
+      }
+    },
+
+    "workflow": {
+      "type": "object",
+      "description": "交互流程（第 7 结构原语之一）。v1 最小化占位：plain 必填（地图『当…就…』投影的可读半边），steps 为可选有序步骤占位。完整编排语义（分支、并发、可执行判据）待架构阶段设计，本 schema 当前只校验形态合法性。",
+      "required": ["id", "plain"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "plain": { "$ref": "#/$defs/plain" },
+        "plain_name": { "type": "string", "description": "地图节点的人类标题（如『看文章』）。" },
+        "steps": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "有序步骤的通俗描述（占位；v1 不校验步骤间的图引用一致性）。"
+        },
+        "satisfies": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/id" },
+          "description": "本流程满足的需求 id 列表（追溯 R→A）。"
+        },
+        "status": { "$ref": "#/$defs/status" },
+        "origin": { "$ref": "#/$defs/origin" }
+      }
+    },
+
+    "statemachine": {
+      "type": "object",
+      "description": "状态机（第 7 结构原语之一）。v1 最小化占位：plain 必填（地图『某物的一生』投影的可读半边），states / transitions 为可选占位。完整语义（守卫、动作、可执行判据）待架构阶段设计，本 schema 当前只校验形态合法性。",
+      "required": ["id", "plain"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "plain": { "$ref": "#/$defs/plain" },
+        "plain_name": { "type": "string", "description": "地图节点的人类标题（如『文章的一生』）。" },
+        "states": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "状态集合的通俗描述（占位）。"
+        },
+        "transitions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["from", "to"],
+            "additionalProperties": false,
+            "properties": {
+              "from": { "type": "string" },
+              "to": { "type": "string" },
+              "on": { "type": "string", "description": "触发事件的通俗描述（占位）。" }
+            }
+          },
+          "description": "状态迁移占位（v1 不校验状态可达性）。"
+        },
+        "satisfies": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/id" },
+          "description": "本状态机满足的需求 id 列表（追溯 R→A）。"
+        },
         "status": { "$ref": "#/$defs/status" },
         "origin": { "$ref": "#/$defs/origin" }
       }
