@@ -8,8 +8,14 @@
     "ui-spec"
   ],
   "authoring": "md",
-  "document_drift_count": 1,
+  "document_drift_count": 2,
   "documents": [
+    {
+      "doc_id": "https://cataforge.dev/instance/doc/arch",
+      "remediation": "ingest",
+      "source_path": "docs/arch/arch-keel.md",
+      "state": "never_exported"
+    },
     {
       "doc_id": "https://cataforge.dev/instance/doc/prd",
       "remediation": "ingest",
@@ -28,7 +34,8 @@
       "ghost_sections": [],
       "missing_entities": [],
       "missing_relations": [],
-      "missing_sections": []
+      "missing_sections": [],
+      "orphan_relations": []
     },
     "deploy-spec": {
       "divergence_count": 0,
@@ -38,7 +45,8 @@
       "ghost_sections": [],
       "missing_entities": [],
       "missing_relations": [],
-      "missing_sections": []
+      "missing_sections": [],
+      "orphan_relations": []
     },
     "dev-plan": {
       "divergence_count": 0,
@@ -48,7 +56,8 @@
       "ghost_sections": [],
       "missing_entities": [],
       "missing_relations": [],
-      "missing_sections": []
+      "missing_sections": [],
+      "orphan_relations": []
     },
     "prd": {
       "divergence_count": 0,
@@ -58,7 +67,8 @@
       "ghost_sections": [],
       "missing_entities": [],
       "missing_relations": [],
-      "missing_sections": []
+      "missing_sections": [],
+      "orphan_relations": []
     },
     "test-report": {
       "divergence_count": 0,
@@ -68,7 +78,8 @@
       "ghost_sections": [],
       "missing_entities": [],
       "missing_relations": [],
-      "missing_sections": []
+      "missing_sections": [],
+      "orphan_relations": []
     },
     "ui-spec": {
       "divergence_count": 0,
@@ -78,8 +89,9 @@
       "ghost_sections": [],
       "missing_entities": [],
       "missing_relations": [],
-      "missing_sections": []
+      "missing_sections": [],
+      "orphan_relations": []
     }
   },
-  "timestamp": "2026-06-15T09:20:35Z"
+  "timestamp": "2026-06-18T08:40:20Z"
 }

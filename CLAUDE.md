@@ -28,14 +28,14 @@
 
 ## 项目状态 (orchestrator专属写入区，其他Agent禁止修改)
 
-- 当前阶段: architecture
-- 上次完成: product-manager — PRD v2.1 全量重写（消除「一核两壳」，聚焦非程序员单一产品，F-001~F-018 按能力域统一编号，ADR-0011）；r4 审查 approved_with_notes 后 7 条问题全部修复，r5 增量复审 approved
-- 下一步行动: 主线程 inline 承载 architect，基于 prd-keel v2.1（docs/prd/）产出架构设计文档至 docs/arch/
-- 已完成阶段: [requirements]
+- 当前阶段: ui_design
+- 上次完成: architect — arch-keel 4 卷（main/modules/api/data）approved（doc-review r2，r1 的 2 HIGH+8 MED+3 LOW 全部 RESOLVED）；技术栈锁定 Next.js16+Postgres+BetterAuth+Drizzle、Keel 引擎 TS 单栈、ACP-first 执行引擎；M-001~M-015 覆盖全 F-001~F-018。两处 KG 阶段过严门（doc-review has_test 覆盖、doc-consistency ac-traceability）经 reviewer-calibration 驳回/降级，已归档 docs/feedback/
+- 下一步行动: 主线程 inline 承载 ui-designer，基于 arch（docs/arch/）+ prd 产出 ui-spec 至 docs/ui-spec/（原型 demo A/B/C 为 UI 雏形参考；F-006 能力地图/F-008 三面工作区为核心交付）
+- 已完成阶段: [requirements, architecture]
 - 当前Sprint: —
 - 文档状态:
   - prd: approved
-  - arch: 未开始
+  - arch: approved
   - ui-spec: 未开始
   - dev-plan: 未开始
   - test-report: 未开始
