@@ -1,7 +1,517 @@
 {
   "version": "1",
-  "generated_at": "2026-06-17T10:21:18.872019+00:00",
+  "generated_at": "2026-06-18T08:43:00.117899+00:00",
   "documents": {
+    "arch-keel-api": {
+      "file_path": "docs/arch/arch-keel-api.md",
+      "doc_type": "arch",
+      "volume": "api",
+      "status": "approved",
+      "total_lines": 255,
+      "est_tokens": 3276,
+      "content_hash": "45e3e419",
+      "sections": {
+        "3": {
+          "heading": "## 3. 接口契约",
+          "line_start": 21,
+          "line_end": 255,
+          "est_tokens": 3170,
+          "deps": [],
+          "level": 2,
+          "items": {
+            "API-001": {
+              "heading": "### API-001: 蓝图读写与查询",
+              "line_start": 25,
+              "line_end": 41,
+              "est_tokens": 224,
+              "deps": []
+            },
+            "API-002": {
+              "heading": "### API-002: 门禁执行（结构化结果）— F-003 AC-006",
+              "line_start": 42,
+              "line_end": 59,
+              "est_tokens": 369,
+              "deps": []
+            },
+            "API-003": {
+              "heading": "### API-003: 漂移检测",
+              "line_start": 60,
+              "line_end": 74,
+              "est_tokens": 194,
+              "deps": []
+            },
+            "API-004": {
+              "heading": "### API-004: 调和切片",
+              "line_start": 75,
+              "line_end": 87,
+              "est_tokens": 158,
+              "deps": []
+            },
+            "API-005": {
+              "heading": "### API-005: 意图→蓝图 diff + blast radius",
+              "line_start": 88,
+              "line_end": 100,
+              "est_tokens": 164,
+              "deps": []
+            },
+            "API-006": {
+              "heading": "### API-006: 契约冻结",
+              "line_start": 101,
+              "line_end": 112,
+              "est_tokens": 119,
+              "deps": []
+            },
+            "API-007": {
+              "heading": "### API-007: 实现执行",
+              "line_start": 113,
+              "line_end": 124,
+              "est_tokens": 129,
+              "deps": []
+            },
+            "API-008": {
+              "heading": "### API-008: 自愈",
+              "line_start": 125,
+              "line_end": 139,
+              "est_tokens": 164,
+              "deps": []
+            },
+            "API-009": {
+              "heading": "### API-009: 执行引擎抽象（统一接缝）",
+              "line_start": 140,
+              "line_end": 158,
+              "est_tokens": 371,
+              "deps": []
+            },
+            "API-010": {
+              "heading": "### API-010: 工具面（执行引擎可消费）— F-018 AC-006",
+              "line_start": 159,
+              "line_end": 174,
+              "est_tokens": 191,
+              "deps": []
+            },
+            "API-011": {
+              "heading": "### API-011: 能力地图视图模型",
+              "line_start": 175,
+              "line_end": 189,
+              "est_tokens": 174,
+              "deps": []
+            },
+            "API-012": {
+              "heading": "### API-012: 应用预览",
+              "line_start": 190,
+              "line_end": 201,
+              "est_tokens": 108,
+              "deps": []
+            },
+            "API-013": {
+              "heading": "### API-013: 意图日志与时光机",
+              "line_start": 202,
+              "line_end": 217,
+              "est_tokens": 218,
+              "deps": []
+            },
+            "API-014": {
+              "heading": "### API-014: 上线与安全体检",
+              "line_start": 218,
+              "line_end": 230,
+              "est_tokens": 169,
+              "deps": []
+            },
+            "API-015": {
+              "heading": "### API-015: 导出与交接",
+              "line_start": 231,
+              "line_end": 242,
+              "est_tokens": 136,
+              "deps": []
+            },
+            "API-016": {
+              "heading": "### API-016: 项目初始化",
+              "line_start": 243,
+              "line_end": 255,
+              "est_tokens": 178,
+              "deps": []
+            }
+          }
+        }
+      },
+      "split_from": "arch-keel",
+      "deps": [
+        "prd-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "7c5be6fe"
+      }
+    },
+    "arch-keel-data": {
+      "file_path": "docs/arch/arch-keel-data.md",
+      "doc_type": "arch",
+      "volume": "data",
+      "status": "approved",
+      "total_lines": 97,
+      "est_tokens": 1090,
+      "content_hash": "aad6c2b6",
+      "sections": {
+        "4": {
+          "heading": "## 4. 数据模型",
+          "line_start": 21,
+          "line_end": 97,
+          "est_tokens": 981,
+          "deps": [],
+          "level": 2,
+          "items": {
+            "4.1": {
+              "heading": "### 4.1 实体关系",
+              "line_start": 29,
+              "line_end": 38,
+              "est_tokens": 95,
+              "deps": []
+            },
+            "E-001": {
+              "heading": "### E-001: Project",
+              "line_start": 39,
+              "line_end": 49,
+              "est_tokens": 141,
+              "deps": []
+            },
+            "E-002": {
+              "heading": "### E-002: IntentLogEntry",
+              "line_start": 50,
+              "line_end": 60,
+              "est_tokens": 142,
+              "deps": []
+            },
+            "E-003": {
+              "heading": "### E-003: DecisionRecord",
+              "line_start": 61,
+              "line_end": 69,
+              "est_tokens": 105,
+              "deps": []
+            },
+            "E-004": {
+              "heading": "### E-004: FrozenContractSet",
+              "line_start": 70,
+              "line_end": 78,
+              "est_tokens": 109,
+              "deps": []
+            },
+            "E-005": {
+              "heading": "### E-005: HealthSnapshot",
+              "line_start": 79,
+              "line_end": 89,
+              "est_tokens": 129,
+              "deps": []
+            },
+            "E-006": {
+              "heading": "### E-006: EngineConnection",
+              "line_start": 90,
+              "line_end": 97,
+              "est_tokens": 113,
+              "deps": []
+            }
+          }
+        }
+      },
+      "split_from": "arch-keel",
+      "deps": [
+        "prd-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "7c5be6fe"
+      }
+    },
+    "arch-keel-modules": {
+      "file_path": "docs/arch/arch-keel-modules.md",
+      "doc_type": "arch",
+      "volume": "modules",
+      "status": "approved",
+      "total_lines": 133,
+      "est_tokens": 3022,
+      "content_hash": "f8a5b2b9",
+      "sections": {
+        "2": {
+          "heading": "## 2. 模块划分",
+          "line_start": 21,
+          "line_end": 133,
+          "est_tokens": 2913,
+          "deps": [],
+          "level": 2,
+          "items": {
+            "M-001": {
+              "heading": "### M-001: 蓝图引擎 Blueprint Engine",
+              "line_start": 25,
+              "line_end": 31,
+              "est_tokens": 169,
+              "deps": []
+            },
+            "M-002": {
+              "heading": "### M-002: 门禁引擎 Gate Engine",
+              "line_start": 32,
+              "line_end": 39,
+              "est_tokens": 359,
+              "deps": []
+            },
+            "M-003": {
+              "heading": "### M-003: 漂移检测器 Drift Detector",
+              "line_start": 40,
+              "line_end": 46,
+              "est_tokens": 202,
+              "deps": []
+            },
+            "M-004": {
+              "heading": "### M-004: 调和引擎 Reconcile Engine",
+              "line_start": 47,
+              "line_end": 53,
+              "est_tokens": 147,
+              "deps": []
+            },
+            "M-005": {
+              "heading": "### M-005: 意图编排器 Intent Orchestrator",
+              "line_start": 54,
+              "line_end": 60,
+              "est_tokens": 180,
+              "deps": []
+            },
+            "M-006": {
+              "heading": "### M-006: 实现执行器 Implementation Executor",
+              "line_start": 61,
+              "line_end": 67,
+              "est_tokens": 156,
+              "deps": []
+            },
+            "M-007": {
+              "heading": "### M-007: 自愈代理层 Auto-Repair Layer",
+              "line_start": 68,
+              "line_end": 74,
+              "est_tokens": 210,
+              "deps": []
+            },
+            "M-008": {
+              "heading": "### M-008: 执行引擎抽象层 Engine Abstraction",
+              "line_start": 75,
+              "line_end": 83,
+              "est_tokens": 282,
+              "deps": []
+            },
+            "M-009": {
+              "heading": "### M-009: 能力地图渲染器 Capability Map",
+              "line_start": 84,
+              "line_end": 91,
+              "est_tokens": 236,
+              "deps": []
+            },
+            "M-010": {
+              "heading": "### M-010: 应用预览 App Preview",
+              "line_start": 92,
+              "line_end": 98,
+              "est_tokens": 106,
+              "deps": []
+            },
+            "M-011": {
+              "heading": "### M-011: 意图日志与时光机 Intent Log & Time Machine",
+              "line_start": 99,
+              "line_end": 105,
+              "est_tokens": 160,
+              "deps": []
+            },
+            "M-012": {
+              "heading": "### M-012: 上线与安全体检 Deploy & Security Audit",
+              "line_start": 106,
+              "line_end": 112,
+              "est_tokens": 152,
+              "deps": []
+            },
+            "M-013": {
+              "heading": "### M-013: 导出与交接 Export & Handoff",
+              "line_start": 113,
+              "line_end": 119,
+              "est_tokens": 184,
+              "deps": []
+            },
+            "M-014": {
+              "heading": "### M-014: 项目初始化 Project Init",
+              "line_start": 120,
+              "line_end": 126,
+              "est_tokens": 178,
+              "deps": []
+            },
+            "M-015": {
+              "heading": "### M-015: 工作区外壳 Workspace Shell",
+              "line_start": 127,
+              "line_end": 133,
+              "est_tokens": 147,
+              "deps": []
+            }
+          }
+        }
+      },
+      "split_from": "arch-keel",
+      "deps": [
+        "prd-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "7c5be6fe"
+      }
+    },
+    "arch-keel": {
+      "file_path": "docs/arch/arch-keel.md",
+      "doc_type": "arch",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 176,
+      "est_tokens": 3190,
+      "content_hash": "341dacc0",
+      "sections": {
+        "1": {
+          "heading": "## 1. 架构概览",
+          "line_start": 28,
+          "line_end": 77,
+          "est_tokens": 1039,
+          "deps": [],
+          "level": 2,
+          "items": {
+            "1.1": {
+              "heading": "### 1.1 项目类型",
+              "line_start": 30,
+              "line_end": 36,
+              "est_tokens": 111,
+              "deps": []
+            },
+            "1.2": {
+              "heading": "### 1.2 架构风格",
+              "line_start": 37,
+              "line_end": 42,
+              "est_tokens": 191,
+              "deps": []
+            },
+            "1.3": {
+              "heading": "### 1.3 系统上下文图",
+              "line_start": 43,
+              "line_end": 59,
+              "est_tokens": 228,
+              "deps": []
+            },
+            "1.4": {
+              "heading": "### 1.4 技术栈",
+              "line_start": 60,
+              "line_end": 77,
+              "est_tokens": 504,
+              "deps": []
+            }
+          }
+        },
+        "2": {
+          "heading": "## 2. 模块划分",
+          "line_start": 78,
+          "line_end": 101,
+          "est_tokens": 546,
+          "deps": [],
+          "level": 2,
+          "items": {}
+        },
+        "3": {
+          "heading": "## 3. 接口契约",
+          "line_start": 102,
+          "line_end": 110,
+          "est_tokens": 146,
+          "deps": [],
+          "level": 2,
+          "items": {}
+        },
+        "4": {
+          "heading": "## 4. 数据模型",
+          "line_start": 111,
+          "line_end": 117,
+          "est_tokens": 122,
+          "deps": [],
+          "level": 2,
+          "items": {}
+        },
+        "5": {
+          "heading": "## 5. 非功能架构",
+          "line_start": 118,
+          "line_end": 142,
+          "est_tokens": 675,
+          "deps": [],
+          "level": 2,
+          "items": {
+            "5.1": {
+              "heading": "### 5.1 性能方案",
+              "line_start": 120,
+              "line_end": 125,
+              "est_tokens": 175,
+              "deps": []
+            },
+            "5.2": {
+              "heading": "### 5.2 安全方案",
+              "line_start": 126,
+              "line_end": 131,
+              "est_tokens": 212,
+              "deps": []
+            },
+            "5.3": {
+              "heading": "### 5.3 错误处理",
+              "line_start": 132,
+              "line_end": 137,
+              "est_tokens": 177,
+              "deps": []
+            },
+            "5.4": {
+              "heading": "### 5.4 配置管理",
+              "line_start": 138,
+              "line_end": 142,
+              "est_tokens": 105,
+              "deps": []
+            }
+          }
+        },
+        "6": {
+          "heading": "## 6. 目录结构",
+          "line_start": 143,
+          "line_end": 166,
+          "est_tokens": 331,
+          "deps": [],
+          "level": 2,
+          "items": {}
+        },
+        "7": {
+          "heading": "## 7. 开发约定",
+          "line_start": 167,
+          "line_end": 176,
+          "est_tokens": 128,
+          "deps": [],
+          "level": 2,
+          "items": {
+            "7.1": {
+              "heading": "### 7.1 命名规范",
+              "line_start": 168,
+              "line_end": 171,
+              "est_tokens": 58,
+              "deps": []
+            },
+            "7.2": {
+              "heading": "### 7.2 代码风格",
+              "line_start": 172,
+              "line_end": 173,
+              "est_tokens": 27,
+              "deps": []
+            },
+            "7.3": {
+              "heading": "### 7.3 Git约定",
+              "line_start": 174,
+              "line_end": 176,
+              "est_tokens": 38,
+              "deps": []
+            }
+          }
+        }
+      },
+      "deps": [
+        "prd-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "7c5be6fe"
+      }
+    },
     "adr-0001-project-lead-alex": {
       "file_path": "docs/decisions/0001-project-lead-alex.md",
       "doc_type": "decision",
@@ -120,6 +630,26 @@
       "total_lines": 27,
       "est_tokens": 365,
       "content_hash": "eb613afe",
+      "sections": {}
+    },
+    "feedback-bug-arch-ui-spec-doc-review-l1-kg-bidirectional_coverage-has_test-testcase": {
+      "file_path": "docs/feedback/arch-coverage-has-test-gate-20260618.md",
+      "doc_type": "framework-feedback",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 214,
+      "est_tokens": 3864,
+      "content_hash": "a4e20fee",
+      "sections": {}
+    },
+    "feedback-bug-kg-first-context-read-doc_id-mtime-doc_type-frontmatter-id": {
+      "file_path": "docs/feedback/kg-read-split-doc-id-staleness-20260618.md",
+      "doc_type": "framework-feedback",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 234,
+      "est_tokens": 3896,
+      "content_hash": "cd672ec6",
       "sections": {}
     },
     "feedback-bug-kg-first-rocksdb-store-git-manifest-wal": {
@@ -329,36 +859,36 @@
       "doc_type": "prd",
       "volume": "main",
       "status": "approved",
-      "total_lines": 232,
-      "est_tokens": 3068,
+      "total_lines": 233,
+      "est_tokens": 3074,
       "content_hash": "7c5be6fe",
       "sections": {
         "1": {
           "heading": "## 1. 概述",
-          "line_start": 26,
-          "line_end": 69,
+          "line_start": 27,
+          "line_end": 70,
           "est_tokens": 584,
           "deps": [],
           "level": 2,
           "items": {
             "1.1": {
               "heading": "### 1.1 背景与动机",
-              "line_start": 28,
-              "line_end": 43,
+              "line_start": 29,
+              "line_end": 44,
               "est_tokens": 263,
               "deps": []
             },
             "1.2": {
               "heading": "### 1.2 目标用户",
-              "line_start": 44,
-              "line_end": 58,
+              "line_start": 45,
+              "line_end": 59,
               "est_tokens": 109,
               "deps": []
             },
             "1.3": {
               "heading": "### 1.3 成功指标",
-              "line_start": 59,
-              "line_end": 69,
+              "line_start": 60,
+              "line_end": 70,
               "est_tokens": 208,
               "deps": []
             }
@@ -366,8 +896,8 @@
         },
         "2": {
           "heading": "## 2. 功能需求",
-          "line_start": 70,
-          "line_end": 102,
+          "line_start": 71,
+          "line_end": 103,
           "est_tokens": 361,
           "deps": [],
           "level": 2,
@@ -375,30 +905,30 @@
         },
         "3": {
           "heading": "## 3. 非功能需求",
-          "line_start": 103,
-          "line_end": 137,
+          "line_start": 104,
+          "line_end": 138,
           "est_tokens": 465,
           "deps": [],
           "level": 2,
           "items": {
             "3.1": {
               "heading": "### 3.1 性能",
-              "line_start": 105,
-              "line_end": 116,
+              "line_start": 106,
+              "line_end": 117,
               "est_tokens": 158,
               "deps": []
             },
             "3.2": {
               "heading": "### 3.2 安全",
-              "line_start": 117,
-              "line_end": 130,
+              "line_start": 118,
+              "line_end": 131,
               "est_tokens": 177,
               "deps": []
             },
             "3.3": {
               "heading": "### 3.3 兼容性",
-              "line_start": 131,
-              "line_end": 137,
+              "line_start": 132,
+              "line_end": 138,
               "est_tokens": 124,
               "deps": []
             }
@@ -406,37 +936,37 @@
         },
         "4": {
           "heading": "## 4. 约束与假设",
-          "line_start": 138,
-          "line_end": 169,
+          "line_start": 139,
+          "line_end": 170,
           "est_tokens": 605,
           "deps": [],
           "level": 2,
           "items": {
             "4.1": {
               "heading": "### 4.1 产品约束",
-              "line_start": 140,
-              "line_end": 147,
+              "line_start": 141,
+              "line_end": 148,
               "est_tokens": 161,
               "deps": []
             },
             "4.2": {
               "heading": "### 4.2 技术约束",
-              "line_start": 148,
-              "line_end": 157,
+              "line_start": 149,
+              "line_end": 158,
               "est_tokens": 226,
               "deps": []
             },
             "4.3": {
               "heading": "### 4.3 关键假设",
-              "line_start": 158,
-              "line_end": 163,
+              "line_start": 159,
+              "line_end": 164,
               "est_tokens": 153,
               "deps": []
             },
             "4.4": {
               "heading": "### 4.4 调研记录",
-              "line_start": 164,
-              "line_end": 169,
+              "line_start": 165,
+              "line_end": 170,
               "est_tokens": 60,
               "deps": []
             }
@@ -444,8 +974,8 @@
         },
         "5": {
           "heading": "## 5. 关键流程",
-          "line_start": 170,
-          "line_end": 209,
+          "line_start": 171,
+          "line_end": 210,
           "est_tokens": 353,
           "deps": [],
           "level": 2,
@@ -453,13 +983,77 @@
         },
         "6": {
           "heading": "## 6. 术语表",
-          "line_start": 210,
-          "line_end": 232,
+          "line_start": 211,
+          "line_end": 233,
           "est_tokens": 545,
           "deps": [],
           "level": 2,
           "items": {}
         }
+      },
+      "aliases": [
+        "prd"
+      ]
+    },
+    "research-arch-tech-eval-stack": {
+      "file_path": "docs/research/arch-tech-eval-stack-20260618.md",
+      "doc_type": "research",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 74,
+      "est_tokens": 1175,
+      "content_hash": "13c73541",
+      "sections": {
+        "1": {
+          "heading": "## 1. 目标应用锁定技术栈（生成代码 + 一键上线目标）",
+          "line_start": 14,
+          "line_end": 38,
+          "est_tokens": 450,
+          "deps": [],
+          "level": 2,
+          "items": {
+            "1.1": {
+              "heading": "### 1.1 认证组件：Auth.js vs Better Auth（关键修正）",
+              "line_start": 26,
+              "line_end": 38,
+              "est_tokens": 197,
+              "deps": []
+            }
+          }
+        },
+        "2": {
+          "heading": "## 2. 执行引擎接入（F-018）",
+          "line_start": 39,
+          "line_end": 49,
+          "est_tokens": 183,
+          "deps": [],
+          "level": 2,
+          "items": {}
+        },
+        "3": {
+          "heading": "## 3. 门禁检查器工具链（F-003 rule.type → checker）",
+          "line_start": 50,
+          "line_end": 63,
+          "est_tokens": 227,
+          "deps": [],
+          "level": 2,
+          "items": {}
+        },
+        "4": {
+          "heading": "## 4. Keel 自身形态（用户选定）",
+          "line_start": 64,
+          "line_end": 68,
+          "est_tokens": 80,
+          "deps": [],
+          "level": 2,
+          "items": {}
+        }
+      },
+      "deps": [
+        "prd-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "7c5be6fe"
       }
     },
     "corrections-log": {
@@ -471,6 +1065,50 @@
       "est_tokens": 222,
       "content_hash": "c9de0bc4",
       "sections": {}
+    },
+    "review-arch-keel-r1": {
+      "file_path": "docs/reviews/doc/REVIEW-arch-keel-r1.md",
+      "doc_type": "review",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 158,
+      "est_tokens": 3142,
+      "content_hash": "1fe6a7ae",
+      "sections": {},
+      "deps": [
+        "arch-keel",
+        "arch-keel-modules",
+        "arch-keel-api",
+        "arch-keel-data"
+      ],
+      "dep_hashes": {
+        "arch-keel": "341dacc0",
+        "arch-keel-modules": "f8a5b2b9",
+        "arch-keel-api": "45e3e419",
+        "arch-keel-data": "aad6c2b6"
+      }
+    },
+    "review-arch-keel-r2": {
+      "file_path": "docs/reviews/doc/REVIEW-arch-keel-r2.md",
+      "doc_type": "review",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 55,
+      "est_tokens": 931,
+      "content_hash": "c57eb6b6",
+      "sections": {},
+      "deps": [
+        "arch-keel",
+        "arch-keel-modules",
+        "arch-keel-api",
+        "arch-keel-data"
+      ],
+      "dep_hashes": {
+        "arch-keel": "341dacc0",
+        "arch-keel-modules": "f8a5b2b9",
+        "arch-keel-api": "45e3e419",
+        "arch-keel-data": "aad6c2b6"
+      }
     },
     "review-prd-keel-r1": {
       "file_path": "docs/reviews/doc/REVIEW-prd-keel-r1.md",
@@ -606,6 +1244,265 @@
     }
   },
   "xref": {
+    "API-001": [
+      {
+        "doc_id": "arch-keel-api",
+        "section": "3",
+        "file_path": "docs/arch/arch-keel-api.md"
+      }
+    ],
+    "API-002": [
+      {
+        "doc_id": "arch-keel-api",
+        "section": "3",
+        "file_path": "docs/arch/arch-keel-api.md"
+      }
+    ],
+    "API-003": [
+      {
+        "doc_id": "arch-keel-api",
+        "section": "3",
+        "file_path": "docs/arch/arch-keel-api.md"
+      }
+    ],
+    "API-004": [
+      {
+        "doc_id": "arch-keel-api",
+        "section": "3",
+        "file_path": "docs/arch/arch-keel-api.md"
+      }
+    ],
+    "API-005": [
+      {
+        "doc_id": "arch-keel-api",
+        "section": "3",
+        "file_path": "docs/arch/arch-keel-api.md"
+      }
+    ],
+    "API-006": [
+      {
+        "doc_id": "arch-keel-api",
+        "section": "3",
+        "file_path": "docs/arch/arch-keel-api.md"
+      }
+    ],
+    "API-007": [
+      {
+        "doc_id": "arch-keel-api",
+        "section": "3",
+        "file_path": "docs/arch/arch-keel-api.md"
+      }
+    ],
+    "API-008": [
+      {
+        "doc_id": "arch-keel-api",
+        "section": "3",
+        "file_path": "docs/arch/arch-keel-api.md"
+      }
+    ],
+    "API-009": [
+      {
+        "doc_id": "arch-keel-api",
+        "section": "3",
+        "file_path": "docs/arch/arch-keel-api.md"
+      }
+    ],
+    "API-010": [
+      {
+        "doc_id": "arch-keel-api",
+        "section": "3",
+        "file_path": "docs/arch/arch-keel-api.md"
+      }
+    ],
+    "API-011": [
+      {
+        "doc_id": "arch-keel-api",
+        "section": "3",
+        "file_path": "docs/arch/arch-keel-api.md"
+      }
+    ],
+    "API-012": [
+      {
+        "doc_id": "arch-keel-api",
+        "section": "3",
+        "file_path": "docs/arch/arch-keel-api.md"
+      }
+    ],
+    "API-013": [
+      {
+        "doc_id": "arch-keel-api",
+        "section": "3",
+        "file_path": "docs/arch/arch-keel-api.md"
+      }
+    ],
+    "API-014": [
+      {
+        "doc_id": "arch-keel-api",
+        "section": "3",
+        "file_path": "docs/arch/arch-keel-api.md"
+      }
+    ],
+    "API-015": [
+      {
+        "doc_id": "arch-keel-api",
+        "section": "3",
+        "file_path": "docs/arch/arch-keel-api.md"
+      }
+    ],
+    "API-016": [
+      {
+        "doc_id": "arch-keel-api",
+        "section": "3",
+        "file_path": "docs/arch/arch-keel-api.md"
+      }
+    ],
+    "E-001": [
+      {
+        "doc_id": "arch-keel-data",
+        "section": "4",
+        "file_path": "docs/arch/arch-keel-data.md"
+      }
+    ],
+    "E-002": [
+      {
+        "doc_id": "arch-keel-data",
+        "section": "4",
+        "file_path": "docs/arch/arch-keel-data.md"
+      }
+    ],
+    "E-003": [
+      {
+        "doc_id": "arch-keel-data",
+        "section": "4",
+        "file_path": "docs/arch/arch-keel-data.md"
+      }
+    ],
+    "E-004": [
+      {
+        "doc_id": "arch-keel-data",
+        "section": "4",
+        "file_path": "docs/arch/arch-keel-data.md"
+      }
+    ],
+    "E-005": [
+      {
+        "doc_id": "arch-keel-data",
+        "section": "4",
+        "file_path": "docs/arch/arch-keel-data.md"
+      }
+    ],
+    "E-006": [
+      {
+        "doc_id": "arch-keel-data",
+        "section": "4",
+        "file_path": "docs/arch/arch-keel-data.md"
+      }
+    ],
+    "M-001": [
+      {
+        "doc_id": "arch-keel-modules",
+        "section": "2",
+        "file_path": "docs/arch/arch-keel-modules.md"
+      }
+    ],
+    "M-002": [
+      {
+        "doc_id": "arch-keel-modules",
+        "section": "2",
+        "file_path": "docs/arch/arch-keel-modules.md"
+      }
+    ],
+    "M-003": [
+      {
+        "doc_id": "arch-keel-modules",
+        "section": "2",
+        "file_path": "docs/arch/arch-keel-modules.md"
+      }
+    ],
+    "M-004": [
+      {
+        "doc_id": "arch-keel-modules",
+        "section": "2",
+        "file_path": "docs/arch/arch-keel-modules.md"
+      }
+    ],
+    "M-005": [
+      {
+        "doc_id": "arch-keel-modules",
+        "section": "2",
+        "file_path": "docs/arch/arch-keel-modules.md"
+      }
+    ],
+    "M-006": [
+      {
+        "doc_id": "arch-keel-modules",
+        "section": "2",
+        "file_path": "docs/arch/arch-keel-modules.md"
+      }
+    ],
+    "M-007": [
+      {
+        "doc_id": "arch-keel-modules",
+        "section": "2",
+        "file_path": "docs/arch/arch-keel-modules.md"
+      }
+    ],
+    "M-008": [
+      {
+        "doc_id": "arch-keel-modules",
+        "section": "2",
+        "file_path": "docs/arch/arch-keel-modules.md"
+      }
+    ],
+    "M-009": [
+      {
+        "doc_id": "arch-keel-modules",
+        "section": "2",
+        "file_path": "docs/arch/arch-keel-modules.md"
+      }
+    ],
+    "M-010": [
+      {
+        "doc_id": "arch-keel-modules",
+        "section": "2",
+        "file_path": "docs/arch/arch-keel-modules.md"
+      }
+    ],
+    "M-011": [
+      {
+        "doc_id": "arch-keel-modules",
+        "section": "2",
+        "file_path": "docs/arch/arch-keel-modules.md"
+      }
+    ],
+    "M-012": [
+      {
+        "doc_id": "arch-keel-modules",
+        "section": "2",
+        "file_path": "docs/arch/arch-keel-modules.md"
+      }
+    ],
+    "M-013": [
+      {
+        "doc_id": "arch-keel-modules",
+        "section": "2",
+        "file_path": "docs/arch/arch-keel-modules.md"
+      }
+    ],
+    "M-014": [
+      {
+        "doc_id": "arch-keel-modules",
+        "section": "2",
+        "file_path": "docs/arch/arch-keel-modules.md"
+      }
+    ],
+    "M-015": [
+      {
+        "doc_id": "arch-keel-modules",
+        "section": "2",
+        "file_path": "docs/arch/arch-keel-modules.md"
+      }
+    ],
     "F-001": [
       {
         "doc_id": "prd-keel-f001-f009",
@@ -733,5 +1630,7 @@
       }
     ]
   },
-  "aliases": {}
+  "aliases": {
+    "prd": "prd-keel"
+  }
 }

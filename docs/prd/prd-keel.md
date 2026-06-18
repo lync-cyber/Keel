@@ -6,6 +6,7 @@ author: product-manager
 status: approved
 deps: []
 consumers: [architect, ui-designer, tech-lead]
+aliases: ["prd"]
 volume: main
 required_sections:
   - "## 1. 概述"
