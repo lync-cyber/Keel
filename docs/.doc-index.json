@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generated_at": "2026-06-18T15:38:50.965617+00:00",
+  "generated_at": "2026-06-22T05:09:07.032826+00:00",
   "documents": {
     "arch-keel-api": {
       "file_path": "docs/arch/arch-keel-api.md",
@@ -650,6 +650,16 @@
       "total_lines": 234,
       "est_tokens": 3896,
       "content_hash": "cd672ec6",
+      "sections": {}
+    },
+    "feedback-bug-framework-update-bootstrap-upgrade-scaffold-git": {
+      "file_path": "docs/feedback/kg-store-current-deleted-by-upgrade-20260622.md",
+      "doc_type": "framework-feedback",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 258,
+      "est_tokens": 4403,
+      "content_hash": "dd70b252",
       "sections": {}
     },
     "feedback-bug-kg-first-rocksdb-store-git-manifest-wal": {
