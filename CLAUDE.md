@@ -30,7 +30,7 @@
 
 - 当前阶段: ui_design
 - 上次完成: architect — arch-keel 4 卷（main/modules/api/data）approved（doc-review r2，r1 的 2 HIGH+8 MED+3 LOW 全部 RESOLVED）；技术栈锁定 Next.js16+Postgres+BetterAuth+Drizzle、Keel 引擎 TS 单栈、ACP-first 执行引擎；M-001~M-015 覆盖全 F-001~F-018。两处 KG 阶段过严门（doc-review has_test 覆盖、doc-consistency ac-traceability）经 reviewer-calibration 驳回/降级，已归档 docs/feedback/
-- 下一步行动: 主线程 inline 承载 ui-designer，基于 arch（docs/arch/）+ prd 产出 ui-spec 至 docs/ui-spec/（原型 demo A/B/C 为 UI 雏形参考；F-006 能力地图/F-008 三面工作区为核心交付）
+- 下一步行动: ui_design 进行中（inline 承载 ui-designer）。设计方向+Token 已锁定见 docs/research/ui-design-direction-keel-20260623.md（沉静海图/暖调蓝图，藏青#2b3f72+暖纸#f1ece1+三声部排版；用户定：演进视觉+Penpot MCP 建设计系统+全量覆盖 F-001~F-018；ui-spec 五卷 main/theme/components/pages-core/pages-lifecycle）。**阻塞点**：Penpot MCP 多用户 userToken 缺口，待用户给 Claude MCP 注册加 `?userToken=<同Plugin串>` 并重启会话（根因/修复见该 note §3 + 记忆 penpot-mcp-setup）。恢复后：确认 Penpot 可用→建设计系统画板→授权 ui-spec 五卷→reviewer 门禁
 - 已完成阶段: [requirements, architecture]
 - 当前Sprint: —
 - 文档状态:
