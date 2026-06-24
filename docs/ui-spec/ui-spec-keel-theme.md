@@ -3,7 +3,7 @@ id: "ui-spec-keel-theme"
 version: "0.1"
 doc_type: ui-spec
 author: ui-designer
-status: draft
+status: approved
 deps: ["arch-keel", "research-ui-design-direction-keel"]
 consumers: [tech-lead, developer]
 volume: theme
@@ -93,14 +93,14 @@ library typographies（已落 Penpot）: Display(Serif 30/700) · Heading/H1(Ser
 
 ##### 4.1.4 对比度与无障碍
 
-- ink/muted/keel 对 paper 均 ≥4.5:1（ink 13.9 AAA、keel 8.7、muted 4.8 AA 正文下限）。
+- ink/muted/keel 对 paper 均 ≥4.5:1（实测 #221F1A / #6F6657 / #2B3F72 on #F1ECE1：ink 13.9 AAA、keel 8.7、muted 4.80 AA 正文下限）。本卷为对比度单一事实源，数值以实测为准。
 - 健康色 ok/warn/alert 对 paper 为 3.4–4.0:1：仅用于 pill/图标/大字与各自 soft 底配对，不用作 paper 上的小字正文；soft 底配对在组件卷逐对核验。
 - brass 为非语义点缀（对 paper 3.1），仅用于 wordmark/龙骨线/聚焦环等极少量场景。
 - v1 以浅色暖纸为唯一规范主题；深色主题不在 v1 范围（如需另立 dark set，健康/diff 语义保持）。
 
 #### 4.2 适配组件
 
-组件清单与主题覆写规则见分卷 ui-spec-keel-components（UC-XXX）。健康 pill 三态、diff chips、能力节点卡、原语徽章六类、ghost/primary 按钮等核心组件的 token 绑定已在 Penpot「Components」页落地验证。
+组件清单与主题覆写规则见分卷 ui-spec-keel-components（UC-XXX）。健康 pill 三态、diff chips、能力节点卡、原语徽章七类（+ 自由实现区修饰标识）、ghost/primary 按钮等核心组件的 token 绑定已在 Penpot「Components」页落地验证。
 
 #### 4.3 关键页面应用
 

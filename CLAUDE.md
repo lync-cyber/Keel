@@ -28,15 +28,15 @@
 
 ## 项目状态 (orchestrator专属写入区，其他Agent禁止修改)
 
-- 当前阶段: ui_design
-- 上次完成: architect — arch-keel 4 卷（main/modules/api/data）approved（doc-review r2，r1 的 2 HIGH+8 MED+3 LOW 全部 RESOLVED）；技术栈锁定 Next.js16+Postgres+BetterAuth+Drizzle、Keel 引擎 TS 单栈、ACP-first 执行引擎；M-001~M-015 覆盖全 F-001~F-018。两处 KG 阶段过严门（doc-review has_test 覆盖、doc-consistency ac-traceability）经 reviewer-calibration 驳回/降级，已归档 docs/feedback/
-- 下一步行动: ui_design 进行中（inline 承载 ui-designer）。设计方向+Token 见 docs/research/ui-design-direction-keel-20260623.md（沉静海图/暖调蓝图，藏青#2b3f72+暖纸#f1ece1+三声部排版；全量覆盖 F-001~F-018；ui-spec 五卷 main/theme/components/pages-core/pages-lifecycle）。**Penpot 设计系统已建成并验证**（2026-06-24，文件「Keel」）：6 集 54 design token + library 21 colors/8 typographies + 核心组件（能力节点已 componentize、健康pill/ghost按钮/diff chips/原语徽章），「Design System」「Components」两页导出渲染确认。**整屏 mockup 折叠进 ui-spec**：Penpot MCP 深层嵌套整屏叶子内容不持久/不渲染（用户 2026-06-24 确认调整），三面工作区等屏由 ui-spec pages 卷文档精确定义、引用设计系统+静态原型A/B/C。**ui-spec 进度**：theme 卷已授权注册（docs/ui-spec/ui-spec-keel-theme.md，validate OK；hybrid 授权流程=Write docs/→`cataforge context ingest`→`index`，非 write-doc）。**剩**：main/components/pages-core/pages-lifecycle 四卷 → task #6 reviewer doc-review 门禁。Penpot 动笔前须验文件身份、见记忆 penpot-mcp-setup
-- 已完成阶段: [requirements, architecture]
+- 当前阶段: ui_design（完成，待 go/no-go 进入 dev_planning）
+- 上次完成: ui-designer — **ui-spec 五卷 approved**（main/theme/components/pages-core/pages-lifecycle，docs/ui-spec/）。doc-review r2 = approved_with_notes：r1 的 2 HIGH+6 MED+2 LOW 全 RESOLVED、r2 新增 N-001 LOW 亦已修，validate OK。设计方向「沉静海图/暖调蓝图」（藏青#2b3f72+暖纸#f1ece1+三声部排版），全量覆盖 F-001~F-018（§6 屏↔功能映射总表，P-001~P-011 × UC-001~UC-020）。能力地图渲染选型推荐 React Flow v12（懒加载缓解 bundle，备选 D3，重评条件见 pages-core P-002）。Penpot 设计系统（文件「Keel」6 集 54 token + 21 colors/8 typo + 核心组件）为 theme 卷事实源。
+- 下一步行动: **dev_planning（Phase 4，tech-lead，subagent dispatch）** 基于 arch + ui-spec 产出 dev-plan。**移交 tech-lead 的 3 个 arch [ASSUMPTION] 缺口**（ui-spec 已 [ASSUMPTION] 桥接、根因在 arch，dev_planning 需 arch amendment 或任务卡消化）：R-004 API-011 缺 MapEdge 类型定义；R-006 API-013 timeline 缺 entryKind 字段；R-007 API-016 缺 usageStatus 操作（M-014 UsageProbe 契约未暴露）。pre_dev 人工检查点在 Phase 4→5 前（dev_planning 后）。
+- 已完成阶段: [requirements, architecture, ui_design]
 - 当前Sprint: —
 - 文档状态:
   - prd: approved
   - arch: approved
-  - ui-spec: 未开始
+  - ui-spec: approved
   - dev-plan: 未开始
   - test-report: 未开始
   - deploy-spec: 未开始

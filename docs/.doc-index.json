@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generated_at": "2026-06-24T03:35:27.753208+00:00",
+  "generated_at": "2026-06-24T04:19:47.122133+00:00",
   "documents": {
     "arch-keel-api": {
       "file_path": "docs/arch/arch-keel-api.md",
@@ -1338,20 +1338,381 @@
         "prd-keel-f010-f018": "c63c6b5e"
       }
     },
+    "review-ui-spec-keel-r1": {
+      "file_path": "docs/reviews/doc/REVIEW-ui-spec-keel-r1.md",
+      "doc_type": "review",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 140,
+      "est_tokens": 2574,
+      "content_hash": "88a55ade",
+      "sections": {},
+      "deps": [
+        "ui-spec-keel",
+        "ui-spec-keel-theme",
+        "ui-spec-keel-components",
+        "ui-spec-keel-pages-core",
+        "ui-spec-keel-pages-lifecycle"
+      ],
+      "dep_hashes": {
+        "ui-spec-keel": "321261bf",
+        "ui-spec-keel-theme": "5e3ec83c",
+        "ui-spec-keel-components": "139fcb0f",
+        "ui-spec-keel-pages-core": "9ab232b0",
+        "ui-spec-keel-pages-lifecycle": "4aef76dd"
+      }
+    },
+    "review-ui-spec-keel-r2": {
+      "file_path": "docs/reviews/doc/REVIEW-ui-spec-keel-r2.md",
+      "doc_type": "review",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 122,
+      "est_tokens": 1685,
+      "content_hash": "57679837",
+      "sections": {},
+      "deps": [
+        "ui-spec-keel",
+        "ui-spec-keel-theme",
+        "ui-spec-keel-components",
+        "ui-spec-keel-pages-core",
+        "ui-spec-keel-pages-lifecycle"
+      ],
+      "dep_hashes": {
+        "ui-spec-keel": "321261bf",
+        "ui-spec-keel-theme": "5e3ec83c",
+        "ui-spec-keel-components": "139fcb0f",
+        "ui-spec-keel-pages-core": "9ab232b0",
+        "ui-spec-keel-pages-lifecycle": "4aef76dd"
+      }
+    },
+    "ui-spec-keel-components": {
+      "file_path": "docs/ui-spec/ui-spec-keel-components.md",
+      "doc_type": "ui-spec",
+      "volume": "components",
+      "status": "approved",
+      "total_lines": 164,
+      "est_tokens": 3591,
+      "content_hash": "139fcb0f",
+      "sections": {
+        "2": {
+          "heading": "## 2. 组件清单",
+          "line_start": 23,
+          "line_end": 164,
+          "est_tokens": 3399,
+          "deps": [],
+          "level": 2,
+          "items": {
+            "UC-001": {
+              "heading": "### UC-001: 健康灯 / 健康 Pill（HealthPill）",
+              "line_start": 25,
+              "line_end": 31,
+              "est_tokens": 164,
+              "deps": []
+            },
+            "UC-002": {
+              "heading": "### UC-002: 能力节点卡（CapabilityNode）",
+              "line_start": 32,
+              "line_end": 38,
+              "est_tokens": 232,
+              "deps": []
+            },
+            "UC-003": {
+              "heading": "### UC-003: 关系连线（RelationEdge）",
+              "line_start": 39,
+              "line_end": 45,
+              "est_tokens": 230,
+              "deps": []
+            },
+            "UC-004": {
+              "heading": "### UC-004: 原语徽章（PrimitiveBadge）",
+              "line_start": 46,
+              "line_end": 53,
+              "est_tokens": 363,
+              "deps": []
+            },
+            "UC-005": {
+              "heading": "### UC-005: 能力详情卡（CapabilityDetailCard）",
+              "line_start": 54,
+              "line_end": 60,
+              "est_tokens": 136,
+              "deps": []
+            },
+            "UC-006": {
+              "heading": "### UC-006: 对话气泡（ChatBubble）",
+              "line_start": 61,
+              "line_end": 67,
+              "est_tokens": 135,
+              "deps": []
+            },
+            "UC-007": {
+              "heading": "### UC-007: 蓝图 diff 卡 / 人话变更说明书（BlueprintDiffCard）",
+              "line_start": 68,
+              "line_end": 74,
+              "est_tokens": 204,
+              "deps": []
+            },
+            "UC-008": {
+              "heading": "### UC-008: 影响预览条（BlastRadiusBanner）",
+              "line_start": 75,
+              "line_end": 81,
+              "est_tokens": 145,
+              "deps": []
+            },
+            "UC-009": {
+              "heading": "### UC-009: 健康问题卡（HealthIssueCard）",
+              "line_start": 82,
+              "line_end": 88,
+              "est_tokens": 167,
+              "deps": []
+            },
+            "UC-010": {
+              "heading": "### UC-010: 需你决策卡（DecisionCard）",
+              "line_start": 89,
+              "line_end": 95,
+              "est_tokens": 143,
+              "deps": []
+            },
+            "UC-011": {
+              "heading": "### UC-011: 安全红绿灯卡（SecurityChecklistCard）",
+              "line_start": 96,
+              "line_end": 102,
+              "est_tokens": 190,
+              "deps": []
+            },
+            "UC-012": {
+              "heading": "### UC-012: 时间线条目（TimelineEntry）",
+              "line_start": 103,
+              "line_end": 109,
+              "est_tokens": 215,
+              "deps": []
+            },
+            "UC-013": {
+              "heading": "### UC-013: 进度状态标（StatusChip）",
+              "line_start": 110,
+              "line_end": 116,
+              "est_tokens": 120,
+              "deps": []
+            },
+            "UC-014": {
+              "heading": "### UC-014: 修复中状态条（RepairingStatus）",
+              "line_start": 117,
+              "line_end": 123,
+              "est_tokens": 109,
+              "deps": []
+            },
+            "UC-015": {
+              "heading": "### UC-015: 通知 Toast（Toast）",
+              "line_start": 124,
+              "line_end": 130,
+              "est_tokens": 118,
+              "deps": []
+            },
+            "UC-016": {
+              "heading": "### UC-016: 确认模态 / 抽屉（ConfirmModal / Drawer）",
+              "line_start": 131,
+              "line_end": 137,
+              "est_tokens": 149,
+              "deps": []
+            },
+            "UC-017": {
+              "heading": "### UC-017: 空状态（EmptyState）",
+              "line_start": 138,
+              "line_end": 144,
+              "est_tokens": 112,
+              "deps": []
+            },
+            "UC-018": {
+              "heading": "### UC-018: 按钮（Button）",
+              "line_start": 145,
+              "line_end": 151,
+              "est_tokens": 133,
+              "deps": []
+            },
+            "UC-019": {
+              "heading": "### UC-019: 引擎安装 / 登录卡（EngineSetupCard）",
+              "line_start": 152,
+              "line_end": 158,
+              "est_tokens": 146,
+              "deps": []
+            },
+            "UC-020": {
+              "heading": "### UC-020: 用量 / 订阅徽标（UsageMeter）",
+              "line_start": 159,
+              "line_end": 164,
+              "est_tokens": 171,
+              "deps": []
+            }
+          }
+        }
+      },
+      "split_from": "ui-spec-keel",
+      "deps": [
+        "prd-keel",
+        "arch-keel",
+        "research-ui-design-direction-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "7c5be6fe",
+        "arch-keel": "341dacc0",
+        "research-ui-design-direction-keel": "fc504dea"
+      }
+    },
+    "ui-spec-keel-pages-core": {
+      "file_path": "docs/ui-spec/ui-spec-keel-pages-core.md",
+      "doc_type": "ui-spec",
+      "volume": "pages",
+      "status": "approved",
+      "total_lines": 100,
+      "est_tokens": 1921,
+      "content_hash": "9ab232b0",
+      "sections": {
+        "3": {
+          "heading": "## 3. 页面布局",
+          "line_start": 23,
+          "line_end": 100,
+          "est_tokens": 1744,
+          "deps": [],
+          "level": 2,
+          "items": {
+            "P-001": {
+              "heading": "### P-001: 三面工作区外壳（Workspace Shell）",
+              "line_start": 25,
+              "line_end": 36,
+              "est_tokens": 243,
+              "deps": []
+            },
+            "P-002": {
+              "heading": "### P-002: 能力地图面（Capability Map）",
+              "line_start": 37,
+              "line_end": 53,
+              "est_tokens": 505,
+              "deps": []
+            },
+            "P-003": {
+              "heading": "### P-003: 意图对话 + 蓝图 diff 确认（Intent → Blueprint Diff）",
+              "line_start": 54,
+              "line_end": 65,
+              "est_tokens": 273,
+              "deps": []
+            },
+            "P-004": {
+              "heading": "### P-004: 应用实时预览面（App Preview）",
+              "line_start": 66,
+              "line_end": 77,
+              "est_tokens": 196,
+              "deps": []
+            },
+            "P-005": {
+              "heading": "### P-005: 实现进度（Implementation Progress）",
+              "line_start": 78,
+              "line_end": 89,
+              "est_tokens": 248,
+              "deps": []
+            },
+            "P-006": {
+              "heading": "### P-006: 健康调和（Health & Reconcile）",
+              "line_start": 90,
+              "line_end": 100,
+              "est_tokens": 272,
+              "deps": []
+            }
+          }
+        }
+      },
+      "split_from": "ui-spec-keel",
+      "deps": [
+        "prd-keel",
+        "arch-keel",
+        "research-ui-design-direction-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "7c5be6fe",
+        "arch-keel": "341dacc0",
+        "research-ui-design-direction-keel": "fc504dea"
+      }
+    },
+    "ui-spec-keel-pages-lifecycle": {
+      "file_path": "docs/ui-spec/ui-spec-keel-pages-lifecycle.md",
+      "doc_type": "ui-spec",
+      "volume": "pages",
+      "status": "approved",
+      "total_lines": 83,
+      "est_tokens": 1416,
+      "content_hash": "4aef76dd",
+      "sections": {
+        "3": {
+          "heading": "## 3. 页面布局",
+          "line_start": 23,
+          "line_end": 83,
+          "est_tokens": 1231,
+          "deps": [],
+          "level": 2,
+          "items": {
+            "P-007": {
+              "heading": "### P-007: 新项目上手 + 引擎安装/登录（Onboarding）",
+              "line_start": 25,
+              "line_end": 36,
+              "est_tokens": 307,
+              "deps": []
+            },
+            "P-008": {
+              "heading": "### P-008: 意图日志时光机（Intent Log & Time Machine）",
+              "line_start": 37,
+              "line_end": 48,
+              "est_tokens": 239,
+              "deps": []
+            },
+            "P-009": {
+              "heading": "### P-009: 一键上线 + 安全体检（Deploy & Security Audit）",
+              "line_start": 49,
+              "line_end": 60,
+              "est_tokens": 213,
+              "deps": []
+            },
+            "P-010": {
+              "heading": "### P-010: 导出交接（Export & Handoff）",
+              "line_start": 61,
+              "line_end": 72,
+              "est_tokens": 227,
+              "deps": []
+            },
+            "P-011": {
+              "heading": "### P-011: 自由实现区（Escape Hatch）",
+              "line_start": 73,
+              "line_end": 83,
+              "est_tokens": 239,
+              "deps": []
+            }
+          }
+        }
+      },
+      "split_from": "ui-spec-keel",
+      "deps": [
+        "prd-keel",
+        "arch-keel",
+        "research-ui-design-direction-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "7c5be6fe",
+        "arch-keel": "341dacc0",
+        "research-ui-design-direction-keel": "fc504dea"
+      }
+    },
     "ui-spec-keel-theme": {
       "file_path": "docs/ui-spec/ui-spec-keel-theme.md",
       "doc_type": "ui-spec",
       "volume": "theme",
-      "status": "draft",
+      "status": "approved",
       "total_lines": 107,
-      "est_tokens": 1280,
-      "content_hash": "b937b7dd",
+      "est_tokens": 1307,
+      "content_hash": "5e3ec83c",
       "sections": {
         "4": {
           "heading": "## 4. 主题方案",
           "line_start": 21,
           "line_end": 107,
-          "est_tokens": 1158,
+          "est_tokens": 1184,
           "deps": [],
           "level": 2,
           "items": {
@@ -1359,21 +1720,21 @@
               "heading": "### THEME-01: Calm Cartography（沉静海图 · 暖调蓝图）",
               "line_start": 23,
               "line_end": 107,
-              "est_tokens": 1154,
+              "est_tokens": 1180,
               "deps": []
             },
             "4.1": {
               "heading": "##### 4.1.4 对比度与无障碍",
               "line_start": 94,
               "line_end": 100,
-              "est_tokens": 105,
+              "est_tokens": 126,
               "deps": []
             },
             "4.2": {
               "heading": "#### 4.2 适配组件",
               "line_start": 101,
               "line_end": 104,
-              "est_tokens": 52,
+              "est_tokens": 56,
               "deps": []
             },
             "4.3": {
@@ -1392,6 +1753,105 @@
         "research-ui-design-direction-keel"
       ],
       "dep_hashes": {
+        "arch-keel": "341dacc0",
+        "research-ui-design-direction-keel": "fc504dea"
+      }
+    },
+    "ui-spec-keel": {
+      "file_path": "docs/ui-spec/ui-spec-keel.md",
+      "doc_type": "ui-spec",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 120,
+      "est_tokens": 1789,
+      "content_hash": "321261bf",
+      "sections": {
+        "0": {
+          "heading": "## 0. 设计方向",
+          "line_start": 29,
+          "line_end": 35,
+          "est_tokens": 146,
+          "deps": [],
+          "level": 2,
+          "items": {}
+        },
+        "1": {
+          "heading": "## 1. 设计系统",
+          "line_start": 36,
+          "line_end": 58,
+          "est_tokens": 327,
+          "deps": [],
+          "level": 2,
+          "items": {
+            "1.1": {
+              "heading": "### 1.1 色彩",
+              "line_start": 40,
+              "line_end": 55,
+              "est_tokens": 223,
+              "deps": []
+            },
+            "1.2": {
+              "heading": "### 1.2 排版与间距",
+              "line_start": 56,
+              "line_end": 58,
+              "est_tokens": 32,
+              "deps": []
+            }
+          }
+        },
+        "2": {
+          "heading": "## 2. 组件清单",
+          "line_start": 59,
+          "line_end": 62,
+          "est_tokens": 39,
+          "deps": [],
+          "level": 2,
+          "items": {}
+        },
+        "3": {
+          "heading": "## 3. 页面布局",
+          "line_start": 63,
+          "line_end": 69,
+          "est_tokens": 83,
+          "deps": [],
+          "level": 2,
+          "items": {}
+        },
+        "4": {
+          "heading": "## 4. 导航与路由",
+          "line_start": 70,
+          "line_end": 89,
+          "est_tokens": 313,
+          "deps": [],
+          "level": 2,
+          "items": {}
+        },
+        "5": {
+          "heading": "## 5. 响应式策略",
+          "line_start": 90,
+          "line_end": 103,
+          "est_tokens": 226,
+          "deps": [],
+          "level": 2,
+          "items": {}
+        },
+        "6": {
+          "heading": "## 6. 屏↔功能映射总表",
+          "line_start": 104,
+          "line_end": 120,
+          "est_tokens": 390,
+          "deps": [],
+          "level": 2,
+          "items": {}
+        }
+      },
+      "deps": [
+        "prd-keel",
+        "arch-keel",
+        "research-ui-design-direction-keel"
+      ],
+      "dep_hashes": {
+        "prd-keel": "7c5be6fe",
         "arch-keel": "341dacc0",
         "research-ui-design-direction-keel": "fc504dea"
       }
@@ -1781,6 +2241,223 @@
         "doc_id": "prd-keel-f010-f018",
         "section": "2",
         "file_path": "docs/prd/prd-keel-f010-f018.md"
+      }
+    ],
+    "UC-001": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-002": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-003": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-004": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-005": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-006": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-007": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-008": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-009": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-010": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-011": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-012": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-013": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-014": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-015": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-016": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-017": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-018": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-019": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "UC-020": [
+      {
+        "doc_id": "ui-spec-keel-components",
+        "section": "2",
+        "file_path": "docs/ui-spec/ui-spec-keel-components.md"
+      }
+    ],
+    "P-001": [
+      {
+        "doc_id": "ui-spec-keel-pages-core",
+        "section": "3",
+        "file_path": "docs/ui-spec/ui-spec-keel-pages-core.md"
+      }
+    ],
+    "P-002": [
+      {
+        "doc_id": "ui-spec-keel-pages-core",
+        "section": "3",
+        "file_path": "docs/ui-spec/ui-spec-keel-pages-core.md"
+      }
+    ],
+    "P-003": [
+      {
+        "doc_id": "ui-spec-keel-pages-core",
+        "section": "3",
+        "file_path": "docs/ui-spec/ui-spec-keel-pages-core.md"
+      }
+    ],
+    "P-004": [
+      {
+        "doc_id": "ui-spec-keel-pages-core",
+        "section": "3",
+        "file_path": "docs/ui-spec/ui-spec-keel-pages-core.md"
+      }
+    ],
+    "P-005": [
+      {
+        "doc_id": "ui-spec-keel-pages-core",
+        "section": "3",
+        "file_path": "docs/ui-spec/ui-spec-keel-pages-core.md"
+      }
+    ],
+    "P-006": [
+      {
+        "doc_id": "ui-spec-keel-pages-core",
+        "section": "3",
+        "file_path": "docs/ui-spec/ui-spec-keel-pages-core.md"
+      }
+    ],
+    "P-007": [
+      {
+        "doc_id": "ui-spec-keel-pages-lifecycle",
+        "section": "3",
+        "file_path": "docs/ui-spec/ui-spec-keel-pages-lifecycle.md"
+      }
+    ],
+    "P-008": [
+      {
+        "doc_id": "ui-spec-keel-pages-lifecycle",
+        "section": "3",
+        "file_path": "docs/ui-spec/ui-spec-keel-pages-lifecycle.md"
+      }
+    ],
+    "P-009": [
+      {
+        "doc_id": "ui-spec-keel-pages-lifecycle",
+        "section": "3",
+        "file_path": "docs/ui-spec/ui-spec-keel-pages-lifecycle.md"
+      }
+    ],
+    "P-010": [
+      {
+        "doc_id": "ui-spec-keel-pages-lifecycle",
+        "section": "3",
+        "file_path": "docs/ui-spec/ui-spec-keel-pages-lifecycle.md"
+      }
+    ],
+    "P-011": [
+      {
+        "doc_id": "ui-spec-keel-pages-lifecycle",
+        "section": "3",
+        "file_path": "docs/ui-spec/ui-spec-keel-pages-lifecycle.md"
       }
     ],
     "THEME-01": [
