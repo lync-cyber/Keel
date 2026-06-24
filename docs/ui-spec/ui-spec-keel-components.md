@@ -39,7 +39,7 @@ required_sections:
 ### UC-003: 关系连线（RelationEdge）
 - **变体**: normal, diff-added（`color.diff-added`=keel 虚线）, diff-touched（`color.diff-touched` 紫）, diff-unchanged（`color.diff-unchanged` 淡化）, blast-highlight（影响预览高亮）。
 - **视觉差异**: 自信墨色细线（`color.ink` 1.5px），带方向箭头；diff 态按上表换色 / 虚线；blast radius 时触及边加粗高亮、安全区边降透明。
-- **Props**: `{ from, to, relationType, diffState?, highlighted? }`（对应 API-011 `edges: MapEdge[]`）。**[ASSUMPTION]**: API-011 `types:` 段当前仅定义 MapNode，MapEdge 字段未声明；本 Props 为 ui-spec 提出的 MapEdge 形态，待 arch API-011 补 `MapEdge: { id, from, to, relationType, diffState?, highlighted? }` 后对账（根因在 arch，R-004）。
+- **Props**: `{ from, to, relationType, diffState?, highlighted? }`（对应 API-011 `MapEdge: { id, from, to, relationType, diffState?: enum(added|touched|unchanged), highlighted? }`，arch-keel-api 已定义）。
 - **映射功能**: F-006 AC-002, F-007 AC-001
 - **交互说明**: 只读；hover 显示关系通俗说明（如「文章列表用到登录」），不暴露 relation 技术类型名。
 
@@ -103,7 +103,7 @@ required_sections:
 ### UC-012: 时间线条目（TimelineEntry）
 - **变体**: change（普通变更）, decision（需你决策留痕）, deploy（上线动作）, current（当前所在点）。
 - **视觉差异**: 竖向时间线节点 + 自然语言摘要（「添加了用户收藏文章功能」），时间 `font.mono` `color.muted`；不显示 commit 哈希/git 命令/代码 diff；current 态 `color.keel` 高亮。
-- **Props**: `{ kind, plainSummary, timestamp, isCurrent, onRollback }`（plainSummary/timestamp 对应 API-013 timeline entries）。**[ASSUMPTION]**: `kind`（change/decision/deploy）待 arch API-013 timeline entries 补 `entryKind: enum(change|decision|deploy)` 字段；补全前由前端按条目内容推断变体（根因在 arch，R-006）。
+- **Props**: `{ kind, plainSummary, timestamp, isCurrent, onRollback }`（对应 API-013 timeline entries，`kind` 取自 `entryKind: enum(change|decision|deploy)` 驱动变体；arch-keel-api 已定义）。
 - **映射功能**: F-013 AC-002/AC-004
 - **交互说明**: 「回到这里」→ 时光机回滚（蓝图+代码+健康灯同步）；回滚前若有通道外改动先弹 UC-010 untracked-rollback 确认（F-013 AC-006）。
 
@@ -159,6 +159,6 @@ required_sections:
 ### UC-020: 用量 / 订阅徽标（UsageMeter）
 - **变体**: subscription（订阅计划+额度）, apikey（Key 额度+消耗）, unknown（引擎侧未提供）。
 - **视觉差异**: 顶栏角落紧凑徽标，`font.mono` 数字 + 细环进度；点击展开明细；措辞标明「执行引擎侧消耗」与 Keel 定价无关。
-- **Props**: `{ planLabel, used, quota, source }`（数据由引擎侧接口提供）。**[ASSUMPTION]**: API-016 当前仅定义 scaffold/detectEngine/authenticate，无用量查询操作；M-014 内部 UsageProbe 的契约待 arch 补 API-016 `usageStatus` 操作（返回 `{ planLabel, used, quota, source }`）后对账（根因在 arch，R-007）。
+- **Props**: `{ planLabel, used, quota, source }`（数据由 API-016 `usageStatus` 操作提供，返回 `{ planLabel, used, quota, source: enum(subscription|api_key|unknown) }`；arch-keel-api 已定义）。
 - **映射功能**: F-012 AC-007
 - **交互说明**: 仅作执行引擎消耗透明度展示（定价延后 ADR-0005）；无 Keel 自身计费入口。

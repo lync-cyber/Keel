@@ -183,8 +183,9 @@ response:
   ok:    { schema: "{ nodes: MapNode[], edges: MapEdge[], renderMs: number(≤1000) }" }
   error: { schema: "KeelError" }
 types:
-  MapNode: "{ id, plainName, plainDetail, kind, health: enum(green|amber|red), status, isEscapeHatch: boolean }"
-notes: 仅 surfaces_on_map=true；只读（F-006 AC-006）；红色节点带问题详情与修复入口
+  MapNode: "{ id, plainName, plainDetail, kind: enum(module|port|entity|relation|workflow|statemachine|constraint), health: enum(green|amber|red), status, isEscapeHatch: boolean }"
+  MapEdge: "{ id, from, to, relationType, diffState?: enum(added|touched|unchanged), highlighted?: boolean }"
+notes: 仅 surfaces_on_map=true；只读（F-006 AC-006）；红色节点带问题详情与修复入口；kind 对应 F-001 AC-001 七原语，isEscapeHatch 为 Module 修饰位（非第八原语）
 ```
 
 ### API-012: 应用预览
@@ -211,7 +212,7 @@ response:
   ok:    { schema: "{ entryId: string, gitRef?: string }" }
   error: { schema: "KeelError" }
 operations:
-  timeline: { in: "{ limit? }", out: "{ entries: {entryId, plainSummary, timestamp}[] }" }   # 查询 ≤3s
+  timeline: { in: "{ limit? }", out: "{ entries: {entryId, plainSummary, timestamp, entryKind: enum(change|decision|deploy)}[] }" }   # 查询 ≤3s；entryKind 驱动时间线条目变体
   rollback: { in: "{ entryId }", out: "{ restored: boolean, untrackedChangePrompt? }" }       # 通道外改动先提示（F-013 AC-006）
 ```
 
@@ -252,4 +253,5 @@ response:
 operations:
   detectEngine: { in: "{}", out: "{ ready: boolean, kind?: enum(acp|sdk|cli), installGuide? }" }
   authenticate: { in: "{ method: enum(oauth|api_key) }", out: "{ authenticated: boolean }" }   # 本地存储最小权限
+  usageStatus:  { in: "{}", out: "{ planLabel: string, used: number, quota: number, source: enum(subscription|api_key|unknown) }" }   # M-014 UsageProbe 暴露：引擎侧订阅/用量（F-012 AC-007），仅消耗透明度
 ```

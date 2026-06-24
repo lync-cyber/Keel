@@ -30,7 +30,7 @@
 
 - 当前阶段: ui_design（完成，待 go/no-go 进入 dev_planning）
 - 上次完成: ui-designer — **ui-spec 五卷 approved**（main/theme/components/pages-core/pages-lifecycle，docs/ui-spec/）。doc-review r2 = approved_with_notes：r1 的 2 HIGH+6 MED+2 LOW 全 RESOLVED、r2 新增 N-001 LOW 亦已修，validate OK。设计方向「沉静海图/暖调蓝图」（藏青#2b3f72+暖纸#f1ece1+三声部排版），全量覆盖 F-001~F-018（§6 屏↔功能映射总表，P-001~P-011 × UC-001~UC-020）。能力地图渲染选型推荐 React Flow v12（懒加载缓解 bundle，备选 D3，重评条件见 pages-core P-002）。Penpot 设计系统（文件「Keel」6 集 54 token + 21 colors/8 typo + 核心组件）为 theme 卷事实源。
-- 下一步行动: **dev_planning（Phase 4，tech-lead，subagent dispatch）** 基于 arch + ui-spec 产出 dev-plan。**移交 tech-lead 的 3 个 arch [ASSUMPTION] 缺口**（ui-spec 已 [ASSUMPTION] 桥接、根因在 arch，dev_planning 需 arch amendment 或任务卡消化）：R-004 API-011 缺 MapEdge 类型定义；R-006 API-013 timeline 缺 entryKind 字段；R-007 API-016 缺 usageStatus 操作（M-014 UsageProbe 契约未暴露）。pre_dev 人工检查点在 Phase 4→5 前（dev_planning 后）。
+- 下一步行动: **dev_planning（Phase 4，tech-lead，subagent dispatch）** 基于 arch + ui-spec 产出 dev-plan。doc-review r2 暴露的 3 个 arch 契约缺口已补全（amendment 提交于 ui-spec 合并后）：API-011 补 `MapEdge` 类型（+ MapNode.kind 显式七原语枚举）、API-013 timeline 补 `entryKind`、API-016 补 `usageStatus` 操作；ui-spec UC-003/012/020 的 [ASSUMPTION] 桥接已闭环对账，validate OK。pre_dev 人工检查点在 Phase 4→5 前（dev_planning 后）。
 - 已完成阶段: [requirements, architecture, ui_design]
 - 当前Sprint: —
 - 文档状态:

@@ -1,21 +1,21 @@
 {
   "version": "1",
-  "generated_at": "2026-06-24T04:19:47.122133+00:00",
+  "generated_at": "2026-06-24T07:27:36.934749+00:00",
   "documents": {
     "arch-keel-api": {
       "file_path": "docs/arch/arch-keel-api.md",
       "doc_type": "arch",
       "volume": "api",
       "status": "approved",
-      "total_lines": 255,
-      "est_tokens": 3276,
-      "content_hash": "45e3e419",
+      "total_lines": 257,
+      "est_tokens": 3437,
+      "content_hash": "a5b9b781",
       "sections": {
         "3": {
           "heading": "## 3. 接口契约",
           "line_start": 21,
-          "line_end": 255,
-          "est_tokens": 3170,
+          "line_end": 257,
+          "est_tokens": 3331,
           "deps": [],
           "level": 2,
           "items": {
@@ -92,43 +92,43 @@
             "API-011": {
               "heading": "### API-011: 能力地图视图模型",
               "line_start": 175,
-              "line_end": 189,
-              "est_tokens": 174,
+              "line_end": 190,
+              "est_tokens": 253,
               "deps": []
             },
             "API-012": {
               "heading": "### API-012: 应用预览",
-              "line_start": 190,
-              "line_end": 201,
+              "line_start": 191,
+              "line_end": 202,
               "est_tokens": 108,
               "deps": []
             },
             "API-013": {
               "heading": "### API-013: 意图日志与时光机",
-              "line_start": 202,
-              "line_end": 217,
-              "est_tokens": 218,
+              "line_start": 203,
+              "line_end": 218,
+              "est_tokens": 239,
               "deps": []
             },
             "API-014": {
               "heading": "### API-014: 上线与安全体检",
-              "line_start": 218,
-              "line_end": 230,
+              "line_start": 219,
+              "line_end": 231,
               "est_tokens": 169,
               "deps": []
             },
             "API-015": {
               "heading": "### API-015: 导出与交接",
-              "line_start": 231,
-              "line_end": 242,
+              "line_start": 232,
+              "line_end": 243,
               "est_tokens": 136,
               "deps": []
             },
             "API-016": {
               "heading": "### API-016: 项目初始化",
-              "line_start": 243,
-              "line_end": 255,
-              "est_tokens": 178,
+              "line_start": 244,
+              "line_end": 257,
+              "est_tokens": 240,
               "deps": []
             }
           }
@@ -1180,7 +1180,7 @@
       "dep_hashes": {
         "arch-keel": "341dacc0",
         "arch-keel-modules": "f8a5b2b9",
-        "arch-keel-api": "45e3e419",
+        "arch-keel-api": "a5b9b781",
         "arch-keel-data": "aad6c2b6"
       }
     },
@@ -1202,7 +1202,7 @@
       "dep_hashes": {
         "arch-keel": "341dacc0",
         "arch-keel-modules": "f8a5b2b9",
-        "arch-keel-api": "45e3e419",
+        "arch-keel-api": "a5b9b781",
         "arch-keel-data": "aad6c2b6"
       }
     },
@@ -1357,7 +1357,7 @@
       "dep_hashes": {
         "ui-spec-keel": "321261bf",
         "ui-spec-keel-theme": "5e3ec83c",
-        "ui-spec-keel-components": "139fcb0f",
+        "ui-spec-keel-components": "932f12cb",
         "ui-spec-keel-pages-core": "9ab232b0",
         "ui-spec-keel-pages-lifecycle": "4aef76dd"
       }
@@ -1381,7 +1381,7 @@
       "dep_hashes": {
         "ui-spec-keel": "321261bf",
         "ui-spec-keel-theme": "5e3ec83c",
-        "ui-spec-keel-components": "139fcb0f",
+        "ui-spec-keel-components": "932f12cb",
         "ui-spec-keel-pages-core": "9ab232b0",
         "ui-spec-keel-pages-lifecycle": "4aef76dd"
       }
@@ -1392,14 +1392,14 @@
       "volume": "components",
       "status": "approved",
       "total_lines": 164,
-      "est_tokens": 3591,
-      "content_hash": "139fcb0f",
+      "est_tokens": 3494,
+      "content_hash": "932f12cb",
       "sections": {
         "2": {
           "heading": "## 2. 组件清单",
           "line_start": 23,
           "line_end": 164,
-          "est_tokens": 3399,
+          "est_tokens": 3303,
           "deps": [],
           "level": 2,
           "items": {
@@ -1421,7 +1421,7 @@
               "heading": "### UC-003: 关系连线（RelationEdge）",
               "line_start": 39,
               "line_end": 45,
-              "est_tokens": 230,
+              "est_tokens": 195,
               "deps": []
             },
             "UC-004": {
@@ -1484,7 +1484,7 @@
               "heading": "### UC-012: 时间线条目（TimelineEntry）",
               "line_start": 103,
               "line_end": 109,
-              "est_tokens": 215,
+              "est_tokens": 179,
               "deps": []
             },
             "UC-013": {
@@ -1540,7 +1540,7 @@
               "heading": "### UC-020: 用量 / 订阅徽标（UsageMeter）",
               "line_start": 159,
               "line_end": 164,
-              "est_tokens": 171,
+              "est_tokens": 145,
               "deps": []
             }
           }
