@@ -21,4 +21,4 @@ R1 可读半边需要可用性测试。测试对象有两个候选：现有 web/
 ## 后果
 
 - R1 测试关键路径不被嵌入式平移阻塞。
-- 嵌入式市场分析（`embedded-market-analysis.html`）降为 R1 通过后的后续项。
+- 嵌入式市场分析（`docs/reference/embedded-market-analysis.html`）降为 R1 通过后的后续项。

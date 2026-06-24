@@ -19,13 +19,13 @@ deps: []
 把产物分三层、各用最省事的形态：
 
 - **探索性**（决策、草图）：ADR Markdown（一决策一文件）+ Mermaid 内嵌。
-- **真相源**（原语 + 实例）：`archive/meta-model.md` 规格 + `blueprint.example.yaml`（YAML + 注释）。
+- **真相源**（原语 + 实例）：`blueprint.schema.json` 元模型 + `blueprint.example.yaml`（YAML + 注释）。
 - **机器门**（形态校验）：`blueprint.schema.json`，降级为不手读、只跑校验。
 
 **现在不上 CUE/Pkl**；等到要编译强制时再评估。YAML 优于 TOML/KDL（深嵌套 + 注释 + 已在用）。
 
 ## 后果
 
-- 新增 `archive/meta-model.md`（原 docs/meta-model.md）、`docs/decisions/`。
+- 新增 `docs/decisions/`（ADR 一决策一文件）。
 - 一旦原语定稿，其视图从规范实例渲染，不另维护第二份真相。
 - 升级路径：要强制时原语定义 → CUE 或保留 JSON Schema；图 → 由蓝图生成 Structurizr/D2。
