@@ -3,7 +3,7 @@ id: "dev-plan-keel-s5"
 version: "1.0.0"
 doc_type: dev-plan
 author: tech-lead
-status: draft
+status: approved
 deps: ["arch-keel", "ui-spec-keel"]
 consumers: [developer, qa-engineer]
 volume: sprint

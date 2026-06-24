@@ -28,16 +28,16 @@
 
 ## 项目状态 (orchestrator专属写入区，其他Agent禁止修改)
 
-- 当前阶段: dev_planning（进行中，tech-lead 产出 dev-plan）
-- 上次完成: ui-designer — **ui-spec 五卷 approved**（main/theme/components/pages-core/pages-lifecycle，docs/ui-spec/）。doc-review r2 = approved_with_notes：r1 的 2 HIGH+6 MED+2 LOW 全 RESOLVED、r2 新增 N-001 LOW 亦已修，validate OK。设计方向「沉静海图/暖调蓝图」（藏青#2b3f72+暖纸#f1ece1+三声部排版），全量覆盖 F-001~F-018（§6 屏↔功能映射总表，P-001~P-011 × UC-001~UC-020）。能力地图渲染选型推荐 React Flow v12（懒加载缓解 bundle，备选 D3，重评条件见 pages-core P-002）。Penpot 设计系统（文件「Keel」6 集 54 token + 21 colors/8 typo + 核心组件）为 theme 卷事实源。
-- 下一步行动: **dev_planning（Phase 4，tech-lead，subagent dispatch）** 基于 arch + ui-spec 产出 dev-plan。doc-review r2 暴露的 3 个 arch 契约缺口已补全（amendment 提交于 ui-spec 合并后）：API-011 补 `MapEdge` 类型（+ MapNode.kind 显式七原语枚举）、API-013 timeline 补 `entryKind`、API-016 补 `usageStatus` 操作；ui-spec UC-003/012/020 的 [ASSUMPTION] 桥接已闭环对账，validate OK。pre_dev 人工检查点在 Phase 4→5 前（dev_planning 后）。
-- 已完成阶段: [requirements, architecture, ui_design]
+- 当前阶段: dev_planning（完成，**待 pre_dev 人工检查点 → development go/no-go**）
+- 上次完成: tech-lead — **dev-plan approved**（主卷 + s1~s6，docs/dev-plan/，57 任务/6 Sprint）。doc-review：r1 needs_revision（Layer 1 全 FAIL：缺必填节/deliverables/tdd_acceptance、AC 缺可观测动词）→ 修订后全 7 卷 Layer 1 PASS → r2 approved_with_notes（F-001~F-018 全覆盖、M-001~M-015 全承载、依赖图无环权重 32、无工时估算/行为门/非 TS 任务）；r2 两 note 已修（R-010 主卷补技术栈分层说明 §5.1、R-011 T-008 security_sensitive→tdd_mode:standard）。关键路径 T-001→T-004→T-013→T-017→T-019→T-021→T-025→T-036→T-037→T-052→T-056→T-057。
+- 下一步行动: **pre_dev 人工检查点（development go/no-go）** —— 命中 MANUAL_REVIEW_CHECKPOINTS，必须用户确认才进 Phase 5。确认后 development 由 tdd-engine 编排，从 Sprint 1（T-001~T-009 蓝图核心+门禁骨架，基础设施）起；基础设施任务 T-001/T-004 是多数下游前置。standard 模式 TDD 按各卡 tdd_mode（standard: T-001/004/005/006/010/011/013/017/019/021/023/025/030/039/044/047/052/054 + T-008）。
+- 已完成阶段: [requirements, architecture, ui_design, dev_planning]
 - 当前Sprint: —
 - 文档状态:
   - prd: approved
   - arch: approved
   - ui-spec: approved
-  - dev-plan: 未开始
+  - dev-plan: approved
   - test-report: 未开始
   - deploy-spec: 未开始
   <!-- changelog 由 devops 产出但不纳入门禁追踪 -->

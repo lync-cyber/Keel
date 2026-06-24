@@ -3,7 +3,7 @@ id: "dev-plan-keel-s1"
 version: "1.0.0"
 doc_type: dev-plan
 author: tech-lead
-status: draft
+status: approved
 deps: ["arch-keel", "ui-spec-keel"]
 consumers: [developer, qa-engineer]
 volume: sprint
@@ -209,7 +209,7 @@ required_sections:
 - **模块**: —（数据层，供 M-011/M-005/M-014 使用）
 - **接口**: E-001~E-006
 - **task_kind**: chore
-- **tdd_mode**: light
+- **tdd_mode**: standard
 - **tdd_refactor**: skip
 - **security_sensitive**: true
 - **tdd_acceptance**:

@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generated_at": "2026-06-24T07:49:28.181267+00:00",
+  "generated_at": "2026-06-24T08:31:41.066207+00:00",
   "documents": {
     "arch-keel-api": {
       "file_path": "docs/arch/arch-keel-api.md",
@@ -636,16 +636,16 @@
       "file_path": "docs/dev-plan/dev-plan-keel-s1.md",
       "doc_type": "dev-plan",
       "volume": "sprint",
-      "status": "draft",
-      "total_lines": 247,
-      "est_tokens": 4546,
-      "content_hash": "32719233",
+      "status": "approved",
+      "total_lines": 249,
+      "est_tokens": 4735,
+      "content_hash": "8377eed0",
       "sections": {
         "3": {
           "heading": "## 3. 任务卡详细",
           "line_start": 21,
-          "line_end": 247,
-          "est_tokens": 4422,
+          "line_end": 249,
+          "est_tokens": 4611,
           "deps": [],
           "level": 2,
           "items": {
@@ -653,14 +653,14 @@
               "heading": "### T-001: 蓝图 Schema 与图 IR 核心",
               "line_start": 23,
               "line_end": 53,
-              "est_tokens": 796,
+              "est_tokens": 814,
               "deps": []
             },
             "T-002": {
               "heading": "### T-002: 蓝图加载 / 序列化 / 持久化",
               "line_start": 54,
               "line_end": 76,
-              "est_tokens": 396,
+              "est_tokens": 422,
               "deps": []
             },
             "T-003": {
@@ -688,7 +688,7 @@
               "heading": "### T-006: 回归守护（RegressionGuard）",
               "line_start": 161,
               "line_end": 184,
-              "est_tokens": 444,
+              "est_tokens": 471,
               "deps": []
             },
             "T-007": {
@@ -702,14 +702,14 @@
               "heading": "### T-008: 元数据 SQLite Schema + E-001~E-006",
               "line_start": 206,
               "line_end": 229,
-              "est_tokens": 400,
+              "est_tokens": 465,
               "deps": []
             },
             "T-009": {
               "heading": "### T-009: [VALIDATION] 蓝图核心与门禁骨架",
               "line_start": 230,
-              "line_end": 247,
-              "est_tokens": 328,
+              "line_end": 249,
+              "est_tokens": 380,
               "deps": []
             }
           }
@@ -729,16 +729,16 @@
       "file_path": "docs/dev-plan/dev-plan-keel-s2.md",
       "doc_type": "dev-plan",
       "volume": "sprint",
-      "status": "draft",
-      "total_lines": 249,
-      "est_tokens": 4470,
-      "content_hash": "d295fee1",
+      "status": "approved",
+      "total_lines": 251,
+      "est_tokens": 4701,
+      "content_hash": "645e8309",
       "sections": {
         "3": {
           "heading": "## 3. 任务卡详细",
           "line_start": 21,
-          "line_end": 249,
-          "est_tokens": 4344,
+          "line_end": 251,
+          "est_tokens": 4573,
           "deps": [],
           "level": 2,
           "items": {
@@ -753,21 +753,21 @@
               "heading": "### T-011: 蓝图对账与漂移分类",
               "line_start": 48,
               "line_end": 73,
-              "est_tokens": 525,
+              "est_tokens": 565,
               "deps": []
             },
             "T-012": {
               "heading": "### T-012: ChangeWatcher 通道外改动发现",
               "line_start": 74,
               "line_end": 96,
-              "est_tokens": 381,
+              "est_tokens": 405,
               "deps": []
             },
             "T-013": {
               "heading": "### T-013: 执行引擎抽象层（ACP / SDK / CLI Adapter）",
               "line_start": 97,
               "line_end": 128,
-              "est_tokens": 738,
+              "est_tokens": 773,
               "deps": []
             },
             "T-014": {
@@ -788,21 +788,21 @@
               "heading": "### T-016: 蓝图 Diff + 通俗说明 + Blast Radius 展示",
               "line_start": 179,
               "line_end": 204,
-              "est_tokens": 449,
+              "est_tokens": 477,
               "deps": []
             },
             "T-017": {
               "heading": "### T-017: 契约冻结门（FrozenContractSet + E-004）",
               "line_start": 205,
               "line_end": 229,
-              "est_tokens": 488,
+              "est_tokens": 536,
               "deps": []
             },
             "T-018": {
               "heading": "### T-018: [VALIDATION] 漂移检测 + 意图捕获核心流程",
               "line_start": 230,
-              "line_end": 249,
-              "est_tokens": 388,
+              "line_end": 251,
+              "est_tokens": 440,
               "deps": []
             }
           }
@@ -822,16 +822,16 @@
       "file_path": "docs/dev-plan/dev-plan-keel-s3.md",
       "doc_type": "dev-plan",
       "volume": "sprint",
-      "status": "draft",
-      "total_lines": 217,
-      "est_tokens": 3564,
-      "content_hash": "79e4a475",
+      "status": "approved",
+      "total_lines": 219,
+      "est_tokens": 3757,
+      "content_hash": "b71439e0",
       "sections": {
         "3": {
           "heading": "## 3. 任务卡详细",
           "line_start": 21,
-          "line_end": 217,
-          "est_tokens": 3440,
+          "line_end": 219,
+          "est_tokens": 3632,
           "deps": [],
           "level": 2,
           "items": {
@@ -839,7 +839,7 @@
               "heading": "### T-019: DAG 调度器（DagScheduler）",
               "line_start": 23,
               "line_end": 45,
-              "est_tokens": 343,
+              "est_tokens": 354,
               "deps": []
             },
             "T-020": {
@@ -853,7 +853,7 @@
               "heading": "### T-021: Worktree 隔离与回滚（WorktreeIsolator）",
               "line_start": 68,
               "line_end": 92,
-              "est_tokens": 441,
+              "est_tokens": 540,
               "deps": []
             },
             "T-022": {
@@ -881,14 +881,14 @@
               "heading": "### T-025: 调和引擎（切片重生成 + 内容保护）",
               "line_start": 168,
               "line_end": 196,
-              "est_tokens": 576,
+              "est_tokens": 605,
               "deps": []
             },
             "T-026": {
               "heading": "### T-026: [VALIDATION] 实现执行 + 自愈 + 调和端到端流程",
               "line_start": 197,
-              "line_end": 217,
-              "est_tokens": 358,
+              "line_end": 219,
+              "est_tokens": 410,
               "deps": []
             }
           }
@@ -908,16 +908,16 @@
       "file_path": "docs/dev-plan/dev-plan-keel-s4.md",
       "doc_type": "dev-plan",
       "volume": "sprint",
-      "status": "draft",
-      "total_lines": 316,
-      "est_tokens": 5629,
-      "content_hash": "750a5ff0",
+      "status": "approved",
+      "total_lines": 318,
+      "est_tokens": 5816,
+      "content_hash": "9f4413c7",
       "sections": {
         "3": {
           "heading": "## 3. 任务卡详细",
           "line_start": 21,
-          "line_end": 316,
-          "est_tokens": 5503,
+          "line_end": 318,
+          "est_tokens": 5689,
           "deps": [],
           "level": 2,
           "items": {
@@ -953,7 +953,7 @@
               "heading": "### T-031: 健康叠加 + 节点 Status（M-009 HealthOverlay）",
               "line_start": 135,
               "line_end": 160,
-              "est_tokens": 500,
+              "est_tokens": 543,
               "deps": []
             },
             "T-032": {
@@ -967,7 +967,7 @@
               "heading": "### T-033: 蓝图 Diff 卡与 Blast Radius 展示（P-003 diff 侧）",
               "line_start": 187,
               "line_end": 214,
-              "est_tokens": 615,
+              "est_tokens": 646,
               "deps": []
             },
             "T-034": {
@@ -988,14 +988,14 @@
               "heading": "### T-036: 健康调和抽屉（P-006）",
               "line_start": 267,
               "line_end": 294,
-              "est_tokens": 532,
+              "est_tokens": 592,
               "deps": []
             },
             "T-037": {
               "heading": "### T-037: [VALIDATION] 工作区前端核心三面 + 意图→diff→确认流程",
               "line_start": 295,
-              "line_end": 316,
-              "est_tokens": 328,
+              "line_end": 318,
+              "est_tokens": 381,
               "deps": []
             }
           }
@@ -1015,16 +1015,16 @@
       "file_path": "docs/dev-plan/dev-plan-keel-s5.md",
       "doc_type": "dev-plan",
       "volume": "sprint",
-      "status": "draft",
-      "total_lines": 387,
-      "est_tokens": 6745,
-      "content_hash": "6875f0f5",
+      "status": "approved",
+      "total_lines": 389,
+      "est_tokens": 7013,
+      "content_hash": "dbec3b79",
       "sections": {
         "3": {
           "heading": "## 3. 任务卡详细",
           "line_start": 21,
-          "line_end": 387,
-          "est_tokens": 6617,
+          "line_end": 389,
+          "est_tokens": 6884,
           "deps": [],
           "level": 2,
           "items": {
@@ -1039,14 +1039,14 @@
               "heading": "### T-039: 项目初始化：鉴权 + 骨架生成（M-014）",
               "line_start": 47,
               "line_end": 76,
-              "est_tokens": 610,
+              "est_tokens": 629,
               "deps": []
             },
             "T-040": {
               "heading": "### T-040: 上手向导页面（P-007，M-014 + M-008）",
               "line_start": 77,
               "line_end": 104,
-              "est_tokens": 505,
+              "est_tokens": 527,
               "deps": []
             },
             "T-041": {
@@ -1074,7 +1074,7 @@
               "heading": "### T-044: 安全体检三类检查器（M-012 SecurityAuditor）",
               "line_start": 181,
               "line_end": 210,
-              "est_tokens": 587,
+              "est_tokens": 611,
               "deps": []
             },
             "T-045": {
@@ -1095,35 +1095,35 @@
               "heading": "### T-047: 代码仓导出与工具配置编译（M-013）",
               "line_start": 259,
               "line_end": 286,
-              "est_tokens": 514,
+              "est_tokens": 530,
               "deps": []
             },
             "T-048": {
               "heading": "### T-048: 交接包生成（M-013 HandoffPackager）",
               "line_start": 287,
               "line_end": 312,
-              "est_tokens": 438,
+              "est_tokens": 460,
               "deps": []
             },
             "T-049": {
               "heading": "### T-049: 导出交接页面（P-010，M-013）",
               "line_start": 313,
               "line_end": 334,
-              "est_tokens": 304,
+              "est_tokens": 330,
               "deps": []
             },
             "T-050": {
               "heading": "### T-050: 自由实现区标注 + 地图展示（P-011，M-001 + M-009）",
               "line_start": 335,
               "line_end": 363,
-              "est_tokens": 585,
+              "est_tokens": 671,
               "deps": []
             },
             "T-051": {
               "heading": "### T-051: [VALIDATION] 生命周期功能：上手 + 时光机 + 上线 + 导出",
               "line_start": 364,
-              "line_end": 387,
-              "est_tokens": 381,
+              "line_end": 389,
+              "est_tokens": 434,
               "deps": []
             }
           }
@@ -1143,16 +1143,16 @@
       "file_path": "docs/dev-plan/dev-plan-keel-s6.md",
       "doc_type": "dev-plan",
       "volume": "sprint",
-      "status": "draft",
-      "total_lines": 190,
-      "est_tokens": 2807,
-      "content_hash": "d1b691ce",
+      "status": "approved",
+      "total_lines": 192,
+      "est_tokens": 2926,
+      "content_hash": "acbd3952",
       "sections": {
         "3": {
           "heading": "## 3. 任务卡详细",
           "line_start": 21,
-          "line_end": 190,
-          "est_tokens": 2680,
+          "line_end": 192,
+          "est_tokens": 2799,
           "deps": [],
           "level": 2,
           "items": {
@@ -1167,7 +1167,7 @@
               "heading": "### T-053: 用量徽标与引擎侧消耗透明（UC-020，M-014）",
               "line_start": 53,
               "line_end": 74,
-              "est_tokens": 347,
+              "est_tokens": 378,
               "deps": []
             },
             "T-054": {
@@ -1188,14 +1188,14 @@
               "heading": "### T-056: 错误降级 + 通俗化全面审查",
               "line_start": 128,
               "line_end": 152,
-              "est_tokens": 404,
+              "est_tokens": 439,
               "deps": []
             },
             "T-057": {
               "heading": "### T-057: [VALIDATION] 完整产品端到端验收",
               "line_start": 153,
-              "line_end": 190,
-              "est_tokens": 512,
+              "line_end": 192,
+              "est_tokens": 564,
               "deps": []
             }
           }
@@ -1215,24 +1215,33 @@
       "file_path": "docs/dev-plan/dev-plan-keel.md",
       "doc_type": "dev-plan",
       "volume": "main",
-      "status": "draft",
-      "total_lines": 361,
-      "est_tokens": 4894,
-      "content_hash": "8b3e4896",
+      "status": "approved",
+      "total_lines": 418,
+      "est_tokens": 6628,
+      "content_hash": "bbb69992",
       "sections": {
         "1": {
           "heading": "## 1. 迭代规划",
-          "line_start": 28,
-          "line_end": 116,
+          "line_start": 40,
+          "line_end": 128,
           "est_tokens": 1906,
+          "deps": [],
+          "level": 2,
+          "items": {}
+        },
+        "3": {
+          "heading": "## 3. 任务卡详细",
+          "line_start": 129,
+          "line_end": 192,
+          "est_tokens": 1766,
           "deps": [],
           "level": 2,
           "items": {}
         },
         "2": {
           "heading": "## 2. 依赖图",
-          "line_start": 117,
-          "line_end": 280,
+          "line_start": 193,
+          "line_end": 356,
           "est_tokens": 1151,
           "deps": [],
           "level": 2,
@@ -1240,8 +1249,8 @@
         },
         "4": {
           "heading": "## 4. 关键路径",
-          "line_start": 281,
-          "line_end": 300,
+          "line_start": 357,
+          "line_end": 376,
           "est_tokens": 227,
           "deps": [],
           "level": 2,
@@ -1249,26 +1258,25 @@
         },
         "5": {
           "heading": "## 5. 风险项",
-          "line_start": 301,
-          "line_end": 312,
-          "est_tokens": 294,
+          "line_start": 377,
+          "line_end": 396,
+          "est_tokens": 499,
           "deps": [],
           "level": 2,
-          "items": {}
-        },
-        "5.5": {
-          "heading": "## 5.5. 里程碑计划",
-          "line_start": 313,
-          "line_end": 339,
-          "est_tokens": 413,
-          "deps": [],
-          "level": 2,
-          "items": {}
+          "items": {
+            "5.1": {
+              "heading": "### 5.1 技术栈分层说明（防实现期混淆）",
+              "line_start": 389,
+              "line_end": 396,
+              "est_tokens": 204,
+              "deps": []
+            }
+          }
         },
         "6": {
           "heading": "## 6. 集成与E2E测试规划",
-          "line_start": 340,
-          "line_end": 361,
+          "line_start": 397,
+          "line_end": 418,
           "est_tokens": 738,
           "deps": [],
           "level": 2,
@@ -1858,6 +1866,62 @@
         "arch-keel-modules": "f8a5b2b9",
         "arch-keel-api": "a5b9b781",
         "arch-keel-data": "aad6c2b6"
+      }
+    },
+    "review-dev-plan-keel-r1": {
+      "file_path": "docs/reviews/doc/REVIEW-dev-plan-keel-r1.md",
+      "doc_type": "review",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 102,
+      "est_tokens": 1330,
+      "content_hash": "620ea8d3",
+      "sections": {},
+      "deps": [
+        "dev-plan-keel",
+        "dev-plan-keel-s1",
+        "dev-plan-keel-s2",
+        "dev-plan-keel-s3",
+        "dev-plan-keel-s4",
+        "dev-plan-keel-s5",
+        "dev-plan-keel-s6"
+      ],
+      "dep_hashes": {
+        "dev-plan-keel": "bbb69992",
+        "dev-plan-keel-s1": "8377eed0",
+        "dev-plan-keel-s2": "645e8309",
+        "dev-plan-keel-s3": "b71439e0",
+        "dev-plan-keel-s4": "9f4413c7",
+        "dev-plan-keel-s5": "dbec3b79",
+        "dev-plan-keel-s6": "acbd3952"
+      }
+    },
+    "review-dev-plan-keel-r2": {
+      "file_path": "docs/reviews/doc/REVIEW-dev-plan-keel-r2.md",
+      "doc_type": "review",
+      "volume": "main",
+      "status": "approved",
+      "total_lines": 222,
+      "est_tokens": 3591,
+      "content_hash": "1dfe50f5",
+      "sections": {},
+      "deps": [
+        "dev-plan-keel",
+        "dev-plan-keel-s1",
+        "dev-plan-keel-s2",
+        "dev-plan-keel-s3",
+        "dev-plan-keel-s4",
+        "dev-plan-keel-s5",
+        "dev-plan-keel-s6"
+      ],
+      "dep_hashes": {
+        "dev-plan-keel": "bbb69992",
+        "dev-plan-keel-s1": "8377eed0",
+        "dev-plan-keel-s2": "645e8309",
+        "dev-plan-keel-s3": "b71439e0",
+        "dev-plan-keel-s4": "9f4413c7",
+        "dev-plan-keel-s5": "dbec3b79",
+        "dev-plan-keel-s6": "acbd3952"
       }
     },
     "review-prd-keel-r1": {

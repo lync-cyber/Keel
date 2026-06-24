@@ -3,7 +3,7 @@ id: "dev-plan-keel"
 version: "1.0.1"
 doc_type: dev-plan
 author: tech-lead
-status: draft
+status: approved
 deps: ["prd-keel", "arch-keel", "ui-spec-keel"]
 consumers: [developer, qa-engineer]
 volume: main
@@ -385,6 +385,14 @@ graph LR
 | SQLite local-first 与 Web 壳跨进程访问（E-001~E-006）| T-008 持久化层设计 | T-008 明确本地引擎服务为数据库宿主，Web 壳经本地引擎 HTTP API 间接访问；不直连 SQLite |
 | IntentTranslator LLM 结构化生成 ≤10s（F-009 AC-008）| 用户体验 | T-015 注入最小上下文（选中节点 + 一跳邻域），约束 prompt token；arch §5.1 已设计 |
 | 意图日志 git commit↔entry 映射粒度（E-002 gitRef [ASSUMPTION]）| M-011 持久化方案 | T-041 先用 entryId 本地存储确保可用；git 映射作为可选字段，不阻塞功能 |
+
+### 5.1 技术栈分层说明（防实现期混淆）
+
+dev-plan 涉及三套独立技术栈，分属不同进程/产物，实现者勿混用（尤以 T-008 存储层、T-029 Web 壳、T-039 骨架生成器为易混点）：
+
+1. **Keel 引擎本体**（`packages/`，T-001~T-026 等）：TypeScript（Node 20+）；元数据持久化用 **better-sqlite3 + Drizzle(SQLite)**（local-first，T-008）；门禁工具链 dependency-cruiser / ts-morph / tsc / madge。
+2. **Keel 工作区 Web 壳**（`apps/workspace/`，T-027~T-037）：**Vite + React 19**；能力地图 React Flow v12；经本地引擎 HTTP API 间接访问数据，不直连 SQLite。
+3. **目标应用**（骨架生成后的用户应用，由 T-039 ScaffoldGenerator 产出）：**Next.js 16 + PostgreSQL + Better Auth + Drizzle(Postgres)**（arch §1.4 锁定栈）——是 Keel 的**产物**，不是 Keel 引擎自身依赖；`better-sqlite3`/`Postgres` 的职责边界以此层分离。
 
 ## 6. 集成与E2E测试规划
 
