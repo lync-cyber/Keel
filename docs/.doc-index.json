@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "generated_at": "2026-06-23T14:08:24.040325+00:00",
+  "generated_at": "2026-06-24T03:35:27.753208+00:00",
   "documents": {
     "arch-keel-api": {
       "file_path": "docs/arch/arch-keel-api.md",
@@ -1337,6 +1337,64 @@
         "prd-keel-f001-f009": "1162ddc0",
         "prd-keel-f010-f018": "c63c6b5e"
       }
+    },
+    "ui-spec-keel-theme": {
+      "file_path": "docs/ui-spec/ui-spec-keel-theme.md",
+      "doc_type": "ui-spec",
+      "volume": "theme",
+      "status": "draft",
+      "total_lines": 107,
+      "est_tokens": 1280,
+      "content_hash": "b937b7dd",
+      "sections": {
+        "4": {
+          "heading": "## 4. 主题方案",
+          "line_start": 21,
+          "line_end": 107,
+          "est_tokens": 1158,
+          "deps": [],
+          "level": 2,
+          "items": {
+            "THEME-01": {
+              "heading": "### THEME-01: Calm Cartography（沉静海图 · 暖调蓝图）",
+              "line_start": 23,
+              "line_end": 107,
+              "est_tokens": 1154,
+              "deps": []
+            },
+            "4.1": {
+              "heading": "##### 4.1.4 对比度与无障碍",
+              "line_start": 94,
+              "line_end": 100,
+              "est_tokens": 105,
+              "deps": []
+            },
+            "4.2": {
+              "heading": "#### 4.2 适配组件",
+              "line_start": 101,
+              "line_end": 104,
+              "est_tokens": 52,
+              "deps": []
+            },
+            "4.3": {
+              "heading": "#### 4.3 关键页面应用",
+              "line_start": 105,
+              "line_end": 107,
+              "est_tokens": 67,
+              "deps": []
+            }
+          }
+        }
+      },
+      "split_from": "ui-spec-keel",
+      "deps": [
+        "arch-keel",
+        "research-ui-design-direction-keel"
+      ],
+      "dep_hashes": {
+        "arch-keel": "341dacc0",
+        "research-ui-design-direction-keel": "fc504dea"
+      }
     }
   },
   "xref": {
@@ -1723,6 +1781,13 @@
         "doc_id": "prd-keel-f010-f018",
         "section": "2",
         "file_path": "docs/prd/prd-keel-f010-f018.md"
+      }
+    ],
+    "THEME-01": [
+      {
+        "doc_id": "ui-spec-keel-theme",
+        "section": "4",
+        "file_path": "docs/ui-spec/ui-spec-keel-theme.md"
       }
     ]
   },
